@@ -1,9 +1,10 @@
-<h1 style="text-align: center;font-size:2.5em;font-weight:700;padding-bottom: 0.5em">Unread - OCR 📖</h1>
-<div style="display:flex;justify-content:center;">
+<h1 align="center">Unread - OCR 📖</h1>
+<p align="center">
     <img src="https://img.shields.io/github/v/tag/JulesdeCube/UnRead?label=version&style=flat-square"/>
     <img src="https://img.shields.io/github/license/JulesdeCube/UnRead?style=flat-square"/>
     <img src="https://img.shields.io/badge/std-c99-blue?style=flat-square"/>
-</div>
+</p>
+
 
 
 
