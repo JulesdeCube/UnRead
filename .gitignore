@@ -1,0 +1,8 @@
+# conpilation
+obj/
+build/
+*.o
+
+# editor
+.vscode/
+.*.swp
