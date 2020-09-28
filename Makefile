@@ -2,8 +2,8 @@ BUILD_DIR=build
 OBJECT_DIR=obj
 SRC_DIR=src
 
-SRC=main.c
-DEPS=
+SRC=main.c ocr.c
+DEPS=ocr.h
 BUILD=UnRead-0.1.0
 
 CC=gcc
