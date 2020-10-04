@@ -8,8 +8,8 @@
 ** definition of constuctor, destructor and method od the `s_mask` object
 */
 
-#ifndef UNREAD__SRC_IMAGES__MASK_H_
-#define UNREAD__SRC_IMAGES__MASK_H_
+#ifndef UNREAD__SRC_IMAGE__MASK_H_
+#define UNREAD__SRC_IMAGE__MASK_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -152,4 +152,4 @@ void mk_print(struct s_mask *mask);
 */
 void mk_debug(struct s_mask *image);
 
-#endif // UNREAD__SRC_IMAGES__MASK_H_
+#endif // UNREAD__SRC_IMAGE__MASK_H_
