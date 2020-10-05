@@ -72,6 +72,21 @@ struct s_mask
 struct s_mask im_constructor(unsigned int height, unsigned int width, enum mk_error *error);
 
 /**
+** \brief `s_mask` copy constructor.
+**
+** duplicate a mask.
+** ⚠️** you need to use the `mk_destructor` function after mask use (to free
+** space )** ⚠️
+**
+** \param mask a pointer to the mask to copy
+** \param error error return, can be `MK_SUCCESS` if success or `IK_ERROR_SPACE`
+**              if not enought free space
+**
+** \return a new blank instance of `s_mask` base on given dimention
+*/
+struct s_mask im_cconstructor(struct s_mask *mask, enum mk_error *error);
+
+/**
 ** \brief create mask from file.
 **
 ** create an `s_mask` base on a file data. each pixel 1 channel unsigned char

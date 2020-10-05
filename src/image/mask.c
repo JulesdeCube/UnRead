@@ -31,6 +31,44 @@ struct s_mask mk_constructor(unsigned int height, unsigned int width, enum mk_er
   return mask;
 }
 
+struct s_mask im_cconstructor(struct s_mask *mask, enum mk_error *error)
+{
+  // alocate the memory
+  struct s_mask new_mask = mk_constructor(mask->height, mask->width, error);
+  
+  // `in_constructor` error handler
+  switch (*error)
+  {
+  // success continue
+  case MK_SUCCESS:
+    break;
+
+  // error during space alocation
+  case MK_ERROR_SPACE:
+    return new_mask;
+  
+  // mk_constuctor can't return this error
+  case MK_ERROR_EOF:
+    printf("ERROR: `mk_fconstructor`: `mk_constructor` impossible error : MK_ERROR_EOF");
+    return new_mask;
+
+  // unkown error    
+  default:
+    printf("ERROR: `mk_fconstructor`: `mk_constructor` return unkown code error : %d",
+           *error);
+    return new_mask;
+  }
+
+  // pointer to the pixel
+  unsigned char *pixel = mask->pixels;
+  unsigned char *new_pixel = new_mask.pixels;
+  // copy pixels value
+  for (unsigned long i = mk_count(mask); i; --i, ++pixel, ++new_pixel)
+    *new_pixel = *pixel;
+
+  return new_mask;
+}
+
 struct s_mask mk_fconstructor(unsigned int height, unsigned int width, FILE *fp, enum mk_error *error)
 {
   // create a new mask
@@ -45,6 +83,11 @@ struct s_mask mk_fconstructor(unsigned int height, unsigned int width, FILE *fp,
 
   // error during space alocation
   case MK_ERROR_SPACE:
+    return mask;
+
+  // mk_constuctor can't return this error
+  case MK_ERROR_EOF:
+    printf("ERROR: `mk_fconstructor`: `mk_constructor` impossible error : MK_ERROR_EOF");
     return mask;
 
   // unkown error

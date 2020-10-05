@@ -21,7 +21,7 @@ all: help
 help: ## print this help
 help: version
 	@fgrep -h "## " $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/^## //' |sed -e 's/\(.*\)## /- \1/'
-	@echo "\nJules Lefebvre <juleslefebvre.pro@outlook.fr>"
+	@echo -e "\nJules Lefebvre <juleslefebvre.pro@outlook.fr>"
 
 version: ## print the makefile version
 	@echo "C build v1.2.0"
@@ -45,7 +45,7 @@ $(OBJECT_DIR)/%.o: $(SRC_DIR)/%.c $(addprefix $(SRC_DIR)/, $(DEPS))
 	@$(CC) -c -o $@ $< $(CFLAGS)
 
 $(BUILD_DIR)/$(BUILD): $(BUILD_DIR)/ $(addprefix $(OBJECT_DIR)/, $(SRC:.c=.o))
-	@echo "\nbuilding $(BUILD)"
+	@echo -e "\nbuilding $(BUILD)"
 	@$(CC) -o $(BUILD_DIR)/$(BUILD) $(addprefix $(OBJECT_DIR)/, $(SRC:.c=.o)) $(CFLAGS)
 	@echo "Finish"
 
