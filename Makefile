@@ -24,7 +24,7 @@ help: version
 	@echo -e "\nJules Lefebvre <juleslefebvre.pro@outlook.fr>"
 
 version: ## print the makefile version
-	@echo "C build v1.2.0"
+	@echo "C build v1.2.1"
 
 run: ## build and run the programme
 run: build
