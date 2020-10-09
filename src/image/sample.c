@@ -16,9 +16,18 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-struct s_sample sp_consructor(unsigned int height, unsigned int width, char label, enum mk_error *error)
+struct s_sample sp_consructor(unsigned int height, unsigned int width, char label, enum sp_error *error)
 {
-  return (struct s_sample) {mk_constructor(height, width, error),  label};
+  // error catcher
+  enum mk_error image_error;
+
+  // create the sample
+  struct s_sample sample = {mk_constructor(height, width, &image_error), label};
+  // convert the returning error to be return
+  *error = mk_to_sp_error(image_error);
+
+  // return the created sample
+  return sample;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -29,6 +38,7 @@ struct s_sample sp_consructor(unsigned int height, unsigned int width, char labe
 
 void sp_destructor(struct s_sample *sample)
 {
+  // destroy the mask
   mk_destructor(&(sample->image));
 }
 
@@ -37,3 +47,22 @@ void sp_destructor(struct s_sample *sample)
 //                                  METHODE                                  //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
+
+enum sp_error mk_to_sp_error(enum mk_error error)
+{
+  switch (error)
+  {
+  case MK_SUCCESS:
+    return SP_SUCCESS;
+
+  case MK_ERROR_SPACE:
+    return SP_ERROR_SPACE;
+
+  case MK_ERROR_EOF:
+    return SP_ERROR_EOF_IMAGE;
+
+  default:
+    printf("ERROR: `mk_t_to_Sp`: unkown error : %d", error);
+    return (enum sp_error) - 1;
+  }
+}
