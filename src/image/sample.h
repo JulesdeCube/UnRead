@@ -11,7 +11,7 @@
 #ifndef UNREAD__SRC_IMAGE__SAMPLE_H_
 #define UNREAD__SRC_IMAGE__SAMPLE_H_
 
-#include "mask.h";
+#include "mask.h"
 
 /**
 ** \enum sp_errror

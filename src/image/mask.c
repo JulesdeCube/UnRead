@@ -31,11 +31,11 @@ struct s_mask mk_constructor(unsigned int height, unsigned int width, enum mk_er
   return mask;
 }
 
-struct s_mask im_cconstructor(struct s_mask *mask, enum mk_error *error)
+struct s_mask mk_cconstructor(struct s_mask *mask, enum mk_error *error)
 {
   // alocate the memory
   struct s_mask new_mask = mk_constructor(mask->height, mask->width, error);
-  
+
   // `in_constructor` error handler
   switch (*error)
   {
@@ -46,13 +46,13 @@ struct s_mask im_cconstructor(struct s_mask *mask, enum mk_error *error)
   // error during space alocation
   case MK_ERROR_SPACE:
     return new_mask;
-  
+
   // mk_constuctor can't return this error
   case MK_ERROR_EOF:
     printf("ERROR: `mk_fconstructor`: `mk_constructor` impossible error : MK_ERROR_EOF");
     return new_mask;
 
-  // unkown error    
+  // unkown error
   default:
     printf("ERROR: `mk_fconstructor`: `mk_constructor` return unkown code error : %d",
            *error);

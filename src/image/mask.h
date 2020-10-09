@@ -69,7 +69,7 @@ struct s_mask
 **
 ** \return a new blank instance of `s_mask` base on given dimention
 */
-struct s_mask im_constructor(unsigned int height, unsigned int width, enum mk_error *error);
+struct s_mask mk_constructor(unsigned int height, unsigned int width, enum mk_error *error);
 
 /**
 ** \brief `s_mask` copy constructor.

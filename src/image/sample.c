@@ -8,7 +8,7 @@
 ** cantaigne all the fuction use to maipulate the s_sample object
 */
 
-#include "sample.h";
+#include "sample.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
