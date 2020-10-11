@@ -28,6 +28,10 @@ struct s_mask mk_constructor(unsigned int height, unsigned int width, enum mk_er
   // if there is not enofe space return an error
   *error = mask.pixels == NULL ? MK_ERROR_SPACE : MK_SUCCESS;
 
+  // if there is an error destroy the mask
+  if (*error != MK_SUCCESS)
+    mk_destructor(&mask);
+
   return mask;
 }
 
@@ -49,11 +53,13 @@ struct s_mask mk_cconstructor(struct s_mask *mask, enum mk_error *error)
 
   // mk_constuctor can't return this error
   case MK_ERROR_EOF:
+    mk_destructor(&new_mask);
     printf("ERROR: `mk_fconstructor`: `mk_constructor` impossible error : MK_ERROR_EOF");
     return new_mask;
 
   // unkown error
   default:
+    mk_destructor(&new_mask);
     printf("ERROR: `mk_fconstructor`: `mk_constructor` return unkown code error : %d",
            *error);
     return new_mask;
@@ -87,11 +93,13 @@ struct s_mask mk_fconstructor(unsigned int height, unsigned int width, FILE *fp,
 
   // mk_constuctor can't return this error
   case MK_ERROR_EOF:
+    mk_destructor(&mask);
     printf("ERROR: `mk_fconstructor`: `mk_constructor` impossible error : MK_ERROR_EOF");
     return mask;
 
   // unkown error
   default:
+    mk_destructor(&mask);
     printf("ERROR: `mk_fconstructor`: `mk_constructor` return unkown code error : %d",
            *error);
     return mask;
@@ -99,6 +107,10 @@ struct s_mask mk_fconstructor(unsigned int height, unsigned int width, FILE *fp,
 
   // fill it with file inforamtion
   mk_fimport(&mask, fp, error);
+
+  // if there is an error during the creation return
+  if (error != MK_SUCCESS)
+    mk_destructor(&mask);
 
   return mask;
 }
@@ -111,6 +123,10 @@ struct s_mask mk_fconstructor(unsigned int height, unsigned int width, FILE *fp,
 
 void mk_destructor(struct s_mask *mask)
 {
+  // gard to not destroy an already destroy mask
+  if (mask->pixels == NULL)
+    return;
+
   // free alocate pixel
   free(mask->pixels);
   // set pixel to null to prevent probleme
