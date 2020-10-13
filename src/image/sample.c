@@ -25,6 +25,34 @@ struct s_sample sp_consructor(unsigned int height, unsigned int width, char labe
   struct s_sample sample = {mk_constructor(height, width, &image_error), label};
   // convert the returning error to be return
   *error = mk_to_sp_error(image_error);
+  // return the created sample
+  return sample;
+}
+
+struct s_sample sp_fconsructor(unsigned int height, unsigned int width, FILE *fp_images, FILE *fp_label, enum sp_error *error)
+{
+  // error catcher
+  enum mk_error image_error;
+  struct s_sample sample = {
+      mk_fconstructor(height, width, fp_images, &image_error),
+      '\00'};
+
+  // convert the error
+  *error = mk_to_sp_error(image_error);
+
+  // if all not go right return an error
+  if (*error != SP_SUCCESS)
+    return sample;
+
+  // check if we can read the label
+  if (feof(fp_label))
+  {
+    *error = SP_ERROR_EOF_LABEL;
+    return sample;
+  }
+
+  // update the label
+  sample.label = fgetc(fp_label);
 
   // return the created sample
   return sample;

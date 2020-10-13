@@ -72,6 +72,22 @@ struct s_sample
 */
 struct s_sample sp_consructor(unsigned int height, unsigned int width, char label, enum sp_error *error);
 
+/**
+** \brief `s_sample` constuctor from file
+**
+** create an `s_sample` base on a image file and a label file. -> see `mk_
+**
+** ⚠️** you need to use the `sp_destructor` function after sample use (to free
+** space )** ⚠️
+**
+** \param height the number of row of pixels in the image
+** \param width the number of collum of pixels in the image
+** \param label the repesenting letter.
+** \param error error return see `mk_constructor` for more information
+**
+** \return a new instance of `s_sample`
+*/
+struct s_sample sp_fconsructor(unsigned int height, unsigned int width, FILE *fp_images, FILE *fp_label, enum sp_error *error);
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
 //                                 DESTRUCTOR                                //
