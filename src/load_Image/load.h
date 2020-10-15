@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void load_Image();
-int nb_Random();
+int load_Image();
 
 #endif

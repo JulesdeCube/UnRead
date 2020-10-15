@@ -7,7 +7,9 @@ DEPS=load_Image/load.h
 BUILD=UnRead-0.1.0
 
 CC=gcc
-CFLAGS=-I$(SRC_DIR) -Wall -Wextra -Werror -std=c99 -pedantic -g
+CFLAGS=-I$(SRC_DIR) -Wall -Wextra -Werror -std=c99 -pedantic -g 
+
+LDFLAGS=-lSDL2
 
 .PHONY: all help version run build clean
 ##
@@ -46,7 +48,7 @@ $(OBJECT_DIR)/%.o: $(SRC_DIR)/%.c $(addprefix $(SRC_DIR)/, $(DEPS))
 
 $(BUILD_DIR)/$(BUILD): $(BUILD_DIR)/ $(addprefix $(OBJECT_DIR)/, $(SRC:.c=.o))
 	@echo "\nbuilding $(BUILD)"
-	@$(CC) -o $(BUILD_DIR)/$(BUILD) $(addprefix $(OBJECT_DIR)/, $(SRC:.c=.o)) $(CFLAGS)
+	@$(CC) -o $(BUILD_DIR)/$(BUILD) $(addprefix $(OBJECT_DIR)/, $(SRC:.c=.o)) $(CFLAGS) ${LDFLAGS}
 	@echo "Finish"
 
 %/:

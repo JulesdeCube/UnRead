@@ -1,34 +1,45 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <SDL2/SDL.h>
 
+/*tu lance Xming
+*puis export DISPLAY=:0
+*puis tu execute ton programme
+*/
 
-void load_Image(){
-    SDL_Surface *ecran = NULL, *imageDeFond = NULL;
-    SDL_Rect positionFond;
+int load_Image()
+{
 
-    positionFond.x = 0;
-    positionFond.y = 0;
+    /* Initialisation simple */
+    if (SDL_Init(SDL_INIT_VIDEO) != 0 )
+    {
+        fprintf(stdout,"Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
+        return -1;
+    }
 
-    SDL_Init(SDL_INIT_VIDEO);
+    {
+        /* Création de la fenêtre */
+        SDL_Window* pWindow = NULL;
+        pWindow = SDL_CreateWindow("Ma première application SDL2",SDL_WINDOWPOS_UNDEFINED,
+                                                                  SDL_WINDOWPOS_UNDEFINED,
+                                                                  640,
+                                                                  480,
+                                                                  SDL_WINDOW_SHOWN);
 
-    ecran = SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE);
-    SDL_WM_SetCaption("Chargement d'images en SDL", NULL);
+        if( pWindow )
+        {
+            SDL_Delay(30000); /* Attendre trois secondes, que l'utilisateur voit la fenêtre */
 
-    /* Chargement d'une image Bitmap dans une surface */
-    imageDeFond = SDL_LoadBMP("lac_en_montagne.bmp");
-    /* On blitte par-dessus l'écran */
-    SDL_BlitSurface(imageDeFond, NULL, ecran, &positionFond);
+            SDL_DestroyWindow(pWindow);
+        }
+        else
+        {
+            fprintf(stderr,"Erreur de création de la fenêtre: %s\n",SDL_GetError());
+        }
+    }
 
-    SDL_Flip(ecran);
-    pause();
-
-    SDL_FreeSurface(imageDeFond); /* On libère la surface */
     SDL_Quit();
 
-    return EXIT_SUCCESS;
+    return 0;
 }
 
-int nb_Random(){
-    int x = rand();
-    return x;
-}
