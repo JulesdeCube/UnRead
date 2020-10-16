@@ -145,6 +145,13 @@ void mk_fimport(struct s_mask *mask, FILE *fp, enum mk_error *error);
 */
 unsigned long mk_count(struct s_mask *mask);
 
+/**
+** \brief apply a function to all pixels
+**
+** \param mask the image to browse
+*/
+void mk_foreach_pixel(struct s_mask *mask, void (*f)(char *));
+
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
 //                                   VIEWER                                  //

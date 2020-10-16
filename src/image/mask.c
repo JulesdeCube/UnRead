@@ -174,6 +174,23 @@ unsigned long mk_count(struct s_mask *mask)
 {
   return mask->pixels == NULL ? 0 : mask->height * mask->width;
 }
+
+
+void mk_foreach_pixel(struct s_mask *mask, void (*f)(char *))
+{
+  // if there is no pixel return
+  if (mask->pixels == NULL)
+    return;
+
+  // the moving pointer
+  char *pixel = mask->pixels;
+  // the last pixel
+  char *last_pixel = pixel + mk_count(mask);
+  // apply the function to all the pixels
+  for (; pixel <= last_pixel; ++pixel)
+    f(pixel);
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
 //                                   VIEWER                                  //
