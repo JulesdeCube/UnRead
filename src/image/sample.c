@@ -109,7 +109,7 @@ void sp_print(struct s_sample *sample)
   else
     printf("label: %c\n", sample->label);
   // print the image of the sample
-  mk_print(sample->image);
+  mk_print(&sample->image);
 }
 
 void sp_debug(struct s_sample *sample)
@@ -117,5 +117,5 @@ void sp_debug(struct s_sample *sample)
   // print label
   printf("label: %02x\n", sample->label);
   // print image
-  mk_debug(sample->image);
+  mk_debug(&sample->image);
 }

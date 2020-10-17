@@ -83,8 +83,9 @@ struct s_sample sp_consructor(unsigned int height, unsigned int width, char labe
 **
 ** \param height the number of row of pixels in the image
 ** \param width the number of collum of pixels in the image
-** \param label the repesenting letter.
-** \param error error return see `mk_constructor` for more information
+** \param fp_images a file contaiging the images data, see `mk_fconstructor`
+** \param fp_label a file contaiging the label, each one code in a 1 pont
+** \param error error return see `mk_constructor`.
 **
 ** \return a new instance of `s_sample`
 */
