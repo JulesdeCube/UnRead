@@ -94,3 +94,28 @@ enum sp_error mk_to_sp_error(enum mk_error error)
     return (enum sp_error) - 1;
   }
 }
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+//                                   VIEWER                                  //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
+
+void sp_print(struct s_sample *sample)
+{
+  //print message if there is a label in the smaple
+  if (sample->label == '\00')
+    printf("label: not labalize\n");
+  else
+    printf("label: %c\n", sample->label);
+  // print the image of the sample
+  mk_print(sample->image);
+}
+
+void sp_debug(struct s_sample *sample)
+{
+  // print label
+  printf("label: %02x\n", sample->label);
+  // print image
+  mk_debug(sample->image);
+}

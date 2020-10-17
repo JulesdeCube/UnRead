@@ -11,6 +11,7 @@
 #ifndef UNREAD__SRC_IMAGE__SAMPLE_H_
 #define UNREAD__SRC_IMAGE__SAMPLE_H_
 
+#include <stdio.h>
 #include "mask.h"
 
 /**
@@ -114,5 +115,27 @@ void sp_destructor(struct s_sample *sample);
 ** \param error the mask error
 */
 enum sp_error mk_to_sp_error(enum mk_error error);
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+//                                   VIEWER                                  //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+** \brief diplay the sample
+**
+** \param sample the sample to print
+*/
+void sp_print(struct s_sample *sample);
+
+/**
+** \brief display value of the sample
+**
+** print the lablel and the image in hexa.
+**
+** \param sample the sample to debug
+*/
+void sp_debug(struct s_sample *sample);
 
 #endif // UNREAD__SRC_IMAGE__SAMPLE_H_
