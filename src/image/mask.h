@@ -150,7 +150,7 @@ unsigned long mk_count(struct s_mask *mask);
 **
 ** \param mask the image to browse
 */
-void mk_foreach_pixel(struct s_mask *mask, void (*f)(char *));
+void mk_foreach_pixel(struct s_mask *mask, void (*f)(unsigned char *));
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
