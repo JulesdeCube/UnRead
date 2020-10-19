@@ -47,6 +47,30 @@ struct s_set st_consructor(unsigned int count, unsigned int height, unsigned int
   return set;
 }
 
+struct s_set st_fconsructor(unsigned int count, unsigned int height, unsigned int width, FILE *fp_images, FILE *fp_label, enum sp_error *error)
+{
+  struct s_set set = st_consructor(count, height, width, error);
+
+  struct s_sample *sample = set.samples;
+  struct s_sample *last_sample = sample + set.count;
+  *error = SP_SUCCESS;
+
+  // if can't create the set return error
+  if (*error != SP_SUCCESS)
+    return set;
+
+  // init each sample and break if can't create it
+  for (; sample <= last_sample && *error == SP_SUCCESS; ++sample)
+    *sample = sp_fconsructor(height, width, fp_images, fp_label, error);
+
+  // destory created sample if there is an error
+  if (*error != SP_SUCCESS)
+    for (; sample >= set.samples; --sample)
+      sp_destructor(sample);
+
+  return set;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
 //                                 DESTRUCTOR                                //
@@ -90,7 +114,7 @@ void st_foreach(struct s_set *set, void (*f)(struct s_sample *))
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-void sp_print(struct s_set *set)
+void st_print(struct s_set *set)
 {
   st_foreach(set, sp_print);
 }

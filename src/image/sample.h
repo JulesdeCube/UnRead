@@ -76,7 +76,7 @@ struct s_sample sp_consructor(unsigned int height, unsigned int width, char labe
 /**
 ** \brief `s_sample` constuctor from file
 **
-** create an `s_sample` base on a image file and a label file. -> see `mk_
+** create an `s_sample` base on a image file and a label file.
 **
 ** ⚠️** you need to use the `sp_destructor` function after sample use (to free
 ** space )** ⚠️
