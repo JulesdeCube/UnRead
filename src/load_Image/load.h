@@ -3,7 +3,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <gtk/gtk.h>
+#include <gdk/gdk.h>
 
-int load_Image();
+#include "transform_BW.h"
+
+#define UNUSED(x) (void)(x)
+
+GtkWidget* create_image (void);
+void activate_window(GtkApplication *app, gpointer user_data);
+int create_window(int, char **);
 
 #endif
