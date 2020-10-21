@@ -7,6 +7,7 @@
 #include <gdk/gdk.h>
 
 #include "transform_BW.h"
+#include "transform_greylvl.h"
 
 #define UNUSED(x) (void)(x)
 

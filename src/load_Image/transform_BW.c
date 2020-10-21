@@ -1,11 +1,18 @@
 #include "transform_BW.h"
 
-//return the approximative value of the whitest pixel
-int blackest_pixel(GdkPixbuf *pixbuf)
+/*
+    Search and return the withest and the blackest pixel
+*/
+struct s_int_tuple search_BW_pixel(GdkPixbuf *pixbuf)
 {
     guchar *p;
     int tmp;
+    int tmpmin;
+    int tmpmax;
     int min;
+    int max;
+    struct s_int_tuple tuple;
+    
 
     int rowstride = gdk_pixbuf_get_rowstride (pixbuf);
     int n_channels = gdk_pixbuf_get_n_channels (pixbuf);
@@ -14,57 +21,43 @@ int blackest_pixel(GdkPixbuf *pixbuf)
     int width = gdk_pixbuf_get_width (pixbuf);
 
     min = 255; //Cannot be superior than 255
-    
+    max = 0; //Cannot be inferior than 0
+
     for(int y = 0; y < height; ++y)
     {
         for(int x = 0; x < width; ++x)
         {
             p = which_pixels + y * rowstride + x * n_channels;
             tmp = (p[0] + p[1] + p[2]) / 3;
-            if(tmp < min)
-                min = tmp;
+            tmpmin = tmp;
+            tmpmax = tmp;
+            if(tmpmin < min)
+                min = tmpmin;
+            if(tmpmax > max)
+                max = tmpmax;
         }
     }
-    return min;
+    tuple.first = min;
+    tuple.second = max;
+    return tuple;
 }
 
 
-//return the approximative value of the whitest pixel
-int whitest_pixel(GdkPixbuf *pixbuf)
-{
-    guchar *p;
-    int tmp;
-    int max;
-
-    int rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-    int n_channels = gdk_pixbuf_get_n_channels (pixbuf);
-    guchar *which_pixels = gdk_pixbuf_get_pixels (pixbuf);
-    int height = gdk_pixbuf_get_height (pixbuf);
-    int width = gdk_pixbuf_get_width (pixbuf);
-
-    max = 0;
-    
-    for(int y = 0; y < height; ++y)
-    {
-        for(int x = 0; x < width; ++x)
-        {
-            p = which_pixels + y * rowstride + x * n_channels;
-            tmp = (p[0] + p[1] + p[2]) / 3;
-            if(tmp > max)
-                max = tmp;
-        }
-    }
-    return max;
-}
-
-
+/*
+    Change your image into the same but in black and white binary
+        -take the withest and blackest pîxel
+        -take the medium =  (whitest - blackest) /2
+        -each pixel under medium will be black and each pixel upper medium will be white
+    Return image with only white and black pixels
+*/
 GtkWidget* image_to_BW_binary (GtkWidget* image_to_change)
 {
     GdkPixbuf *pixbuf;
-    int n_bits;
     guchar *which_pixels;
-    guchar *p;
+    guchar *pixel;
     int tmp;
+    int applied_color;
+    struct s_int_tuple tuple;
 
     pixbuf = gtk_image_get_pixbuf ((GtkImage*) image_to_change);
     int n_channels = gdk_pixbuf_get_n_channels (pixbuf);
@@ -72,50 +65,37 @@ GtkWidget* image_to_BW_binary (GtkWidget* image_to_change)
     int height = gdk_pixbuf_get_height (pixbuf);
     int width = gdk_pixbuf_get_width (pixbuf);
 
-    printf("TEST for BW\n");
+    printf("Tranform into Black and White Binary is starting\n");
 
-    printf("Taille : %d\n", n_channels);
+    which_pixels = gdk_pixbuf_get_pixels(pixbuf);
 
-    n_bits = gdk_pixbuf_get_bits_per_sample (pixbuf);
-    printf("Bits per sample : %d\n", n_bits);
-
-    which_pixels = gdk_pixbuf_get_pixels (pixbuf);
-    /*printf("Pixels Red : %hhu\n", *which_pixels);
-    printf("Pixels Green : %hhu\n", which_pixels[1]);
-    which_pixels += 2;
-    printf("Pixels Blue : %hhu\n", *which_pixels);*/
-
-    
-    int white_max = whitest_pixel(pixbuf);
-    printf("The whitest pixel is approximatively : %d\n", white_max);
-    int black_min = blackest_pixel(pixbuf);
-    printf("The blackest pixel is approximatively : %d\n", black_min);
-
+    tuple = search_BW_pixel(pixbuf);
+    int white_max = tuple.second;
+    int black_min = tuple.first;
     int medium = (white_max - black_min) /2;
 
     for(int y = 0; y < height; ++y)
     {
         for(int x = 0; x < width; ++x)
         {
-            p = which_pixels + y * rowstride + x * n_channels;
-            tmp = (p[0] + p[1] + p[2]) / 3;
+            pixel = which_pixels + y * rowstride + x * n_channels;
+
+            /*
+                pixel[0] => RED
+                pixel[1] => GREEN
+                pixel[3] => BLUE
+            */
+            tmp = (pixel[0] + pixel[1] + pixel[2]) / 3;
+            
             if(tmp <= black_min + medium)
-            {
-                p[0] = 0;
-                p[1] = 0;
-                p[2] = 0;
-            }
+                applied_color = 0;
             else
-            {
-                p[0] = 255;
-                p[1] = 255;
-                p[2] = 255;
-            }
+                applied_color = 255;
+            for(unsigned char i = 0; i < 3; ++i)
+                pixel[i] = applied_color;
+
         }
     }
-
-
-    UNUSED(n_bits);
 
     return image_to_change;
 }

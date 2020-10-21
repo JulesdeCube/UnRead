@@ -8,8 +8,12 @@
 
 #define UNUSED(x) (void)(x)
 
-int blackest_pixel(GdkPixbuf *pixbuf);
-int whitest_pixel(GdkPixbuf *pixbuf);
+struct s_int_tuple{
+    int first;
+    int second;
+};
+
+struct s_int_tuple search_BW_pixel(GdkPixbuf *pixbuf);
 GtkWidget* image_to_BW_binary (GtkWidget* image_to_change);
 
 #endif

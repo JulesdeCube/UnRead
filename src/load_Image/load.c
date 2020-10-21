@@ -1,11 +1,10 @@
 #include "load.h"
 
-
 /*Create an Image and return it*/
 GtkWidget* create_image ()
 {
   GtkWidget *image;
-  image = gtk_image_new_from_file ("./src/load_Image/Images/sdl_icone.bmp");
+  image = gtk_image_new_from_file ("./src/load_Image/Images/oiseau.bmp");
   return image;
 }
 
@@ -27,9 +26,13 @@ void activate_window (GtkApplication *app, gpointer user_data)
     gtk_container_add (GTK_CONTAINER (window), imagec);
     
 
-    
-    //Change the color
-    image_to_BW_binary(imagec);
+    /*
+      ################################################
+          HERE TO CHANGE THE TRANSFORMATION
+      ################################################
+    */
+    image_to_greylvl(imagec);
+
 
     //To show our Image
     gtk_widget_show_all (window);
