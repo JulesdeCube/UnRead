@@ -7,7 +7,7 @@ DEPS= neural_network/layer.h neural_network/neural_network.h neural_network/neur
 BUILD=UnRead-0.1.0
 
 CC=gcc
-CFLAGS=-I$(SRC_DIR) -Wall -Wextra -Werror -std=c99 -pedantic -g
+CFLAGS=-I$(SRC_DIR) -Wall -Wextra -Werror -std=c99 -pedantic -g -lm
 
 .PHONY: all help version run build clean
 ##

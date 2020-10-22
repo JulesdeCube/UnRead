@@ -26,3 +26,13 @@ double random_uniforme(double min, double max)
 //                             ACTIVATION FUNCTION                           //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
+
+double sigmoid(double x)
+{
+  return 1.0 / (1.0 + exp(-x));
+}
+
+double sigmoid_derivate(double x)
+{
+  return x * (1 - x);
+}
