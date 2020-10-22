@@ -49,8 +49,8 @@ enum nn_error
 */
 struct s_function
 {
-  float (*self)(double);
-  float (*derivate)(double);
+  double (*self)(double);
+  double (*derivate)(double);
 };
 
 /**
@@ -102,6 +102,17 @@ void nn_destructor(struct s_neural_network *self);
 //                                  METHODE                                  //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
+
+/**
+** \brief convert an layer error to a neural network error
+**
+**  convert `la_error` to `nn_error`
+**
+** \param error the layer error
+**
+** \return the equivalent neural network error
+*/
+enum nn_error la_to_nn_error(enum la_error error);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //

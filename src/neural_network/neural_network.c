@@ -59,10 +59,14 @@ struct s_neural_network *nn_consructor(unsigned int nb_layer, unsigned int *laye
     for (; *layer >= *self->layers; --layer)
       la_destructor(*layer);
     self->layers = NULL;
+
     nn_destructor(self);
+
+    *error = NN_ERROR_SPACE;
     return NULL;
   }
 
+  *error = NN_SUCCESS;
   return self;
 }
 
@@ -90,6 +94,27 @@ void nn_destructor(struct s_neural_network *self)
 //                                 OPERATIONS                                //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
+enum nn_error la_to_nn_error(enum la_error error)
+{
+  switch (error)
+  {
+  case LA_SUCCESS:
+    return NN_SUCCESS;
+
+  case LA_ERROR_SPACE:
+    return NN_ERROR_SPACE;
+
+  case LA_NO_NEURAL_NETWORK:
+    return NN_NO_NEURAL_NETWORK;
+
+  case LA_NO_LAYER:
+    return NN_NO_LAYER;
+
+  default:
+    printf("ERROR: `la_to_nn_error`: unkown error : %d", error);
+    return (enum la_error) - 1;
+  }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
