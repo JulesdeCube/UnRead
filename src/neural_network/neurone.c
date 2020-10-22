@@ -1,16 +1,15 @@
 /**
-** \file src/neural_network/neural_network.c
+** \file src/neural_network/neurone.c
 ** \author Jules Lefebvre <jules.lefebvre@epita.fr
 ** \version 1.0.0
 ** \date 2020/09/30
-** \brief implemtation of the `neural_network` object
+** \brief implemtation of the `s_neurone` object
 **
-** containe every contructor, desturctor and method use in `neural_network`
-** struct manipution
+** containe every contructor, desturctor and method use in `s_neurone` struct
+** manipution
 */
 
-#include <stdlib.h>
-#include "neural_network.h"
+#include "neurone.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
@@ -18,51 +17,41 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-struct s_neural_network *nn_consructor(unsigned int nb_layer, unsigned int *layers_size, struct s_function function, enum nn_error *error)
+struct s_neurone ne_consructor(struct s_layer *layer, enum ne_error *error)
 {
+  // init the value to null a bias between -1 and 1 and the layer but no weight
+  struct s_neurone self = {0., random_uniforme(-1.0, 1.0), NULL, layer};
+  *error = NE_SUCCESS;
 
-  struct s_neural_network *self = calloc(1, sizeof(struct s_neural_network));
-
-  if (self == NULL)
+  // if no layer given return an error
+  if (layer == NULL)
   {
-    *error = NN_ERROR_SPACE;
-    return NULL;
+    *error = NE_NO_LAYER;
+    return self;
   }
 
-  if (function.derivate == NULL || function.self == NULL)
+  // get the number of neurone in the previous layer
+  unsigned int nb_neurone_previous_layer = 0;
+  if (self.layer->previous_layer != NULL)
+    nb_neurone_previous_layer = self.layer->previous_layer->size;
+
+  // alocate space for every weight
+  self.weights = calloc(nb_neurone_previous_layer, sizeof(double));
+
+  // if we can't alocate the memory return an error
+  if (self.weights == NULL)
   {
-    *error = NN_NO_FUNCTION;
-    nn_destructor(self);
-    return NULL;
+    *error = NE_ERROR_SPACE;
+    return self;
   }
 
-  self->activation_func = function;
-  self->nb_layer = nb_layer;
-  self->layers = calloc(self->nb_layer, sizeof(struct s_layer *));
+  // init each weight one by one with a value between -1 and 1
+  double *weight = self.weights;
+  double *last_weight = weight + nb_neurone_previous_layer;
+  for (; weight < last_weight; ++weight)
+    *weight = random_uniforme(-1.0, 1.0);
 
-  if (self->layers == NULL)
-  {
-    *error = NN_ERROR_SPACE;
-    nn_destructor(self);
-    return NULL;
-  }
-
-  enum la_error layer_error = LA_SUCCESS;
-  struct s_layer **previous_layer = NULL;
-  struct s_layer **layer = self->layers;
-  struct s_layer **last_layer = layer + self->nb_layer;
-  for (; layer < last_layer && error == LA_SUCCESS; previous_layer = layer, ++layer, ++layers_size)
-    *layer = la_consructor(*layers_size, *previous_layer, self, &layer_error);
-
-  if (layer_error != LA_SUCCESS)
-  {
-    for (; *layer >= *self->layers; --layer)
-      la_destructor(*layer);
-    self->layers = NULL;
-    nn_destructor(self);
-    return NULL;
-  }
-
+  *error = NE_SUCCESS;
   return self;
 }
 
@@ -72,17 +61,22 @@ struct s_neural_network *nn_consructor(unsigned int nb_layer, unsigned int *laye
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-void nn_destructor(struct s_neural_network *self)
+void ne_destructor(struct s_neurone *self)
 {
+  // if no layer remove it
   if (self == NULL)
     return;
 
-  struct s_layer **layer = self->layers;
-  struct s_layer **last_layer = layer + self->nb_layer;
-  for (; *layer < *last_layer; ++layer)
-    la_destructor(*layer);
+  // remove layer
+  self->layer = NULL;
 
-  free(self->layers);
+  // if there is no biases return
+  if (self->weights == NULL)
+    return;
+
+  // remove biases
+  free(self->weights);
+  self->weights = NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

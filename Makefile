@@ -2,8 +2,8 @@ BUILD_DIR=build
 OBJECT_DIR=obj
 SRC_DIR=src
 
-SRC=main.c
-DEPS=
+SRC=main.c neural_network/layer.c neural_network/neural_network.c neural_network/neurone.c neural_network/utils.c
+DEPS= neural_network/layer.h neural_network/neural_network.h neural_network/neurone.h neural_network/utils.h
 BUILD=UnRead-0.1.0
 
 CC=gcc
@@ -39,7 +39,8 @@ clean: $(OBJECT_DIR)
 	@$(RM) -r $(OBJECT_DIR)
 
 
-$(OBJECT_DIR)/%.o: $(SRC_DIR)/%.c $(OBJECT_DIR)/ $(addprefix $(SRC_DIR)/, $(DEPS))
+$(OBJECT_DIR)/%.o: $(SRC_DIR)/%.c $(addprefix $(SRC_DIR)/, $(DEPS))
+	@mkdir -p $(dir $@)
 	@echo "compiling" $<
 	@$(CC) -c -o $@ $< $(CFLAGS)
 

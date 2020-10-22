@@ -12,8 +12,36 @@
 #ifndef UNREAD__SRC_NEURAL_NETWORK__NEURAL_NETWORK_H_
 #define UNREAD__SRC_NEURAL_NETWORK__NEURAL_NETWORK_H_
 
-#include <stdio.h>
-#include "layer.h"
+/**
+** \enum s_neural_network
+** \brief code error of the `s_neural_network`'s function
+**
+** this containe return code error for constuctor and methode of the
+** `s_neural_network` object
+*/
+enum nn_error
+{
+  /**
+  ** succes creation of a `s_neurone_network`
+  */
+  NN_SUCCESS = 0,
+  /**
+  ** no neural network provided
+  */
+  NN_NO_NEURAL_NETWORK,
+  /**
+  ** not enought free space evalable
+  */
+  NN_ERROR_SPACE,
+  /**
+  ** no layer provided to the neurone
+  */
+  NN_NO_LAYER,
+  /**
+  ** no function provided
+  */
+  NN_NO_FUNCTION
+};
 
 /**
 ** \struct s_function
@@ -23,7 +51,7 @@ struct s_function
 {
   float (*self)(double);
   float (*derivate)(double);
-}
+};
 
 /**
 ** \struct s_neural_network
@@ -32,9 +60,12 @@ struct s_function
 struct s_neural_network
 {
   unsigned int nb_layer;
-  struct s_layers *layers;
-  struct s_function activation_func;  
+  struct s_layer **layers;
+  struct s_function activation_func;
 };
+
+#include <stdlib.h>
+#include "layer.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
@@ -49,7 +80,7 @@ struct s_neural_network
 **
 ** \return a new instance of `s_neural_network`
 */
-struct s_neural_network nn_consructor(unsigned int nb_layer,unsigned int *layers_size, struct s_function function,  enum nn_error *error);
+struct s_neural_network *nn_consructor(unsigned int nb_layer, unsigned int *layers_size, struct s_function function, enum nn_error *error);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
@@ -64,7 +95,7 @@ struct s_neural_network nn_consructor(unsigned int nb_layer,unsigned int *layers
 **
 ** \param set a pointer to the set to destroy
 */
-void nn_destructor(struct s_neural_network *neural_network);
+void nn_destructor(struct s_neural_network *self);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
