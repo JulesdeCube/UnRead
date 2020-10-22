@@ -6,9 +6,10 @@
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 
+#include "tools.h"
+
 #define UNUSED(x) (void)(x)
 
-float change_pixel_greylvl(guchar *p);
 GtkWidget* image_to_greylvl (GtkWidget* image_to_change);
 
 #endif

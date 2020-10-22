@@ -2,8 +2,8 @@ BUILD_DIR=build
 OBJECT_DIR=obj
 SRC_DIR=src
 
-SRC=main.c load_Image/load.c load_Image/transform_BW.c load_Image/transform_greylvl.c
-DEPS=load_Image/load.h load_Image/transform_BW.h load_Image/transform_greylvl.h
+SRC=main.c load_Image/load.c load_Image/transform_BW.c load_Image/transform_greylvl.c load_Image/tools.c
+DEPS=load_Image/load.h load_Image/transform_BW.h load_Image/transform_greylvl.h load_Image/tools.h
 BUILD=UnRead-0.1.0
 
 CC=gcc

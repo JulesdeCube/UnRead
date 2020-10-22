@@ -2,6 +2,7 @@
 obj/
 build/
 *.o
+*.jpg
 
 # editor
 .vscode/

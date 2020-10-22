@@ -4,7 +4,7 @@
 GtkWidget* create_image ()
 {
   GtkWidget *image;
-  image = gtk_image_new_from_file ("./src/load_Image/Images/oiseau.bmp");
+  image = gtk_image_new_from_file ("./src/load_Image/Images/hello.bmp");
   return image;
 }
 
