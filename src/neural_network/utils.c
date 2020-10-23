@@ -18,7 +18,7 @@
 
 double random_uniforme(double min, double max)
 {
-  return (double)rand() / RAND_MAX * (max - min) - min;
+  return (double)rand() / RAND_MAX * (max - min) + min;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
