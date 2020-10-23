@@ -94,6 +94,29 @@ void nn_destructor(struct s_neural_network *self)
 //                                 OPERATIONS                                //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
+
+void nn_apply(struct s_neural_network *self, double *input)
+{
+  // if there is no layer do nothing
+  if (!self->nb_layer)
+    return;
+  // set the value in the fist layer
+  la_set(*self->layers, input);
+  // use forward propagation
+  nn_compute(self);
+}
+
+void nn_compute(struct s_neural_network *self)
+{
+  // first and last layer of the neural network
+  struct s_layer **layer = self->layers;
+  struct s_layer **last_layer = layer + self->nb_layer;
+
+  // apply computation to each layer exept the fist
+  for (++layer; layer < last_layer; ++layer)
+    la_compute(*layer);
+}
+
 enum nn_error la_to_nn_error(enum la_error error)
 {
   switch (error)
@@ -129,7 +152,8 @@ void nn_print(struct s_neural_network *self)
   printf("//                                   INPUT                                   //\n");
   printf("//                                                                           //\n");
   printf("///////////////////////////////////////////////////////////////////////////////\n");
-  if (self->nb_layer > 0)
+  // check if it exist at less 1 layer
+  if (self->nb_layer)
     la_print(*self->layers);
 
   printf("\n\n\n");
@@ -139,10 +163,11 @@ void nn_print(struct s_neural_network *self)
   printf("//                                                                           //\n");
   printf("///////////////////////////////////////////////////////////////////////////////\n");
 
-  for (unsigned int i = 1; i < self->nb_layer; ++i)
+  // loop beween the second layer and the penultimate
+  for (unsigned int i = 2; i < self->nb_layer; ++i)
   {
-    printf("\n=================================== LAYER %u ===================================\n", i);
-    la_print(*(self->layers + i));
+    printf("\n=================================== LAYER %u ===================================\n", i - 1);
+    la_print(*(self->layers + i - 1));
   }
 
   printf("\n\n\n");
@@ -151,6 +176,7 @@ void nn_print(struct s_neural_network *self)
   printf("//                                  OUTPUT                                   //\n");
   printf("//                                                                           //\n");
   printf("///////////////////////////////////////////////////////////////////////////////\n");
-  if (self->nb_layer > 0)
+  // print the last layer if there is at less 1 layer
+  if (self->nb_layer)
     la_print(*(self->layers + self->nb_layer - 1));
 }

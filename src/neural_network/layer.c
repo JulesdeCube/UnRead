@@ -43,6 +43,8 @@ struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer,
     return NULL;
   }
 
+  self->neural_network = neural_network;
+
   // alocate the memory for each neurone struct
   self->neurones = calloc(size, sizeof(struct s_neurone));
 
@@ -120,6 +122,28 @@ void la_destructor(struct s_layer *self)
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
+void la_set(struct s_layer *self, double *values)
+{
+  // init start and stop ellement
+  struct s_neurone *neurone = self->neurones;
+  struct s_neurone *last_neurone = neurone + self->size;
+
+  // loop in each neurone and set his value
+  for (; neurone < last_neurone; ++neurone, ++values)
+    neurone->value = *values;
+}
+
+void la_compute(struct s_layer *self)
+{
+  // init start and stop ellement
+  struct s_neurone *neurone = self->neurones;
+  struct s_neurone *last_neurone = neurone + self->size;
+
+  // propagate computation in every neurone
+  for (; neurone < last_neurone; ++neurone)
+    ne_compute(neurone);
+}
+
 enum la_error ne_to_la_error(enum ne_error error)
 {
   switch (error)
@@ -146,9 +170,12 @@ enum la_error ne_to_la_error(enum ne_error error)
 ///////////////////////////////////////////////////////////////////////////////
 void la_print(struct s_layer *self)
 {
+  // loop to each neurone by id
   for (unsigned int i = 0; i < self->size; ++i)
   {
+    // print neurone separator
     printf("\n                       ---------- neurone %d ----------                       \n", i);
+    // print the neurone
     ne_print(self->neurones + i);
   }
 }

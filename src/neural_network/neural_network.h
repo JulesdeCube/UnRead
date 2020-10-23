@@ -104,6 +104,26 @@ void nn_destructor(struct s_neural_network *self);
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
+** \brief apply the neural network to the given input
+**
+** take a list of value a put it into the neural network and compute the output
+**
+** \param self the neural network to compute
+** \param input the value of the first layer
+*/
+void nn_apply(struct s_neural_network *self, double *input);
+
+/**
+** \brief compute neural network
+**
+** compute the value of each neurone layer by layer
+**
+** \param self the neural network to compute
+** \param input the value of the first layer
+*/
+void nn_compute(struct s_neural_network *self);
+
+/**
 ** \brief convert an layer error to a neural network error
 **
 **  convert `la_error` to `nn_error`

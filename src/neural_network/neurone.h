@@ -78,7 +78,7 @@ struct s_neurone ne_consructor(struct s_layer *layer, enum ne_error *error);
 **
 **  free space and propely destruct the neural network
 **
-** \param set a pointer to the set to destroy
+** \param self a pointer to the neural network to destroy
 */
 void ne_destructor(struct s_neurone *neurone);
 
@@ -87,6 +87,16 @@ void ne_destructor(struct s_neurone *neurone);
 //                                  METHODE                                  //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
+
+/**
+** \brief update the value of the neurone
+**
+** make the sum of the previous layer weighted and pass all the sum into the
+** activation function
+**
+** \param self the neurone to update
+*/
+void ne_compute(struct s_neurone *self);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //

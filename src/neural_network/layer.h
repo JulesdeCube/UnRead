@@ -85,7 +85,7 @@ struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer,
 **
 **  free space and propely destruct the layer neural network
 **
-** \param set a pointer to the set to destroy
+** \param self a pointer to the layer to destroy
 */
 void la_destructor(struct s_layer *self);
 
@@ -94,6 +94,26 @@ void la_destructor(struct s_layer *self);
 //                                  METHODE                                  //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
+
+/**
+** \brief set value of neurone of the layer
+**
+** set each value of each neurone of the layer base on a array
+**
+** \param self the layer to set values
+** \param value the list of values
+*/
+void la_set(struct s_layer *self, double *values);
+
+
+/**
+** \brief apply forward propagation to each neurone
+**
+** compute with the previous neurone the value of each neurone of the layer
+**
+** \param self the layer compute
+*/
+void la_compute(struct s_layer *self);
 
 /**
 ** \brief convert an neurone error to a layer error

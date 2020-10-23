@@ -85,6 +85,30 @@ void ne_destructor(struct s_neurone *self)
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
+void ne_compute(struct s_neurone *self)
+{
+  // quite if there is no layer given or there is no previous layer
+  if (!self->layer || !self->layer->previous_layer)
+    return;
+
+  // the previous layer
+  struct s_layer *previous_layer = self->layer->previous_layer;
+
+  // add the bias of the neurone
+  self->value = self->bias;
+  // init the begin and the end of the array
+  double *weight = self->weights;
+  double *last_weight = weight + previous_layer->size;
+  struct s_neurone *neurone_previous_layer = previous_layer->neurones;
+
+  // make the sum of previous neurone multiply by they weight
+  for (; weight < last_weight; ++weight)
+    self->value += (*weight) * neurone_previous_layer->value;
+
+  // path the value of the neurone to the activation function
+  self->value = self->layer->neural_network->activation_func.self(self->value);
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
 //                                   VIEWER                                  //
@@ -93,22 +117,33 @@ void ne_destructor(struct s_neurone *self)
 
 void ne_print(struct s_neurone *self)
 {
+  // print the value of the neurone
   printf("value : %lf\n", self->value);
+
+  // if there is no layer in the struct return an error
   if (!self->layer)
   {
     printf("ERROR: `ne_print` : no layer\n");
     return;
   }
+  // if there is no previous layer just print the value
   struct s_layer *previous_layer = self->layer->previous_layer;
   if (!previous_layer)
     return;
 
+  // print the bias
   printf("bais : %lf\n", self->bias);
+
+  // print the weight
   printf("weight : ");
+  // if there is more than 1 neurone in the previous layer print the fist
+  // ellement
   if (previous_layer->size)
     printf("[0]%lf", *self->weights);
 
+  // for all weight exept the fist one print the separator and the value
   for (unsigned int i = 1; i < previous_layer->size; ++i)
     printf(", [%u]%lf", i, self->weights[i]);
+  // return a line at the end of the list of weight
   printf("\n");
 }
