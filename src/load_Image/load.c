@@ -4,7 +4,7 @@
 GtkWidget* create_image ()
 {
   GtkWidget *image;
-  image = gtk_image_new_from_file ("./src/load_Image/Images/hello.bmp");
+  image = gtk_image_new_from_file ("./src/load_Image/Images/oiseau.bmp");
   return image;
 }
 
@@ -31,7 +31,9 @@ void activate_window (GtkApplication *app, gpointer user_data)
           HERE TO CHANGE THE TRANSFORMATION
       ################################################
     */
-    image_to_greylvl(imagec);
+    Change_Color(imagec, Colored_to_classicGreyLvl);
+    Change_Color(imagec, Greylvl_to_BW);
+
 
 
     //To show our Image

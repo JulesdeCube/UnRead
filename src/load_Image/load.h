@@ -6,13 +6,12 @@
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 
-#include "transform_BW.h"
-#include "transform_greylvl.h"
+#include "change_color.h"
 
 #define UNUSED(x) (void)(x)
 
-GtkWidget* create_image (void);
+GtkWidget* create_image();
 void activate_window(GtkApplication *app, gpointer user_data);
-int create_window(int, char **);
+int create_window(int argc, char **argv);
 
 #endif

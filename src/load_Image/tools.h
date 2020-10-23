@@ -9,11 +9,10 @@
 #define UNUSED(x) (void)(x)
 
 struct s_int_tuple{
-    int first;
-    int second;
+    int min;
+    int max;
 };
 
-struct s_int_tuple search_BW_pixel(GdkPixbuf *pixbuf);
-float change_pixel_greylvl(guchar *p);
+struct s_int_tuple search_BW_pixel(GtkWidget* image);
 
 #endif
