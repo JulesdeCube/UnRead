@@ -90,3 +90,25 @@ void ne_destructor(struct s_neurone *self)
 //                                   VIEWER                                  //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
+
+void ne_print(struct s_neurone *self)
+{
+  printf("value : %lf\n", self->value);
+  if (!self->layer)
+  {
+    printf("ERROR: `ne_print` : no layer\n");
+    return;
+  }
+  struct s_layer *previous_layer = self->layer->previous_layer;
+  if (!previous_layer)
+    return;
+
+  printf("bais : %lf\n", self->bias);
+  printf("weight : ");
+  if (previous_layer->size)
+    printf("[0]%lf", *self->weights);
+
+  for (unsigned int i = 1; i < previous_layer->size; ++i)
+    printf(", [%u]%lf", i, self->weights[i]);
+  printf("\n");
+}

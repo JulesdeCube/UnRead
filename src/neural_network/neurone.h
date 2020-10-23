@@ -48,7 +48,6 @@ struct s_neurone
   struct s_layer *layer;
 };
 
-
 #include <stdlib.h>
 #include "layer.h"
 #include "utils.h"
@@ -94,5 +93,12 @@ void ne_destructor(struct s_neurone *neurone);
 //                                   VIEWER                                  //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
+
+/**
+** \brief diplay the neurone information
+**
+** \param self the neurone to print
+*/
+void ne_print(struct s_neurone *self);
 
 #endif // UNREAD__SRC_NEURAL_NETWORK__NEURONE_H_

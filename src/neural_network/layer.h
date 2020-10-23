@@ -72,7 +72,7 @@ struct s_layer
 **
 ** \return a pointer to a new instance of `s_layer`
 */
-struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer,struct s_neural_network *neural_network, enum la_error *error);
+struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer, struct s_neural_network *neural_network, enum la_error *error);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
@@ -111,5 +111,12 @@ enum la_error ne_to_la_error(enum ne_error error);
 //                                   VIEWER                                  //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
+
+/**
+** \brief diplay the layer information
+**
+** \param self the layer to print
+*/
+void la_print(struct s_layer *self);
 
 #endif // UNREAD__SRC_NEURAL_NETWORK__LAYER_H_

@@ -51,8 +51,8 @@ struct s_neural_network *nn_consructor(unsigned int nb_layer, unsigned int *laye
   struct s_layer **previous_layer = NULL;
   struct s_layer **layer = self->layers;
   struct s_layer **last_layer = layer + self->nb_layer;
-  for (; layer < last_layer && error == LA_SUCCESS; previous_layer = layer, ++layer, ++layers_size)
-    *layer = la_consructor(*layers_size, *previous_layer, self, &layer_error);
+  for (; layer < last_layer && layer_error == LA_SUCCESS; previous_layer = layer, ++layer, ++layers_size)
+    *layer = la_consructor(*layers_size, previous_layer ? *previous_layer : NULL, self, &layer_error);
 
   if (layer_error != LA_SUCCESS)
   {
@@ -121,3 +121,36 @@ enum nn_error la_to_nn_error(enum la_error error)
 //                                   VIEWER                                  //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
+
+void nn_print(struct s_neural_network *self)
+{
+  printf("///////////////////////////////////////////////////////////////////////////////\n");
+  printf("//                                                                           //\n");
+  printf("//                                   INPUT                                   //\n");
+  printf("//                                                                           //\n");
+  printf("///////////////////////////////////////////////////////////////////////////////\n");
+  if (self->nb_layer > 0)
+    la_print(*self->layers);
+
+  printf("\n\n\n");
+  printf("///////////////////////////////////////////////////////////////////////////////\n");
+  printf("//                                                                           //\n");
+  printf("//                                  HIDDEN                                   //\n");
+  printf("//                                                                           //\n");
+  printf("///////////////////////////////////////////////////////////////////////////////\n");
+
+  for (unsigned int i = 1; i < self->nb_layer; ++i)
+  {
+    printf("\n=================================== LAYER %u ===================================\n", i);
+    la_print(*(self->layers + i));
+  }
+
+  printf("\n\n\n");
+  printf("///////////////////////////////////////////////////////////////////////////////\n");
+  printf("//                                                                           //\n");
+  printf("//                                  OUTPUT                                   //\n");
+  printf("//                                                                           //\n");
+  printf("///////////////////////////////////////////////////////////////////////////////\n");
+  if (self->nb_layer > 0)
+    la_print(*(self->layers + self->nb_layer - 1));
+}

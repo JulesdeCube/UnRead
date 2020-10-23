@@ -57,13 +57,13 @@ struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer,
   // for each nerone init it
   struct s_neurone *neurone = self->neurones;
   struct s_neurone *last_neurone = neurone + self->size;
-  enum ne_error *neurone_error = NE_SUCCESS;
+  enum ne_error neurone_error = NE_SUCCESS;
   for (; neurone < last_neurone && neurone_error == NE_SUCCESS; ++neurone)
-    *neurone = ne_consructor(self, neurone_error);
+    *neurone = ne_consructor(self, &neurone_error);
 
   // if there is a error during neurone initialisation remove previouslý created
   // neurone and desotry the layer
-  if (neurone_error != LA_SUCCESS)
+  if (neurone_error != NE_SUCCESS)
   {
     // destroy layer
     for (; neurone >= self->neurones; --neurone)
@@ -144,3 +144,11 @@ enum la_error ne_to_la_error(enum ne_error error)
 //                                   VIEWER                                  //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
+void la_print(struct s_layer *self)
+{
+  for (unsigned int i = 0; i < self->size; ++i)
+  {
+    printf("\n                       ---------- neurone %d ----------                       \n", i);
+    ne_print(self->neurones + i);
+  }
+}

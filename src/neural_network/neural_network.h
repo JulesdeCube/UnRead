@@ -120,4 +120,11 @@ enum nn_error la_to_nn_error(enum la_error error);
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+** \brief diplay the neural network state
+**
+** \param self the neural network to print
+*/
+void nn_print(struct s_neural_network *self);
+
 #endif // UNREAD__SRC_NEURAL_NETWORK__NEURAL_NETWORK_H_
