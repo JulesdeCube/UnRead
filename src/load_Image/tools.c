@@ -1,10 +1,5 @@
 #include "tools.h"
 
-
-/*
-    Search and return the withest and the blackest pixel of a pixbuf
-    return tuple => (min, max)
-*/
 struct s_int_tuple search_BW_pixel(GtkWidget *image)
 {
     GdkPixbuf *pixbuf;
@@ -23,6 +18,7 @@ struct s_int_tuple search_BW_pixel(GtkWidget *image)
     tuple.min = 255; //Cannot be superior than 255
     tuple.max = 0; //Cannot be inferior than 0
 
+    //run on each pixel
     for(int y = 0; y < height; ++y)
     {
         for(int x = 0; x < width; ++x)

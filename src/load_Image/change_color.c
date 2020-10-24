@@ -1,9 +1,5 @@
 #include "change_color.h"
 
-/*
-    for each pixel of the image, change the color with the function called in parameters
-    No return, because it will be apply on the image
-*/
 void apply_color(GtkWidget* image, void filter(guchar *, struct s_int_tuple))
 {
     GdkPixbuf *pixbuf;
@@ -30,10 +26,11 @@ void apply_color(GtkWidget* image, void filter(guchar *, struct s_int_tuple))
     }
 }
 
-
-
-/*
-    Return a value of grey corresponding to the pixel in parameters
+/**
+ ** \brief  Change pixel code in RGB to a pixel code in CLASSIC grey level
+ **
+ ** \param pixel which apply new color
+ ** \param min_max Unused it 
 */
 void Colored_to_classicGreyLvl1( guchar *pixel, struct s_int_tuple min_max)
 {
@@ -43,8 +40,11 @@ void Colored_to_classicGreyLvl1( guchar *pixel, struct s_int_tuple min_max)
         pixel[i] = value;
 }
 
-/*
-    Change the i
+/**
+ ** \brief  Change pixel code in CLASSIC grey level to a pixel code in NORMALIZED grey level
+ **
+ ** \param pixel which apply new color
+ ** \param min_max tuple with the maximum and minimum color of the image  
 */
 void ClassicGLVL_to_NormalizedGLVL1( guchar *pixel, struct s_int_tuple min_max)
 {
@@ -53,9 +53,11 @@ void ClassicGLVL_to_NormalizedGLVL1( guchar *pixel, struct s_int_tuple min_max)
         pixel[i] = value;
 }
 
-/*
-    Change image coded in grey level to an image code into black and white binary
-    - pixel can be coded in Classic or Normalized grey level
+/**
+ ** \brief  Change pixel code in grey level to a pixel code in black and white binary
+ **
+ ** \param pixel which apply new color
+ ** \param min_max Unused it
 */
 void Greylvl_to_BW1(guchar *pixel, struct s_int_tuple min_max)
 {       
@@ -65,7 +67,12 @@ void Greylvl_to_BW1(guchar *pixel, struct s_int_tuple min_max)
         pixel[i] = value;
 }
 
-
+/**
+ ** \brief Change pixel code in RGB to a pixel code in black and white binary
+ **
+ ** \param pixel which apply new color
+ ** \param min_max tuple with the maximum and minimum color of the image  
+*/
 void Colored_to_BW1(guchar *pixel, struct s_int_tuple min_max)
 {
     int medium = (min_max.max - min_max.min) /2;
