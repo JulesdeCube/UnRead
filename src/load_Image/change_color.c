@@ -112,6 +112,10 @@ void Change_Color(GtkWidget* image, enum function f)
     case Colored_to_BW:
         apply_color(image, Colored_to_BW1);
         break;
+        
+    case Colored_to_OnlyBlack:
+        apply_color(image, Colored_to_OnlyBlack1);
+        break;
 
     default:
         printf("ERROR : Change_color : You don't choose a changing color !\n");

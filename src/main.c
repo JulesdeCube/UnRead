@@ -133,6 +133,31 @@ void on_menuitm_open_grey_lvl_n_activate(GtkMenuItem *menuitem, app_widgets *app
     // Finished with the "Open Image" dialog box, so hide it
     gtk_widget_hide(app_wdgts->w_dlg_file_choose);
 }
+// File --> Open only Text
+void on_menuitm_open_preprocess_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
+{
+    UNUSED(menuitem);
+    gchar *file_name = NULL;        // Name of file to open from dialog box
+    
+    // Show the "Open Image" dialog box
+    gtk_widget_show(app_wdgts->w_dlg_file_choose);
+    
+    // Check return value from Open Image dialog box to see if user clicked the Open button
+    if (gtk_dialog_run(GTK_DIALOG (app_wdgts->w_dlg_file_choose)) == GTK_RESPONSE_OK) 
+    {
+        // Get the file name from the dialog box
+        file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(app_wdgts->w_dlg_file_choose));
+        if (file_name != NULL) 
+        {
+            gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), file_name);
+            Change_Color(app_wdgts->w_img_main,Colored_to_OnlyBlack);
+        }
+        g_free(file_name);
+    }
+
+    // Finished with the "Open Image" dialog box, so hide it
+    gtk_widget_hide(app_wdgts->w_dlg_file_choose);
+}
 
 
 /* !  Not working !
