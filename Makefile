@@ -9,7 +9,7 @@ BUILD=UnRead-0.1.0
 CC=gcc
 GTK_CFLAGS=$(shell pkg-config --cflags gtk+-3.0)
 GTK_LIB=$(shell pkg-config --libs gtk+-3.0)
-CFLAGS=-I$(SRC_DIR) $(GTK_CFLAGS) -Wall -Wextra -Werror -std=c99 -g $(GTK_LIB)
+CFLAGS=-I$(SRC_DIR) $(GTK_CFLAGS) -Wall -Wextra -Werror -std=c99 -pedantic -g $(GTK_LIB) -export-dynamic
 
 PACKAGES=libgtk-3-dev
 
@@ -47,7 +47,6 @@ else ifneq "$(shell whereis nix-env)" "nix-env:"
 else
 	@echo "ERROR: package manager not found.">&2
 endif
-
 	@echo "creating needed folder"
 	@mkdir -p cuted_line
 	@mkdir -p cuted_char
