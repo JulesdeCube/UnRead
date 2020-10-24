@@ -34,6 +34,7 @@ void activate_window (GtkApplication *app, gpointer user_data)
     Change_Color(imagec, Colored_to_classicGreyLvl);
     Change_Color(imagec, Greylvl_to_BW);
 
+    mainSegmentation(imagec);
 
 
     //To show our Image
