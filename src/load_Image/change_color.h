@@ -15,7 +15,8 @@ enum function
     Colored_to_classicGreyLvl,
     ClassicGLVL_to_NormalizedGLVL,
     Greylvl_to_BW,
-    Colored_to_BW
+    Colored_to_BW,
+    Colored_to_OnlyBlack
 };
 
 void apply_color(GtkWidget* image, void filter(guchar *, struct s_int_tuple));

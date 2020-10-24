@@ -75,6 +75,24 @@ void Colored_to_BW1(guchar *pixel, struct s_int_tuple min_max)
         pixel[i] = value;
 }
 
+/**
+ ** \brief transform pixel if his color value is under 15+minimal
+ ** of the image into a black one. Else into a white one
+ **
+ ** \param pixel will be modify
+ ** \param min_max the withest(maximal value) and blackest (minimal value) of the image
+*/
+void Colored_to_OnlyBlack1(guchar *pixel, struct s_int_tuple min_max)
+{
+    int value;
+    if((pixel[0] + pixel[1] + pixel[2]) / 3 - min_max.min < 15)
+        value = 0;
+    else
+        value = 255;
+    for(unsigned char i = 0; i < 3; ++i)
+        pixel[i] = value;
+}
+
 void Change_Color(GtkWidget* image, enum function f)
 {
     switch (f)
