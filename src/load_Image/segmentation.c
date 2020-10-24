@@ -12,7 +12,7 @@ int * horizontalProjection(GdkPixbuf *pixbuf)
     guchar *which_pixels = gdk_pixbuf_get_pixels (pixbuf);
     int height = gdk_pixbuf_get_height (pixbuf);
     int width = gdk_pixbuf_get_width (pixbuf);
-    int * hp =(int *) malloc( height );
+    int * hp =(int *) malloc( height * sizeof(int));
 
     for (int i = 0; i < height; ++i)
     {
@@ -44,7 +44,7 @@ int * verticalProjection(GdkPixbuf *pixbuf)
     guchar *which_pixels = gdk_pixbuf_get_pixels (pixbuf);
     int height = gdk_pixbuf_get_height (pixbuf);
     int width = gdk_pixbuf_get_width (pixbuf);
-    int * vp =(int *) malloc( width );
+    int * vp =(int *) malloc( width * sizeof(int) );
 
     for (int i = 0; i < width; ++i)
     {
@@ -81,7 +81,7 @@ void lineSegmentation(GdkPixbuf *pixbuf)
 
     for (int j = 0; j < height; ++j)
     {
-        if (*(hp+j) == 0 )
+        if (!hp[j])
         {
             // case when there is not any black pixel and the two line marker are different.
             if (a != b)
@@ -90,10 +90,10 @@ void lineSegmentation(GdkPixbuf *pixbuf)
                 pixLine = gdk_pixbuf_new_subpixbuf(pixbuf,0,a,width,b-a);
 
                 /* line name is segmentedLine_/line number/ and the format is bmp*/
-                char * sg = (char *) malloc( 255 );
-                char * number = (char *) malloc( 255 );
-                char * t = (char *) malloc( 255 );
-                char * type = (char *) malloc( 255 );
+                char * sg = (char *) malloc( 255 * sizeof(char) );
+                char * number = (char *) malloc( 255 * sizeof(char) );
+                char * t = (char *) malloc( 255 * sizeof(char) );
+                char * type = (char *) malloc( 255 * sizeof(char) );
                 sprintf(sg,"segmentedLine_");
                 sprintf(number, "%d", lineCount);
                 sprintf(t, "bmp");
@@ -107,7 +107,7 @@ void lineSegmentation(GdkPixbuf *pixbuf)
 
 
                 //moving file from UnRead to specific folder.
-                char newpath[255] = "./cuted_line/";
+                char newpath[20] = "./cuted_line/";
                 strcat(newpath,sg);
                 rename(sg,newpath);
 
@@ -137,9 +137,9 @@ void lineSegmentation(GdkPixbuf *pixbuf)
  work the same as the lineSegmentation*/
 void charSegmentation(GdkPixbuf *pixbuf,int lineNumber)
 {
-    printf("vertical projection start\n");
+    //printf("vertical projection start\n");
     int * vp = verticalProjection(pixbuf);
-    printf("vertical projection end\n");
+    //printf("vertical projection end\n");
     int a = 0;
     int b = 0;
     int height = gdk_pixbuf_get_height (pixbuf);
@@ -152,7 +152,7 @@ void charSegmentation(GdkPixbuf *pixbuf,int lineNumber)
     for (int j = 0; j < width; ++j)
     {
         //printf("black pixel in collum %d: %d\n",j,*(vp+j));
-        if (*(vp+j) == 0 )
+        if (!vp[j])
         {
             if (a != b)
             {
@@ -161,11 +161,11 @@ void charSegmentation(GdkPixbuf *pixbuf,int lineNumber)
                 pixChar = gdk_pixbuf_new_subpixbuf(pixbuf,a,0,b-a,height);
 
                 /* line name is segmentedLine_/line number/ and the format is bmp*/
-                char * sg = (char *) malloc( 255 );
-                char * number = (char *) malloc( 255 );
-                char * number2 = (char *) malloc( 255 );
-                char * t = (char *) malloc( 255 );
-                char * type = (char *) malloc( 255 );
+                char * sg = (char *) malloc( 255 * sizeof(char) );
+                char * number = (char *) malloc( 255 * sizeof(char));
+                char * number2 = (char *) malloc( 255 * sizeof(char));
+                char * t = (char *) malloc( 255 * sizeof(char));
+                char * type = (char *) malloc( 255 * sizeof(char));
                 sprintf(sg,"segmentedLine_");
                 sprintf(number2, "%d_", lineNumber);
                 strcat(sg,number2);
@@ -181,7 +181,7 @@ void charSegmentation(GdkPixbuf *pixbuf,int lineNumber)
 
 
                 //moving file from UnRead to specific folder.
-                char newpath[255] = "./cuted_char/";
+                char newpath[20] = "./cuted_char/";
                 strcat(newpath,sg);
                 rename(sg,newpath);
 
@@ -200,7 +200,7 @@ void charSegmentation(GdkPixbuf *pixbuf,int lineNumber)
             b++;
         }
     }
-    printf("line END \n");
+    //printf("line END \n");
 }
 //same sub function in load.c to create a gtk object from an image.
 GtkWidget* create_image2 (char path[255])
@@ -213,36 +213,36 @@ GtkWidget* create_image2 (char path[255])
 //Main segmentation function. Divide a black and white image in line, then Divide every line in char. Output qre stocked in ./cuted_char/
 void mainSegmentation(GtkWidget* image_to_change)
 {
-    printf("segmentation start\n");
+    //printf("segmentation start\n");
     GdkPixbuf *pixbuf;
     pixbuf = gtk_image_get_pixbuf ((GtkImage*) image_to_change);
-    printf("line seg\n");
+    //printf("line seg\n");
     lineSegmentation(pixbuf);
-    printf("line seg end\n");
+    //printf("line seg end\n");
 
     int c = 1;
 
     DIR *d;
     struct dirent *dir;
     d = opendir("./cuted_line");
-    char fileName[255+14];
+    char fileName[269];
     GtkWidget *lineImage;
     GdkPixbuf *pixbuf2;
     if (d)
     {
         //use dirent.h to find every line
         while ((dir = readdir(d)) != NULL) {
-            printf("line number:%d\n", c);
+            //printf("line number:%d\n", c);
 
             sprintf(fileName, "./cuted_line/%s", dir->d_name);
-            printf("%s\n",fileName);
+            //printf("%s\n",fileName);
             if (d)
                 lineImage = create_image2(fileName);
             pixbuf2 = gtk_image_get_pixbuf((GtkImage *) lineImage);
             if (GDK_IS_PIXBUF(pixbuf2)) {
-                printf("char seg\n");
+                //printf("char seg\n");
                 charSegmentation(pixbuf2, c);
-                printf("char seg end\n");
+                //printf("char seg end\n");
                 c += 1;
             }
         }
