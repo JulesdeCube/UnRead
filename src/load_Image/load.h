@@ -7,6 +7,7 @@
 #include <gdk/gdk.h>
 
 #include "change_color.h"
+#include "segmentation.h"
 
 #define UNUSED(x) (void)(x)
 
