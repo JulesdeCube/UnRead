@@ -2,8 +2,8 @@ BUILD_DIR=build
 OBJECT_DIR=obj
 SRC_DIR=src
 
-SRC=main.c load_Image/load.c load_Image/change_color.c load_Image/tools.c
-DEPS=load_Image/load.h load_Image/change_color.c load_Image/tools.h
+SRC=main.c load_Image/load.c load_Image/change_color.c load_Image/tools.c load_Image/segmentation.c
+DEPS=load_Image/load.h load_Image/change_color.c load_Image/tools.h load_Image/segmentation.h
 BUILD=UnRead-0.1.0
 
 CC=gcc
@@ -47,6 +47,10 @@ else ifneq "$(shell whereis nix-env)" "nix-env:"
 else
 	@echo "ERROR: package manager not found.">&2
 endif
+
+	@echo "creating needed folder"
+	@mkdir -p cuted_line
+	@mkdir -p cuted_char
 
 run: ## build and run the programme
 run: build
