@@ -8,11 +8,22 @@
 
 #define UNUSED(x) (void)(x)
 
+/**
+ * \brief tuple of int with min and max
+ */
 struct s_int_tuple{
     int min;
     int max;
 };
 
+/**
+ ** \brief Search the withest (maximum) and the blackest (minimum) pixel of a pixbuf 
+ ** corresponding to an image
+ ** 
+ ** \param image search on this image
+ **
+ ** \return tuple with minimum and maximum values
+*/
 struct s_int_tuple search_BW_pixel(GtkWidget* image);
 
 #endif

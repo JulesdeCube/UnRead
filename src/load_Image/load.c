@@ -1,6 +1,5 @@
 #include "load.h"
 
-/*Create an Image and return it*/
 GtkWidget* create_image ()
 {
   GtkWidget *image;
@@ -8,7 +7,6 @@ GtkWidget* create_image ()
   return image;
 }
 
-/*We start our first window*/
 void activate_window (GtkApplication *app, gpointer user_data)
 {
     UNUSED(user_data);
@@ -34,6 +32,7 @@ void activate_window (GtkApplication *app, gpointer user_data)
     Change_Color(imagec, Colored_to_classicGreyLvl);
     Change_Color(imagec, Greylvl_to_BW);
 
+
     mainSegmentation(imagec);
 
 
@@ -41,7 +40,7 @@ void activate_window (GtkApplication *app, gpointer user_data)
     gtk_widget_show_all (window);
 }
 
-/*generate our window with GTK*/
+
 int create_window(int argc, char **argv)
 {
     GtkApplication *app;
