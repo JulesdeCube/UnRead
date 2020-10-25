@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include <load_Image/change_color.h>
+#include "load_Image/segmentation.h"
 #include <stdio.h>
 #define UNUSED(x) (void)(x)
 
@@ -151,6 +152,7 @@ void on_menuitm_open_preprocess_activate(GtkMenuItem *menuitem, app_widgets *app
         {
             gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), file_name);
             Change_Color(app_wdgts->w_img_main,Colored_to_OnlyBlack);
+            mainSegmentation(app_wdgts->w_img_main);
         }
         g_free(file_name);
     }
