@@ -19,8 +19,8 @@
 
 struct s_neurone ne_consructor(struct s_layer *layer, enum ne_error *error)
 {
-  // init the value to null a bias between -1 and 1 and the layer but no weight
-  struct s_neurone self = {0., random_uniforme(-1.0, 1.0), NULL, layer};
+  // init the sum and output to null a bias between -1 and 1 and the layer but no weight
+  struct s_neurone self = {0., 0., random_uniforme(-1.0, 1.0), NULL, layer};
   *error = NE_SUCCESS;
 
   // if no layer given return an error
@@ -95,18 +95,18 @@ void ne_compute(struct s_neurone *self)
   struct s_layer *previous_layer = self->layer->previous_layer;
 
   // add the bias of the neurone
-  self->value = self->bias;
+  self->sum = self->bias;
   // init the begin and the end of the array
   double *weight = self->weights;
   double *last_weight = weight + previous_layer->size;
   struct s_neurone *neurone_previous_layer = previous_layer->neurones;
 
   // make the sum of previous neurone multiply by they weight
-  for (; weight < last_weight; ++weight)
-    self->value += (*weight) * neurone_previous_layer->value;
+  for (; weight < last_weight; ++neurone_previous_layer, ++weight)
+    self->sum += (*weight) * neurone_previous_layer->output;
 
   // path the value of the neurone to the activation function
-  self->value = self->layer->neural_network->activation_func.self(self->value);
+  self->output = self->layer->neural_network->activation_func.self(self->sum);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -117,8 +117,8 @@ void ne_compute(struct s_neurone *self)
 
 void ne_print(struct s_neurone *self)
 {
-  // print the value of the neurone
-  printf("value : %lf\n", self->value);
+  // print the output of the neurone
+  printf("output : %lf, sum : %lf\n", self->output, self->sum);
 
   // if there is no layer in the struct return an error
   if (!self->layer)

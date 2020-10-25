@@ -137,7 +137,6 @@ void nn_apply(struct s_neural_network *self, double *input);
 ** compute the value of each neurone layer by layer
 **
 ** \param self the neural network to compute
-** \param input the value of the first layer
 */
 void nn_compute(struct s_neural_network *self);
 

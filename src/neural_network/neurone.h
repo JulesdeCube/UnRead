@@ -42,7 +42,8 @@ enum ne_error
 */
 struct s_neurone
 {
-  double value;
+  double sum;
+  double output;
   double bias;
   double *weights;
   struct s_layer *layer;
@@ -62,6 +63,9 @@ struct s_neurone
 ** \brief `s_neurone` constuctor.
 **
 ** create a neurone for neural network
+**
+** \param layer the parrent layer
+** \param error error callback variable
 **
 ** \return a new instance of `s_neurone`
 */

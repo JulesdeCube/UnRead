@@ -130,7 +130,7 @@ void la_set(struct s_layer *self, double *values)
 
   // loop in each neurone and set his value
   for (; neurone < last_neurone; ++neurone, ++values)
-    neurone->value = *values;
+    neurone->output = *values;
 }
 
 void la_compute(struct s_layer *self)

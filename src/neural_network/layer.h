@@ -96,9 +96,9 @@ void la_destructor(struct s_layer *self);
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
-** \brief set value of neurone of the layer
+** \brief set output of neurone of the layer
 **
-** set each value of each neurone of the layer base on a array
+** set each output of each neurone of the layer base on a array
 **
 ** \param self the layer to set values
 ** \param value the list of values
@@ -109,7 +109,7 @@ void la_set(struct s_layer *self, double *values);
 /**
 ** \brief apply forward propagation to each neurone
 **
-** compute with the previous neurone the value of each neurone of the layer
+** compute with the previous neurone the output of each neurone of the layer
 **
 ** \param self the layer compute
 */
