@@ -34,6 +34,43 @@ double random_uniforme(double min, double max);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
+//                               ERROR FUNCTION                              //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+** \brief a simple error function
+**
+** return the square of the diferent:
+** $$
+** \frac12 \times (target - output)^2
+** $$
+**
+** \param target the wanted value
+** \param output the output value of the network
+**
+** \return the error
+*/
+double sq_difference(double target, double output);
+
+/**
+** \brief the derivate of the `sq_diference` function
+**
+** return the derivate square of the diferent:
+** $$
+** \times (target - output)
+** $$
+**
+** \param target the wanted value
+** \param output the output value of the network
+**
+** \return the error
+*/
+double sq_difference_derivate(double target, double output);
+
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
 //                             ACTIVATION FUNCTION                           //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////

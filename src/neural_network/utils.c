@@ -23,6 +23,23 @@ double random_uniforme(double min, double max)
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
+//                               ERROR FUNCTION                              //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
+
+double sq_difference(double target, double output)
+{
+  target -= output;
+  return target * target / 2.;
+}
+
+double sq_difference_derivate(double target, double output)
+{
+  return target -= output;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
 //                             ACTIVATION FUNCTION                           //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
