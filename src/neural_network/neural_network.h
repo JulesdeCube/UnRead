@@ -44,13 +44,23 @@ enum nn_error
 };
 
 /**
-** \struct s_function
-** \brief une fonction et sa derive
+** \struct s_function_1p
+** \brief a function with 1 parameter and is derivate
 */
-struct s_function
+struct s_function_1p
 {
   double (*self)(double);
   double (*derivate)(double);
+};
+
+/**
+** \struct s_function_2p
+** \brief a function with 2 parameter and is derivate
+*/
+struct s_function_2p
+{
+  double (*self)(double, double);
+  double (*derivate)(double, double);
 };
 
 /**
@@ -61,7 +71,8 @@ struct s_neural_network
 {
   unsigned int nb_layer;
   struct s_layer **layers;
-  struct s_function activation_func;
+  struct s_function_1p activation_func;
+  struct s_function_2p error_func;
 };
 
 #include <stdlib.h>
@@ -78,9 +89,16 @@ struct s_neural_network
 **
 ** create a neural network
 **
+** \param nb_layer the number of layer in the network
+** \param layers_size a array containging the number of neurone of each layer
+** \param activation_func the activation and is derivate
+**        function for each neurone
+** \param error_func the error function and is derivate
+** \param error the error callback code
+**
 ** \return a new instance of `s_neural_network`
 */
-struct s_neural_network *nn_consructor(unsigned int nb_layer, unsigned int *layers_size, struct s_function function, enum nn_error *error);
+struct s_neural_network *nn_consructor(unsigned int nb_layer, unsigned int *layers_size, struct s_function_1p activation_func, struct s_function_2p error_func, enum nn_error *error);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //

@@ -132,7 +132,7 @@ void ne_print(struct s_neurone *self)
     return;
 
   // print the bias
-  printf("bais : %lf\n", self->bias);
+  printf("bias : %lf\n", self->bias);
 
   // print the weight
   printf("weight : ");

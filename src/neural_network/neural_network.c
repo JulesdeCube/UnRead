@@ -18,7 +18,7 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-struct s_neural_network *nn_consructor(unsigned int nb_layer, unsigned int *layers_size, struct s_function function, enum nn_error *error)
+struct s_neural_network *nn_consructor(unsigned int nb_layer, unsigned int *layers_size, struct s_function_1p activation_func, struct s_function_2p error_func, enum nn_error *error)
 {
 
   struct s_neural_network *self = calloc(1, sizeof(struct s_neural_network));
@@ -29,14 +29,22 @@ struct s_neural_network *nn_consructor(unsigned int nb_layer, unsigned int *laye
     return NULL;
   }
 
-  if (function.derivate == NULL || function.self == NULL)
+  if (activation_func.derivate == NULL || activation_func.self == NULL)
   {
     *error = NN_NO_FUNCTION;
     nn_destructor(self);
     return NULL;
   }
+  self->activation_func = activation_func;
 
-  self->activation_func = function;
+  if (error_func.self == NULL || error_func.derivate == NULL)
+  {
+    *error = NN_NO_FUNCTION;
+    nn_destructor(self);
+    return NULL;
+  }
+  self->error_func = error_func;
+
   self->nb_layer = nb_layer;
   self->layers = calloc(self->nb_layer, sizeof(struct s_layer *));
 
