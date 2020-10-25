@@ -22,7 +22,8 @@ enum function
     Colored_to_classicGreyLvl,
     ClassicGLVL_to_NormalizedGLVL,
     Greylvl_to_BW,
-    Colored_to_BW
+    Colored_to_BW,
+    Colored_to_OnlyBlack
 };
 
 
