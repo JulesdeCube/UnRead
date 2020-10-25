@@ -85,7 +85,7 @@ void Colored_to_BW1(guchar *pixel, struct s_int_tuple min_max)
 void Colored_to_OnlyBlack1(guchar *pixel, struct s_int_tuple min_max)
 {
     int value;
-    if((pixel[0] + pixel[1] + pixel[2]) / 3 - min_max.min < 15)
+    if((pixel[0] + pixel[1] + pixel[2]) / 3 - min_max.min < 2)
         value = 0;
     else
         value = 255;
