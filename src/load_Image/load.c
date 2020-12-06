@@ -3,7 +3,7 @@
 GtkWidget* create_image ()
 {
   GtkWidget *image;
-  image = gtk_image_new_from_file ("./src/load_Image/Images/oiseau.bmp");
+  image = gtk_image_new_from_file ("./test/traitement/texte_sur_fond3.bmp");
   return image;
 }
 
@@ -18,6 +18,7 @@ void activate_window (GtkApplication *app, gpointer user_data)
     gtk_window_set_title (GTK_WINDOW (window), "Window");
     gtk_window_set_default_size (GTK_WINDOW (window), 1000, 500);
     
+    
 
     //Create an Image
     imagec = create_image();
@@ -29,11 +30,12 @@ void activate_window (GtkApplication *app, gpointer user_data)
           HERE TO CHANGE THE TRANSFORMATION
       ################################################
     */
-    Change_Color(imagec, Colored_to_classicGreyLvl);
-    Change_Color(imagec, Greylvl_to_BW);
+    //Change_Color(imagec, Colored_to_classicGreyLvl);
+    //Change_Color(imagec, Greylvl_to_BW);
+    New_Size_Image(imagec, 1000, 1000);
 
-
-    mainSegmentation(imagec);
+    //Segmentation for hugo
+    //mainSegmentation(imagec);
 
 
     //To show our Image

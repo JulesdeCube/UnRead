@@ -2,8 +2,8 @@ BUILD_DIR=build
 OBJECT_DIR=obj
 SRC_DIR=src
 
-SRC=main.c load_Image/load.c load_Image/change_color.c load_Image/tools.c load_Image/segmentation.c
-DEPS=load_Image/load.h load_Image/change_color.c load_Image/tools.h load_Image/segmentation.h
+SRC=main.c load_Image/load.c load_Image/change_color.c load_Image/tools.c load_Image/segmentation.c load_Image/resize.c
+DEPS=load_Image/load.h load_Image/change_color.c load_Image/tools.h load_Image/segmentation.h load_Image/resize.h
 BUILD=UnRead-0.1.0
 
 CC=gcc

@@ -2,6 +2,9 @@
 #include <load_Image/change_color.h>
 #include "load_Image/segmentation.h"
 #include <stdio.h>
+
+#include "load_Image/load.h"
+
 #define UNUSED(x) (void)(x)
 
 
@@ -12,6 +15,10 @@ typedef struct {
 
 int main(int argc, char *argv[])
 {
+    create_window(argc, argv);
+
+    //With baptiste code
+    /*
     GtkBuilder      *builder;
     GtkWidget       *window;
     app_widgets     *widgets = g_slice_new(app_widgets);
@@ -31,7 +38,7 @@ int main(int argc, char *argv[])
     gtk_widget_show(window);                
     gtk_main();
     g_slice_free(app_widgets, widgets);
-
+    */
     return 0;
 }
 
@@ -160,17 +167,6 @@ void on_menuitm_open_preprocess_activate(GtkMenuItem *menuitem, app_widgets *app
     // Finished with the "Open Image" dialog box, so hide it
     gtk_widget_hide(app_wdgts->w_dlg_file_choose);
 }
-
-
-/* !  Not working !
-fonction to aplly a filter on the current image
-void on_menuitm_switch(GtkMenuItem *menuitem, app_widgets *app_wdgts)
-{
-    UNUSED(menuitem);
-    printf("btn cliked\n");
-    Change_Color(app_wdgts->w_img_main,Colored_to_classicGreyLvl);
-}
-*/
 
 // File --> Quit
 void on_menuitm_close_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
