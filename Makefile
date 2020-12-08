@@ -2,14 +2,14 @@ BUILD_DIR=build
 OBJECT_DIR=obj
 SRC_DIR=src
 
-SRC=main.c load_Image/load.c load_Image/change_color.c load_Image/tools.c load_Image/segmentation.c
-DEPS=load_Image/load.h load_Image/change_color.c load_Image/tools.h load_Image/segmentation.h
+SRC=main.c load_Image/load.c load_Image/change_color.c load_Image/tools.c load_Image/segmentation.c load_Image/rotate.c
+DEPS=load_Image/load.h load_Image/change_color.c load_Image/tools.h load_Image/segmentation.h load_Image/rotate.h
 BUILD=UnRead-0.1.0
 
 CC=gcc
 GTK_CFLAGS=$(shell pkg-config --cflags gtk+-3.0)
 GTK_LIB=$(shell pkg-config --libs gtk+-3.0)
-CFLAGS=-I$(SRC_DIR) $(GTK_CFLAGS) -Wall -Wextra -Werror -std=c99 -pedantic -g $(GTK_LIB) -export-dynamic
+CFLAGS=-I$(SRC_DIR) $(GTK_CFLAGS) -Wall -Wextra -Werror -std=c99 -pedantic -g $(GTK_LIB) -export-dynamic -lm
 
 PACKAGES=libgtk-3-dev
 

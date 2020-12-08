@@ -1,6 +1,8 @@
 #include <gtk/gtk.h>
 #include <load_Image/change_color.h>
 #include "load_Image/segmentation.h"
+#include "load_Image/load.h"
+
 #include <stdio.h>
 #define UNUSED(x) (void)(x)
 
@@ -12,6 +14,8 @@ typedef struct {
 
 int main(int argc, char *argv[])
 {
+    create_window(argc, argv);
+    /*
     GtkBuilder      *builder;
     GtkWidget       *window;
     app_widgets     *widgets = g_slice_new(app_widgets);
@@ -31,7 +35,7 @@ int main(int argc, char *argv[])
     gtk_widget_show(window);                
     gtk_main();
     g_slice_free(app_widgets, widgets);
-
+    */
     return 0;
 }
 
