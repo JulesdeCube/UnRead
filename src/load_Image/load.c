@@ -29,7 +29,7 @@ void activate_window (GtkApplication *app, gpointer user_data)
           HERE TO CHANGE THE TRANSFORMATION
       ################################################
     */
-    rotate(imagec, -90);
+    rotate(imagec, -20);
 
 
     //To show our Image
