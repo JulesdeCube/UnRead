@@ -11,30 +11,7 @@
 #ifndef UNREAD__SRC_NEURAL_NETWORK__NEURONE_H_
 #define UNREAD__SRC_NEURAL_NETWORK__NEURONE_H_
 
-/**
-** \enum ne_errror
-** \brief code error of the `s_neurone`'s function
-**
-** this containe return code error for constuctor and methode of the `s_neurone`
-** object
-*/
-enum ne_error
-{
-  /**
-  ** succes creation of a `s_neurone`
-  */
-  NE_SUCCESS = 0,
-  /**
-  ** no layer provided
-  */
-  NE_NO_LAYER,
-  /**
-  ** not enought free space evalable
-  */
-  NE_ERROR_SPACE
-};
-
-//prevent definition of ne error before usage in defintion
+#include <stdlib.h>
 
 /**
 ** \struct s_neurone
@@ -49,9 +26,10 @@ struct s_neurone
   struct s_layer *layer;
 };
 
-#include <stdlib.h>
+#include <stdio.h>
 #include "layer.h"
 #include "utils.h"
+#include "neural_network_error.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
@@ -69,7 +47,7 @@ struct s_neurone
 **
 ** \return a new instance of `s_neurone`
 */
-struct s_neurone ne_consructor(struct s_layer *layer, enum ne_error *error);
+struct s_neurone ne_consructor(struct s_layer *layer, enum e_nn_error *error);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
@@ -100,7 +78,9 @@ void ne_destructor(struct s_neurone *neurone);
 **
 ** \param self the neurone to update
 */
-void ne_compute(struct s_neurone *self);
+void ne_compute(struct s_neurone *self, enum e_nn_error *error);
+
+void ne_write(struct s_neurone *self, FILE *fp, enum e_nn_error *error);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //

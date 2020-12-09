@@ -12,36 +12,10 @@
 #ifndef UNREAD__SRC_NEURAL_NETWORK__NEURAL_NETWORK_H_
 #define UNREAD__SRC_NEURAL_NETWORK__NEURAL_NETWORK_H_
 
-/**
-** \enum s_neural_network
-** \brief code error of the `s_neural_network`'s function
-**
-** this containe return code error for constuctor and methode of the
-** `s_neural_network` object
-*/
-enum nn_error
-{
-  /**
-  ** succes creation of a `s_neurone_network`
-  */
-  NN_SUCCESS = 0,
-  /**
-  ** no neural network provided
-  */
-  NN_NO_NEURAL_NETWORK,
-  /**
-  ** not enought free space evalable
-  */
-  NN_ERROR_SPACE,
-  /**
-  ** no layer provided to the neurone
-  */
-  NN_NO_LAYER,
-  /**
-  ** no function provided
-  */
-  NN_NO_FUNCTION
-};
+#include <stdlib.h>
+#include <stdio.h>
+#include "neural_network_error.h"
+#include "layer.h"
 
 /**
 ** \struct s_function_1p
@@ -75,9 +49,6 @@ struct s_neural_network
   struct s_function_2p error_func;
 };
 
-#include <stdlib.h>
-#include "layer.h"
-
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
 //                                CONSTRUCTOR                                //
@@ -98,7 +69,7 @@ struct s_neural_network
 **
 ** \return a new instance of `s_neural_network`
 */
-struct s_neural_network *nn_consructor(unsigned int nb_layer, unsigned int *layers_size, struct s_function_1p activation_func, struct s_function_2p error_func, enum nn_error *error);
+struct s_neural_network *nn_consructor(unsigned int nb_layer, unsigned int *layers_size, struct s_function_1p activation_func, struct s_function_2p error_func, enum e_nn_error *error);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
@@ -129,7 +100,7 @@ void nn_destructor(struct s_neural_network *self);
 ** \param self the neural network to compute
 ** \param input the value of the first layer
 */
-void nn_apply(struct s_neural_network *self, double *input);
+void nn_apply(struct s_neural_network *self, double *input, enum e_nn_error *error);
 
 /**
 ** \brief compute neural network
@@ -138,18 +109,29 @@ void nn_apply(struct s_neural_network *self, double *input);
 **
 ** \param self the neural network to compute
 */
-void nn_compute(struct s_neural_network *self);
+void nn_compute(struct s_neural_network *self, enum e_nn_error *error);
 
 /**
-** \brief convert an layer error to a neural network error
+** \brief save the neural_network to file
 **
-**  convert `la_error` to `nn_error`
+** open and create a file in not exist and save the neural network information
+** into it
 **
-** \param error the layer error
-**
-** \return the equivalent neural network error
+** \param self the neural network to save
+** \param filename the path to a file (that can not exist) where the neural
+**        network will be save.
 */
-enum nn_error la_to_nn_error(enum la_error error);
+void nn_save(struct s_neural_network *self, char *filename, enum e_nn_error *error);
+
+/**
+** \brief write the content of a neural network
+**
+** write the weight and the biais of a neural network in the given file
+**
+** \param self the neural network to save
+** \param fp file
+*/
+void nn_write(struct s_neural_network *self, FILE *fp, enum e_nn_error *error);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //

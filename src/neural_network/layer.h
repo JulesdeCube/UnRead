@@ -11,32 +11,12 @@
 #ifndef UNREAD__SRC_NEURAL_NETWORK__LAYER_H_
 #define UNREAD__SRC_NEURAL_NETWORK__LAYER_H_
 
-/**
-** \enum la_errror
-** \brief code error of the `s_layer`'s function
-**
-** this containe return code error for constuctor and methode of the `s_layer`
-** object
-*/
-enum la_error
-{
-  /**
-  ** succes creation of a `s_neurone`
-  */
-  LA_SUCCESS = 0,
-  /**
-  ** no neural network provided
-  */
-  LA_NO_NEURAL_NETWORK,
-  /**
-  ** not enought free space evalable
-  */
-  LA_ERROR_SPACE,
-  /**
-  ** no layer provided to the neurone
-  */
-  LA_NO_LAYER
-};
+#include <stdlib.h>
+#include <stdio.h>
+
+#include "neural_network_error.h"
+#include "neural_network.h"
+#include "neurone.h"
 
 /**
 ** \struct s_layer
@@ -50,11 +30,6 @@ struct s_layer
   struct s_layer *next_layer;
   struct s_neural_network *neural_network;
 };
-
-#include <stdlib.h>
-#include <stdio.h>
-#include "neurone.h"
-#include "neural_network.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
@@ -72,7 +47,7 @@ struct s_layer
 **
 ** \return a pointer to a new instance of `s_layer`
 */
-struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer, struct s_neural_network *neural_network, enum la_error *error);
+struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer, struct s_neural_network *neural_network, enum e_nn_error *error);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
@@ -103,8 +78,7 @@ void la_destructor(struct s_layer *self);
 ** \param self the layer to set values
 ** \param value the list of values
 */
-void la_set(struct s_layer *self, double *values);
-
+void la_set(struct s_layer *self, double *values, enum e_nn_error *error);
 
 /**
 ** \brief apply forward propagation to each neurone
@@ -113,18 +87,17 @@ void la_set(struct s_layer *self, double *values);
 **
 ** \param self the layer compute
 */
-void la_compute(struct s_layer *self);
+void la_compute(struct s_layer *self, enum e_nn_error *error);
 
 /**
-** \brief convert an neurone error to a layer error
+** \brief write the content of a layer
 **
-**  convert `ne_error` to `la_error`
+** write the weight and the biais of a the neural
 **
-** \param error the neurone error
-**
-** \return the equivalent layer error
+** \param self the layer to save
+** \param fp file
 */
-enum la_error ne_to_la_error(enum ne_error error);
+void la_write(struct s_layer *self, FILE *fp, enum e_nn_error *error);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //

@@ -17,15 +17,18 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer, struct s_neural_network *neural_network, enum la_error *error)
+struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer, struct s_neural_network *neural_network, enum e_nn_error *error)
 {
+  // set the error to success
+  *error = NN_SUCCESS;
+
   // create the layer
   struct s_layer *self = calloc(1, sizeof(struct s_layer));
 
   // if we didn't have enought free space trow error
-  if (self == NULL)
+  if (!self)
   {
-    *error = LA_ERROR_SPACE;
+    *error = NN_ERROR_SPACE;
     return self;
   }
 
@@ -36,9 +39,9 @@ struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer,
   self->next_layer = NULL;
 
   // if no neural network given return an error
-  if (neural_network == NULL)
+  if (!neural_network)
   {
-    *error = LA_NO_NEURAL_NETWORK;
+    *error = NN_NO_NEURAL_NETWORK;
     la_destructor(self);
     return NULL;
   }
@@ -49,9 +52,9 @@ struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer,
   self->neurones = calloc(size, sizeof(struct s_neurone));
 
   // if we can't alocate memory throw error and desotry it
-  if (self->neurones == NULL)
+  if (!self->neurones)
   {
-    *error = LA_ERROR_SPACE;
+    *error = NN_ERROR_SPACE;
     la_destructor(self);
     return NULL;
   }
@@ -59,13 +62,12 @@ struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer,
   // for each nerone init it
   struct s_neurone *neurone = self->neurones;
   struct s_neurone *last_neurone = neurone + self->size;
-  enum ne_error neurone_error = NE_SUCCESS;
-  for (; neurone < last_neurone && neurone_error == NE_SUCCESS; ++neurone)
-    *neurone = ne_consructor(self, &neurone_error);
+  for (; neurone < last_neurone && !*error; ++neurone)
+    *neurone = ne_consructor(self, error);
 
   // if there is a error during neurone initialisation remove previouslý created
   // neurone and desotry the layer
-  if (neurone_error != NE_SUCCESS)
+  if (*error)
   {
     // destroy layer
     for (; neurone >= self->neurones; --neurone)
@@ -75,13 +77,11 @@ struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer,
     self->neurones = NULL;
     la_destructor(self);
     // get error
-    *error = ne_to_la_error(*error);
     return NULL;
   }
-  // set the error to success
-  *error = LA_SUCCESS;
+
   // update previous layer
-  if (self->previous_layer != NULL)
+  if (self->previous_layer)
     self->previous_layer->next_layer = self;
 
   return self;
@@ -96,11 +96,11 @@ struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer,
 void la_destructor(struct s_layer *self)
 {
   // if already destroy remove do nothing
-  if (self == NULL)
+  if (!self)
     return;
 
   // if neurones are not destroy remove it
-  if (self->neurones != NULL)
+  if (self->neurones)
   {
     struct s_neurone *neurone = self->neurones;
     struct s_neurone *last_neurone = neurone + self->size;
@@ -122,45 +122,63 @@ void la_destructor(struct s_layer *self)
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-void la_set(struct s_layer *self, double *values)
+void la_set(struct s_layer *self, double *values, enum e_nn_error *error)
 {
-  // init start and stop ellement
+  if (!self)
+  {
+    *error = NN_NO_LAYER;
+    return;
+  }
+
+  // init start and stop element
   struct s_neurone *neurone = self->neurones;
   struct s_neurone *last_neurone = neurone + self->size;
 
   // loop in each neurone and set his value
   for (; neurone < last_neurone; ++neurone, ++values)
     neurone->output = *values;
+
+  *error = NN_SUCCESS;
 }
 
-void la_compute(struct s_layer *self)
+void la_compute(struct s_layer *self, enum e_nn_error *error)
 {
-  // init start and stop ellement
+  *error = NN_SUCCESS;
+  if (!self)
+  {
+    *error = NN_NO_LAYER;
+    return;
+  }
+
+  // init start and stop element
   struct s_neurone *neurone = self->neurones;
   struct s_neurone *last_neurone = neurone + self->size;
 
   // propagate computation in every neurone
-  for (; neurone < last_neurone; ++neurone)
-    ne_compute(neurone);
+  for (; neurone < last_neurone && !*error; ++neurone)
+    ne_compute(neurone, error);
 }
 
-enum la_error ne_to_la_error(enum ne_error error)
+void la_write(struct s_layer *self, FILE *fp, enum e_nn_error *error)
 {
-  switch (error)
+  *error = NN_SUCCESS;
+
+  if (!self)
   {
-  case NE_SUCCESS:
-    return LA_SUCCESS;
-
-  case NE_ERROR_SPACE:
-    return LA_ERROR_SPACE;
-
-  case NE_NO_LAYER:
-    return LA_NO_LAYER;
-
-  default:
-    printf("ERROR: `ne_to_la_error`: unkown error : %d", error);
-    return (enum la_error) - 1;
+    *error = NN_NO_LAYER;
+    return;
   }
+
+  // write the number of neurone
+  fwrite(&self->size, sizeof(self->size), 1u, fp);
+
+  // init start and stop element
+  struct s_neurone *neurone = self->neurones;
+  struct s_neurone *last_neurone = neurone + self->size;
+
+  // write neurones's informations
+  for (; neurone < last_neurone && !*error; ++neurone)
+    ne_write(neurone, fp, error);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -168,8 +186,16 @@ enum la_error ne_to_la_error(enum ne_error error)
 //                                   VIEWER                                  //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
+
 void la_print(struct s_layer *self)
 {
+  // if it not exist exit and print a message
+  if (!self)
+  {
+    printf("ERROR: `la_print` : no layer\n");
+    return;
+  }
+
   // loop to each neurone by id
   for (unsigned int i = 0; i < self->size; ++i)
   {

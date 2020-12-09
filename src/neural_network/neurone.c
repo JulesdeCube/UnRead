@@ -17,16 +17,18 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-struct s_neurone ne_consructor(struct s_layer *layer, enum ne_error *error)
+struct s_neurone ne_consructor(struct s_layer *layer, enum e_nn_error *error)
 {
+  // set the error to success
+  *error = NN_SUCCESS;
+
   // init the sum and output to null a bias between -1 and 1 and the layer but no weight
   struct s_neurone self = {0., 0., random_uniforme(-1.0, 1.0), NULL, layer};
-  *error = NE_SUCCESS;
 
   // if no layer given return an error
-  if (layer == NULL)
+  if (!layer)
   {
-    *error = NE_NO_LAYER;
+    *error = NN_NO_LAYER;
     return self;
   }
 
@@ -41,7 +43,7 @@ struct s_neurone ne_consructor(struct s_layer *layer, enum ne_error *error)
   // if we can't alocate the memory return an error
   if (self.weights == NULL)
   {
-    *error = NE_ERROR_SPACE;
+    *error = NN_ERROR_SPACE;
     return self;
   }
 
@@ -51,7 +53,6 @@ struct s_neurone ne_consructor(struct s_layer *layer, enum ne_error *error)
   for (; weight < last_weight; ++weight)
     *weight = random_uniforme(-1.0, 1.0);
 
-  *error = NE_SUCCESS;
   return self;
 }
 
@@ -85,10 +86,33 @@ void ne_destructor(struct s_neurone *self)
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-void ne_compute(struct s_neurone *self)
+void ne_compute(struct s_neurone *self, enum e_nn_error *error)
 {
-  // quite if there is no layer given or there is no previous layer
-  if (!self->layer || !self->layer->previous_layer)
+  *error = NN_SUCCESS;
+
+  // if no neurone provided return an error
+  if (!self)
+  {
+    *error = NN_NO_NEURONE;
+    return;
+  }
+
+  //  if there is no layer in linked with the neurone return an error;
+  if (!self->layer)
+  {
+    *error = NN_NO_LAYER;
+    return;
+  }
+
+  //  if there is no layer in linked with the neurone return an error;
+  if (!self->layer->neural_network)
+  {
+    *error = NN_NO_NEURAL_NETWORK;
+    return;
+  }
+
+  // quite if there is no previous_layer (nothing to do)
+  if (!self->layer->previous_layer)
     return;
 
   // the previous layer
@@ -96,6 +120,7 @@ void ne_compute(struct s_neurone *self)
 
   // add the bias of the neurone
   self->sum = self->bias;
+
   // init the begin and the end of the array
   double *weight = self->weights;
   double *last_weight = weight + previous_layer->size;
@@ -103,10 +128,48 @@ void ne_compute(struct s_neurone *self)
 
   // make the sum of previous neurone multiply by they weight
   for (; weight < last_weight; ++neurone_previous_layer, ++weight)
-    self->sum += (*weight) * neurone_previous_layer->output;
+    self->sum += *weight * neurone_previous_layer->output;
 
   // path the value of the neurone to the activation function
   self->output = self->layer->neural_network->activation_func.self(self->sum);
+}
+
+void ne_write(struct s_neurone *self, FILE *fp, enum e_nn_error *error)
+{
+  // set to be a success
+  *error = NN_SUCCESS;
+
+  // if no neurone provided return an error
+  if (!self)
+  {
+    *error = NN_NO_NEURONE;
+    return;
+  }
+
+  //  if there is no layer in linked with the neurone return an error;
+  if (!self->layer)
+  {
+    *error = NN_NO_LAYER;
+    return;
+  }
+
+  // if there is no a previous layer just quite (no need to add this informations)
+  if (!self->layer->previous_layer)
+    return;
+
+  // write the bias
+  fwrite(&self->bias, sizeof(self->bias), 1u, fp);
+
+  // the previous layer
+  struct s_layer *previous_layer = self->layer->previous_layer;
+
+  // init the begin and the end of the array
+  double *weight = self->weights;
+  double *last_weight = weight + previous_layer->size;
+
+  // make the sum of previous neurone multiply by they weight
+  for (; weight < last_weight; ++weight)
+    fwrite(weight, sizeof(*weight), 1u, fp);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -117,15 +180,17 @@ void ne_compute(struct s_neurone *self)
 
 void ne_print(struct s_neurone *self)
 {
-  // print the output of the neurone
-  printf("output : %lf, sum : %lf\n", self->output, self->sum);
 
   // if there is no layer in the struct return an error
   if (!self->layer)
   {
-    printf("ERROR: `ne_print` : no layer\n");
+    printf("ERROR: `ne_print` : no neurone\n");
     return;
   }
+
+  // print the output of the neurone
+  printf("output : %lf, sum : %lf\n", self->output, self->sum);
+
   // if there is no previous layer just print the value
   struct s_layer *previous_layer = self->layer->previous_layer;
   if (!previous_layer)
@@ -137,7 +202,7 @@ void ne_print(struct s_neurone *self)
   // print the weight
   printf("weight : ");
   // if there is more than 1 neurone in the previous layer print the fist
-  // ellement
+  // element
   if (previous_layer->size)
     printf("[0]%lf", *self->weights);
 
