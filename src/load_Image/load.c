@@ -29,11 +29,7 @@ void activate_window (GtkApplication *app, gpointer user_data)
           HERE TO CHANGE THE TRANSFORMATION
       ################################################
     */
-    Change_Color(imagec, Colored_to_classicGreyLvl);
-    Change_Color(imagec, Greylvl_to_BW);
-
-
-    mainSegmentation(imagec);
+    //rotate(imagec, -20);
 
 
     //To show our Image
