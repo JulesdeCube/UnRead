@@ -9,19 +9,24 @@
 #include "tools.h"
 
 /**
- ** \brief call the change for height and width for each 
- **       type of rotation
- ** 
- ** \param INVERSE_HW inverse values of height and width
- ** \param MORE_SPACE apply pythagore to have maximum 
- **      space for rotation
- ** \param NONE Nothing happened, just copy height and width
- */
-enum rotate_type
+** \enum e_rotate_type
+** \brief call the change for height and width for each
+**       type of rotation
+*/
+enum e_rotate_type
 {
-    INVERSE_HW,
-    MORE_SPACE,
-    NONE
+  /**
+  ** Inverse values of height and width
+  */
+  INVERSE_HW,
+  /**
+  ** Apply pythagore to have maximum space for rotation
+  */
+  MORE_SPACE,
+  /**
+  ** Nothing happened, just copy height and width
+  */
+  NONE
 };
 
 /**
@@ -38,7 +43,7 @@ enum rotate_type
  ** \param newHeight height of the new pixbuf
  ** \param newWidth width of the new pixbuf
  */
-struct rotate_tools
+struct s_rotate_tools
 {
     int x;
     int y;
@@ -61,8 +66,8 @@ struct rotate_tools
  **               function of type of rotation
  ** \param fun function to apply on each pixel
  */
-void apply_rotation(GtkWidget* image, enum rotate_type r_type, double degree,
-                guchar* filter(struct rotate_tools));
+void apply_rotation(GtkWidget* image, enum e_rotate_type r_type, double degree,
+                guchar* filter(struct r_rotate_tools));
 
 
 /**

@@ -28,8 +28,8 @@ int get_new_y(int x, int y, double degree)
     return x * sin(degree) + y * cos(degree);
 }
 
-void apply_rotation(GtkWidget* image, enum rotate_type r_type, double degree,
-                    guchar* filter(struct rotate_tools))
+void apply_rotation(GtkWidget* image, enum e_rotate_type r_type, double degree,
+                    guchar* filter(struct s_rotate_tools))
 {
     // Initialize our tools
     struct rotate_tools tools;
@@ -104,7 +104,7 @@ void apply_rotation(GtkWidget* image, enum rotate_type r_type, double degree,
  **
  ** \return old pixel or NULL if does not exist
 */
-guchar* classicRotate(struct rotate_tools tools)
+guchar* classicRotate(struct s_rotate_tools tools)
 {
     tools.x -= tools.newWidth/2;
     tools.y -= tools.newHeight/2;
@@ -122,7 +122,7 @@ guchar* classicRotate(struct rotate_tools tools)
  **
  ** \return old pixel
 */
-guchar* rotate180(struct rotate_tools tools)
+guchar* rotate180(struct s_rotate_tools tools)
 {
     return tools.which_pixels + (tools.height - tools.y - 1) *
      tools.rowstride + (tools.width - tools.x - 1) * tools.n_channels;
@@ -136,7 +136,7 @@ guchar* rotate180(struct rotate_tools tools)
  **
  ** \return old pixel
 */
-guchar* rotate90(struct rotate_tools tools)
+guchar* rotate90(struct s_rotate_tools tools)
 {
     return tools.which_pixels + tools.x *
      tools.rowstride + (tools.width - tools.y - 1) * tools.n_channels;
@@ -150,12 +150,11 @@ guchar* rotate90(struct rotate_tools tools)
  **
  ** \return old pixel
 */
-guchar* rotate270(struct rotate_tools tools)
+guchar* rotate270(struct s_rotate_tools tools)
 {
     return tools.which_pixels + (tools.height - tools.x - 1) *
      tools.rowstride + tools.y * tools.n_channels;
 }
-
 
 void rotate(GtkWidget* image, double degree)
 {
