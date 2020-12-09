@@ -67,7 +67,7 @@ struct s_rotate_tools
  ** \param fun function to apply on each pixel
  */
 void apply_rotation(GtkWidget* image, enum e_rotate_type r_type, double degree,
-                guchar* filter(struct r_rotate_tools));
+                guchar* filter(struct s_rotate_tools));
 
 
 /**
