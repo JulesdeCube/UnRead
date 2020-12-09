@@ -11,24 +11,24 @@
 
 #include "neurone.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                                CONSTRUCTOR                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                                 CONSTRUCTOR                                //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
-struct s_neurone ne_consructor(struct s_layer *layer, enum e_nn_error *error)
+struct s_neurone ne_consructor(struct s_layer *parrent, enum e_nn_error *error)
 {
   // set the error to success
   *error = NN_SUCCESS;
 
   // init the sum and output to null a bias between -1 and 1 and the layer but no weight
-  struct s_neurone self = {0., 0., random_uniforme(-1.0, 1.0), NULL, layer};
+  struct s_neurone self = {0., 0., random_uniforme(-1.0, 1.0), NULL, parrent};
 
   // if no layer given return an error
-  if (!layer)
+  if (!parrent)
   {
-    *error = NN_NO_LAYER;
+    *error = NN_NO_PARRENT_LAYER;
     return self;
   }
 
@@ -56,11 +56,11 @@ struct s_neurone ne_consructor(struct s_layer *layer, enum e_nn_error *error)
   return self;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                                 DESTRUCTOR                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                                 DESTRUCTOR                                 //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
 void ne_destructor(struct s_neurone *self)
 {
@@ -80,11 +80,11 @@ void ne_destructor(struct s_neurone *self)
   self->weights = NULL;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                                 OPERATIONS                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                                  METHODE                                   //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
 void ne_compute(struct s_neurone *self, enum e_nn_error *error)
 {
@@ -100,14 +100,14 @@ void ne_compute(struct s_neurone *self, enum e_nn_error *error)
   //  if there is no layer in linked with the neurone return an error;
   if (!self->layer)
   {
-    *error = NN_NO_LAYER;
+    *error = NN_NO_PARRENT_LAYER;
     return;
   }
 
   //  if there is no layer in linked with the neurone return an error;
   if (!self->layer->neural_network)
   {
-    *error = NN_NO_NEURAL_NETWORK;
+    *error = NN_NO_PARRENT_NEURAL_NETWORK;
     return;
   }
 
@@ -146,10 +146,17 @@ void ne_write(struct s_neurone *self, FILE *fp, enum e_nn_error *error)
     return;
   }
 
+  // check if the file is open
+  if (!fp)
+  {
+    *error = NN_PERMISSION_DENIED;
+    return;
+  }
+
   //  if there is no layer in linked with the neurone return an error;
   if (!self->layer)
   {
-    *error = NN_NO_LAYER;
+    *error = NN_NO_PARRENT_LAYER;
     return;
   }
 
@@ -172,11 +179,11 @@ void ne_write(struct s_neurone *self, FILE *fp, enum e_nn_error *error)
     fwrite(weight, sizeof(*weight), 1u, fp);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                                   VIEWER                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                                   VIEWER                                   //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
 void ne_print(struct s_neurone *self)
 {

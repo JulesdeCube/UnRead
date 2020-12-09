@@ -40,12 +40,26 @@ struct s_layer
 /**
 ** \brief `s_layer` constuctor.
 **
-** create a layer for neural network
+** create a layer for neural network. if there is an error durring creation
+** function will return NULL
 **
 ** ⚠️** you need to use the `la_destructor` function after use (to free space )
 ** ** ⚠️
 **
-** \return a pointer to a new instance of `s_layer`
+** \param size number of neurone in the layer
+** \param previous_layer a pointer to the previous layer (can be null)
+** \param neural_network the neural network that get the neurone
+** \param error the return error channel
+**
+** \return a pointer to a new instance of `s_layer` or `NULL` if we can't create
+**         du to some error.
+**
+** \throw NN_NO_NEURAL_NETWORK no parrent neural_network provided
+** \throw NN_NO_PARRENT_LAYER no parrent layer provided to the neurone
+** \throw NN_ERROR_SPACE there is not enought free space to store the neurones
+**        or/and it's self
+**
+** \see neurone.h:ne_consructor for sub error code
 */
 struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer, struct s_neural_network *neural_network, enum e_nn_error *error);
 
@@ -76,7 +90,10 @@ void la_destructor(struct s_layer *self);
 ** set each output of each neurone of the layer base on a array
 **
 ** \param self the layer to set values
-** \param value the list of values
+** \param value the list of values, the lenght need to match with the layer size
+** \param error the return error channel
+**
+** \throw NN_NO_LAYER no layer provided
 */
 void la_set(struct s_layer *self, double *values, enum e_nn_error *error);
 
@@ -86,16 +103,26 @@ void la_set(struct s_layer *self, double *values, enum e_nn_error *error);
 ** compute with the previous neurone the output of each neurone of the layer
 **
 ** \param self the layer compute
+** \param error the return error channel
+**
+** \throw NN_NO_LAYER no layer provided
+**
+** \see neurone.h:ne_compute for sub error code
 */
 void la_compute(struct s_layer *self, enum e_nn_error *error);
 
 /**
 ** \brief write the content of a layer
 **
-** write the weight and the biais of a the neural
+** write the weight and the biais of a the neurone of the layer
 **
 ** \param self the layer to save
 ** \param fp file
+**
+** \throw NN_NO_LAYER no layer provided
+** \throw NN_PERMISSION_DENIED if no file is procided
+**
+** \see neurone.h:ne_write for sub error code
 */
 void la_write(struct s_layer *self, FILE *fp, enum e_nn_error *error);
 

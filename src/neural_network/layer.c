@@ -11,11 +11,11 @@
 
 #include "layer.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                                CONSTRUCTOR                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                                 CONSTRUCTOR                                //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
 struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer, struct s_neural_network *neural_network, enum e_nn_error *error)
 {
@@ -32,20 +32,18 @@ struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer,
     return self;
   }
 
+  // if no neural network given return an error
+  if (!neural_network)
+  {
+    *error = NN_NO_NEURAL_NETWORK;
+    return NULL;
+  }
+
   // init each value
   self->size = size;
   self->neurones = NULL;
   self->previous_layer = previous_layer;
   self->next_layer = NULL;
-
-  // if no neural network given return an error
-  if (!neural_network)
-  {
-    *error = NN_NO_NEURAL_NETWORK;
-    la_destructor(self);
-    return NULL;
-  }
-
   self->neural_network = neural_network;
 
   // alocate the memory for each neurone struct
@@ -87,11 +85,11 @@ struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer,
   return self;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                                 DESTRUCTOR                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                                 DESTRUCTOR                                 //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
 void la_destructor(struct s_layer *self)
 {
@@ -116,14 +114,18 @@ void la_destructor(struct s_layer *self)
   free(self);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                                 OPERATIONS                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                                  METHODE                                   //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
+// FIXME - add error if values is null
 void la_set(struct s_layer *self, double *values, enum e_nn_error *error)
 {
+  // set the error to success
+  *error = NN_SUCCESS;
+
   if (!self)
   {
     *error = NN_NO_LAYER;
@@ -144,6 +146,8 @@ void la_set(struct s_layer *self, double *values, enum e_nn_error *error)
 void la_compute(struct s_layer *self, enum e_nn_error *error)
 {
   *error = NN_SUCCESS;
+
+  // check if the neurone exist
   if (!self)
   {
     *error = NN_NO_LAYER;
@@ -163,9 +167,17 @@ void la_write(struct s_layer *self, FILE *fp, enum e_nn_error *error)
 {
   *error = NN_SUCCESS;
 
+  // check if it provide a layer
   if (!self)
   {
     *error = NN_NO_LAYER;
+    return;
+  }
+
+  // check if the file is open
+  if (!fp)
+  {
+    *error = NN_PERMISSION_DENIED;
     return;
   }
 
@@ -181,11 +193,11 @@ void la_write(struct s_layer *self, FILE *fp, enum e_nn_error *error)
     ne_write(neurone, fp, error);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                                   VIEWER                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                                   VIEWER                                   //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
 void la_print(struct s_layer *self)
 {

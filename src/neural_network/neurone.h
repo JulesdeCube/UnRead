@@ -43,9 +43,13 @@ struct s_neurone
 ** create a neurone for neural network
 **
 ** \param layer the parrent layer
-** \param error error callback variable
+** \param error the return error channel
 **
 ** \return a new instance of `s_neurone`
+**
+** \throw NN_NO_PARRENT_LAYER no parrent layer provided to the neurone
+** \throw NN_ERROR_SPACE there is not enought free space to store the neurone
+**        it's self or his weight
 */
 struct s_neurone ne_consructor(struct s_layer *layer, enum e_nn_error *error);
 
@@ -77,9 +81,27 @@ void ne_destructor(struct s_neurone *neurone);
 ** activation function
 **
 ** \param self the neurone to update
+** \param error the return error channel
+**
+** \throw NN_NO_NEURONE no neurone provided
+** \throw NN_NO_PARRENT_LAYER no parrent layer in the neurone
+** \throw NN_NO_PARRENT_NEURAL_NETWORK no parrented neural network in the parent
+**        of th neurone
 */
 void ne_compute(struct s_neurone *self, enum e_nn_error *error);
 
+/**
+** \brief write the content of a neurone
+**
+** write the weight and the biais of a the neurone
+**
+** \param self the neuone to save
+** \param fp file
+** \param error the return error channel
+**
+** \throw NN_NO_NEURONE no neurone provided
+** \throw NN_NO_PARRENT_LAYER no parrent layer in the neurone
+*/
 void ne_write(struct s_neurone *self, FILE *fp, enum e_nn_error *error);
 
 ///////////////////////////////////////////////////////////////////////////////

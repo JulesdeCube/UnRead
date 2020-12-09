@@ -49,11 +49,11 @@ struct s_neural_network
   struct s_function_2p error_func;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                                CONSTRUCTOR                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                                CONSTRUCTOR                                 //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
 /**
 ** \brief `s_neural_network` constuctor.
@@ -68,14 +68,20 @@ struct s_neural_network
 ** \param error the error callback code
 **
 ** \return a new instance of `s_neural_network`
+**
+** \throw NN_NO_FUNCTION no error or/and activation function provided
+** \throw NN_ERROR_SPACE there is not enought free space to store the neural
+**        netowrk and his layer/neurone
+**
+** \see layer.h:la_consructor for sub error code
 */
 struct s_neural_network *nn_consructor(unsigned int nb_layer, unsigned int *layers_size, struct s_function_1p activation_func, struct s_function_2p error_func, enum e_nn_error *error);
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                                 DESTRUCTOR                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                                 DESTRUCTOR                                 //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
 /**
 ** \brief `s_neural_network` destructor.
@@ -86,11 +92,11 @@ struct s_neural_network *nn_consructor(unsigned int nb_layer, unsigned int *laye
 */
 void nn_destructor(struct s_neural_network *self);
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                                  METHODE                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                                   METHODE                                  //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
 /**
 ** \brief apply the neural network to the given input
@@ -99,6 +105,11 @@ void nn_destructor(struct s_neural_network *self);
 **
 ** \param self the neural network to compute
 ** \param input the value of the first layer
+** \param error the return error channel
+**
+** \throw NN_NO_NEURAL_NETWORK no neural network provided to the function
+**
+** \see layer.h:la_apply for sub error code
 */
 void nn_apply(struct s_neural_network *self, double *input, enum e_nn_error *error);
 
@@ -108,6 +119,11 @@ void nn_apply(struct s_neural_network *self, double *input, enum e_nn_error *err
 ** compute the value of each neurone layer by layer
 **
 ** \param self the neural network to compute
+** \param error the return error channel
+**
+** \throw NN_NO_NEURAL_NETWORK no neural network provided to the function
+**
+** \see layer.h:na_compute for sub error code
 */
 void nn_compute(struct s_neural_network *self, enum e_nn_error *error);
 
@@ -120,6 +136,11 @@ void nn_compute(struct s_neural_network *self, enum e_nn_error *error);
 ** \param self the neural network to save
 ** \param filename the path to a file (that can not exist) where the neural
 **        network will be save.
+**
+** \throw NN_NO_NEURAL_NETWORK no neural network provided to the function
+** \throw NN_PERMISSION_DENIED the file can't be open
+**
+** \see la_write for sub error code
 */
 void nn_save(struct s_neural_network *self, char *filename, enum e_nn_error *error);
 
@@ -130,14 +151,19 @@ void nn_save(struct s_neural_network *self, char *filename, enum e_nn_error *err
 **
 ** \param self the neural network to save
 ** \param fp file
+**
+** \throw NN_NO_NEURAL_NETWORK no neural network provided to the function
+** \throw NN_PERMISSION_DENIED no file provided
+**
+** \see layer.h:la_write for sub error code
 */
 void nn_write(struct s_neural_network *self, FILE *fp, enum e_nn_error *error);
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                                   VIEWER                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                                   VIEWER                                   //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
 /**
 ** \brief diplay the neural network state

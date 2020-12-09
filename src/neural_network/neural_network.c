@@ -11,11 +11,11 @@
 
 #include "neural_network.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                                CONSTRUCTOR                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                                 CONSTRUCTOR                                //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
 struct s_neural_network *nn_consructor(unsigned int nb_layer, unsigned int *layers_size, struct s_function_1p activation_func, struct s_function_2p error_func, enum e_nn_error *error)
 {
@@ -73,15 +73,14 @@ struct s_neural_network *nn_consructor(unsigned int nb_layer, unsigned int *laye
     return NULL;
   }
 
-  *error = NN_SUCCESS;
   return self;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                                 DESTRUCTOR                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                                 DESTRUCTOR                                 //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
 void nn_destructor(struct s_neural_network *self)
 {
@@ -96,11 +95,11 @@ void nn_destructor(struct s_neural_network *self)
   free(self->layers);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                                  METHODE                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                                  METHODE                                   //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
 void nn_apply(struct s_neural_network *self, double *input, enum e_nn_error *error)
 {
@@ -125,6 +124,12 @@ void nn_compute(struct s_neural_network *self, enum e_nn_error *error)
 {
   *error = NN_SUCCESS;
 
+  if (!self)
+  {
+    *error = NN_NO_NEURAL_NETWORK;
+    return;
+  }
+
   // first and last layer of the neural network
   struct s_layer **layer = self->layers;
   struct s_layer **last_layer = layer + self->nb_layer;
@@ -138,6 +143,7 @@ void nn_save(struct s_neural_network *self, char *filename, enum e_nn_error *err
 {
   *error = NN_SUCCESS;
 
+  // check if the neural network is provided
   if (!self)
   {
     *error = NN_NO_NEURAL_NETWORK;
@@ -161,11 +167,22 @@ void nn_save(struct s_neural_network *self, char *filename, enum e_nn_error *err
 
 void nn_write(struct s_neural_network *self, FILE *fp, enum e_nn_error *error)
 {
+  *error = NN_SUCCESS;
+
+  // check if the neural netowrk provided
   if (!self)
   {
     *error = NN_NO_NEURAL_NETWORK;
     return;
   }
+
+  // no file provided
+  if (!fp)
+  {
+    *error = NN_PERMISSION_DENIED;
+    return;
+  }
+
   // write the number of layer
   fwrite(&self->nb_layer, sizeof(self->nb_layer), 1u, fp);
 
@@ -178,11 +195,11 @@ void nn_write(struct s_neural_network *self, FILE *fp, enum e_nn_error *error)
     la_write(*layer, fp, error);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                                   VIEWER                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                                   VIEWER                                   //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
 void nn_print(struct s_neural_network *self)
 {
@@ -194,21 +211,21 @@ void nn_print(struct s_neural_network *self)
     return;
   }
 
-  printf("///////////////////////////////////////////////////////////////////////////////\n");
-  printf("//                                                                           //\n");
-  printf("//                                   INPUT                                   //\n");
-  printf("//                                                                           //\n");
-  printf("///////////////////////////////////////////////////////////////////////////////\n");
+  printf("////////////////////////////////////////////////////////////////////////////////\n");
+  printf("//                                                                            //\n");
+  printf("//                                    INPUT                                   //\n");
+  printf("//                                                                            //\n");
+  printf("////////////////////////////////////////////////////////////////////////////////\n");
   // check if it exist at less 1 layer
   if (self->nb_layer)
     la_print(*self->layers);
 
   printf("\n\n\n");
-  printf("///////////////////////////////////////////////////////////////////////////////\n");
-  printf("//                                                                           //\n");
-  printf("//                                  HIDDEN                                   //\n");
-  printf("//                                                                           //\n");
-  printf("///////////////////////////////////////////////////////////////////////////////\n");
+  printf("////////////////////////////////////////////////////////////////////////////////\n");
+  printf("//                                                                            //\n");
+  printf("//                                   HIDDEN                                   //\n");
+  printf("//                                                                            //\n");
+  printf("////////////////////////////////////////////////////////////////////////////////\n");
 
   // loop beween the second layer and the penultimate
   for (unsigned int i = 2; i < self->nb_layer; ++i)
@@ -218,11 +235,11 @@ void nn_print(struct s_neural_network *self)
   }
 
   printf("\n\n\n");
-  printf("///////////////////////////////////////////////////////////////////////////////\n");
-  printf("//                                                                           //\n");
-  printf("//                                  OUTPUT                                   //\n");
-  printf("//                                                                           //\n");
-  printf("///////////////////////////////////////////////////////////////////////////////\n");
+  printf("////////////////////////////////////////////////////////////////////////////////\n");
+  printf("//                                                                            //\n");
+  printf("//                                   OUTPUT                                   //\n");
+  printf("//                                                                            //\n");
+  printf("////////////////////////////////////////////////////////////////////////////////\n");
   // print the last layer if there is at less 1 layer
   if (self->nb_layer)
     la_print(*(self->layers + self->nb_layer - 1));

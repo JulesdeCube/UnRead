@@ -35,6 +35,14 @@ enum e_nn_error
   */
   NN_NO_FUNCTION,
   /**
+  ** the given neurone has no parrented layer
+  */
+  NN_NO_PARRENT_LAYER,
+  /**
+  ** the given layer has no parrented neural network
+  */
+  NN_NO_PARRENT_NEURAL_NETWORK,
+  /**
   ** file permission eception
   */
   NN_PERMISSION_DENIED
