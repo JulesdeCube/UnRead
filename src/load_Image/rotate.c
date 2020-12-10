@@ -32,7 +32,7 @@ void apply_rotation(GtkWidget* image, enum e_rotate_type r_type, double degree,
                     guchar* filter(struct s_rotate_tools))
 {
     // Initialize our tools
-    struct rotate_tools tools;
+    struct s_rotate_tools tools;
     
     // Transform degrees in radient
     tools.degree = 3.14159265358979323846264338*degree/180;
