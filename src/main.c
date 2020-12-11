@@ -3,34 +3,49 @@
 #include <stdio.h>
 #define UNUSED(x) (void)(x)
 
-
-typedef struct {
+typedef struct 
+{
+    GtkWidget *w_dlg_save_file;
     GtkWidget *w_dlg_file_choose;       // Pointer to file chooser dialog box
-    GtkWidget *w_img_main;              // Pointer to image widget
+    GtkWidget *w_img_main;              // Pointer to image widget 
+    char      *w_path;                  //path of the image open
+    char      *w_save_path;             //path of the file where the text is save
+    char      *w_text_to_save;          //string of the text to save
 } app_widgets;
 
 int main(int argc, char *argv[])
 {
     GtkBuilder      *builder;
     GtkWidget       *window;
+    GtkWidget       *button;
     app_widgets     *widgets = g_slice_new(app_widgets);
+    /*char *filename = "src/save_file/save.txt";
+    char *text_to_save = "oui";
+    UNUSED(filename);
+    UNUSED(text_to_save);*/
+    UNUSED(button);
+    
 
     gtk_init(&argc, &argv);
 
     builder = gtk_builder_new_from_file("src/UI/main_window.glade");
 
     window = GTK_WIDGET(gtk_builder_get_object(builder, "window_main"));
+
+    widgets->w_dlg_save_file = GTK_WIDGET(gtk_builder_get_object(builder, "dlg_save_file"));
     widgets->w_dlg_file_choose = GTK_WIDGET(gtk_builder_get_object(builder, "dlg_file_choose"));
     widgets->w_img_main = GTK_WIDGET(gtk_builder_get_object(builder, "img_main"));
-    
-    gtk_builder_connect_signals(builder, widgets);
+    widgets->w_path = malloc(sizeof(char));
+    widgets->w_save_path = "src/save_file/save.txt";
+    widgets->w_text_to_save = "oui";
 
+    gtk_builder_connect_signals(builder, widgets);
+    
     g_object_unref(builder);
 
     gtk_widget_show(window);                
     gtk_main();
     g_slice_free(app_widgets, widgets);
-
     return 0;
 }
 
@@ -39,7 +54,10 @@ void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
 {
     UNUSED(menuitem);
     gchar *file_name = NULL;        // Name of file to open from dialog box
+    //GtkWidget *image;
     
+    //int x_pos = 0; //x and y pos of the image in the window
+    //int y_pos = 0;
     // Show the "Open Image" dialog box
     gtk_widget_show(app_wdgts->w_dlg_file_choose);
     
@@ -48,16 +66,39 @@ void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
     {
         // Get the file name from the dialog box
         file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(app_wdgts->w_dlg_file_choose));
+        if(app_wdgts->w_path != NULL)
+            g_free(app_wdgts->w_path);
+        app_wdgts->w_path = file_name;
+    
         if (file_name != NULL) 
         {
             gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), file_name);
         }
-        g_free(file_name);
     }
-
     // Finished with the "Open Image" dialog box, so hide it
     gtk_widget_hide(app_wdgts->w_dlg_file_choose);
 }
+
+//file ->save in the w_save_path
+void on_menuitm_save_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
+{
+    UNUSED(menuitem);
+    //GtkWidget *image;
+    
+    // Show the "Open Image" dialog box
+    gtk_widget_show(app_wdgts->w_dlg_save_file);
+
+    FILE *fp = fopen(app_wdgts->w_path, "a");
+    //write
+    fputs(app_wdgts->w_text_to_save, fp);
+    // add new line at the end of the file  
+    fputc('\n', fp);
+    // free the file
+    fclose(fp);
+    // Finished with the "Open Image" dialog box, so hide it
+    gtk_widget_hide(app_wdgts->w_dlg_save_file);
+}
+
 //File ->Open grey lvl
 void on_menuitm_open_grey_lvl_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
 {
@@ -159,16 +200,13 @@ void on_menuitm_open_preprocess_activate(GtkMenuItem *menuitem, app_widgets *app
     gtk_widget_hide(app_wdgts->w_dlg_file_choose);
 }
 
-
-/* !  Not working !
-fonction to aplly a filter on the current image
-void on_menuitm_switch(GtkMenuItem *menuitem, app_widgets *app_wdgts)
+void on_button_clicked(GtkButton *button, app_widgets *app_wdgts)
 {
-    UNUSED(menuitem);
-    printf("btn cliked\n");
+    UNUSED(button);
+    gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), app_wdgts->w_path);
     Change_Color(app_wdgts->w_img_main,Colored_to_classicGreyLvl);
+    Change_Color(app_wdgts->w_img_main,ClassicGLVL_to_NormalizedGLVL);
 }
-*/
 
 // File --> Quit
 void on_menuitm_close_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
