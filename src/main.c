@@ -17,15 +17,8 @@ int main(int argc, char *argv[])
 {
     GtkBuilder      *builder;
     GtkWidget       *window;
-    GtkWidget       *button;
     app_widgets     *widgets = g_slice_new(app_widgets);
-    /*char *filename = "src/save_file/save.txt";
-    char *text_to_save = "oui";
-    UNUSED(filename);
-    UNUSED(text_to_save);*/
-    UNUSED(button);
     
-
     gtk_init(&argc, &argv);
 
     builder = gtk_builder_new_from_file("src/UI/main_window.glade");
@@ -36,7 +29,7 @@ int main(int argc, char *argv[])
     widgets->w_dlg_file_choose = GTK_WIDGET(gtk_builder_get_object(builder, "dlg_file_choose"));
     widgets->w_img_main = GTK_WIDGET(gtk_builder_get_object(builder, "img_main"));
     widgets->w_path = malloc(sizeof(char));
-    widgets->w_save_path = "src/save_file/save.txt";
+    widgets->w_save_path = "test/save_file/save.txt";
     widgets->w_text_to_save = "oui";
 
     gtk_builder_connect_signals(builder, widgets);
@@ -54,10 +47,6 @@ void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
 {
     UNUSED(menuitem);
     gchar *file_name = NULL;        // Name of file to open from dialog box
-    //GtkWidget *image;
-    
-    //int x_pos = 0; //x and y pos of the image in the window
-    //int y_pos = 0;
     // Show the "Open Image" dialog box
     gtk_widget_show(app_wdgts->w_dlg_file_choose);
     
@@ -88,7 +77,7 @@ void on_menuitm_save_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
     // Show the "Open Image" dialog box
     gtk_widget_show(app_wdgts->w_dlg_save_file);
 
-    FILE *fp = fopen(app_wdgts->w_path, "a");
+    FILE *fp = fopen(app_wdgts->w_save_path, "w");
     //write
     fputs(app_wdgts->w_text_to_save, fp);
     // add new line at the end of the file  
@@ -200,6 +189,7 @@ void on_menuitm_open_preprocess_activate(GtkMenuItem *menuitem, app_widgets *app
     gtk_widget_hide(app_wdgts->w_dlg_file_choose);
 }
 
+//Set the color of the image in grey lvl normalised
 void on_button_clicked(GtkButton *button, app_widgets *app_wdgts)
 {
     UNUSED(button);
