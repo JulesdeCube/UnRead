@@ -8,6 +8,7 @@
 
 #include "change_color.h"
 #include "segmentation.h"
+#include "resize.h"
 #include "rotate.h"
 
 #define UNUSED(x) (void)(x)
