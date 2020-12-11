@@ -1,27 +1,21 @@
 #include "load.h"
 
-GtkWidget* create_image ()
+GtkWidget *create_image()
 {
-  GtkWidget *image;
-  image = gtk_image_new_from_file ("./test/traitement/texte_sur_fond3.bmp");
-  return image;
+  return gtk_image_new_from_file ("./test/traitement/oiseau.bmp");
 }
 
 void activate_window (GtkApplication *app, gpointer user_data)
 {
     UNUSED(user_data);
-    GtkWidget *window;
-    GtkWidget *imagec;
 
     //Create our first window with size. 
-    window = gtk_application_window_new (app);
+    GtkWidget *window = gtk_application_window_new (app);
     gtk_window_set_title (GTK_WINDOW (window), "Window");
     gtk_window_set_default_size (GTK_WINDOW (window), 1000, 500);
     
-    
-
     //Create an Image
-    imagec = create_image();
+    GtkWidget *imagec = create_image();
     gtk_container_add (GTK_CONTAINER (window), imagec);
     
 
@@ -32,7 +26,9 @@ void activate_window (GtkApplication *app, gpointer user_data)
     */
     //Change_Color(imagec, Colored_to_classicGreyLvl);
     //Change_Color(imagec, Greylvl_to_BW);
-    New_Size_Image(imagec, 1000, 1000);
+    GdkPixbuf *pixbuf = New_Size_Image(imagec, 100, 100);
+    gdk_pixbuf_save(pixbuf, "src/load_Image/images/img.bmp", "bmp", NULL, NULL);
+
 
     //Segmentation for hugo
     //mainSegmentation(imagec);
@@ -45,14 +41,10 @@ void activate_window (GtkApplication *app, gpointer user_data)
 
 int create_window(int argc, char **argv)
 {
-    GtkApplication *app;
-    int status;
-
-    app = gtk_application_new ("org.gtk.example", G_APPLICATION_FLAGS_NONE);
+    GtkApplication *app = gtk_application_new ("org.gtk.example", G_APPLICATION_FLAGS_NONE);
     g_signal_connect (app, "activate", G_CALLBACK (activate_window), NULL);
-    status = g_application_run (G_APPLICATION (app), argc, argv);
+    int status = g_application_run (G_APPLICATION (app), argc, argv);
     g_object_unref (app);
-
 
     return status;
 } 
