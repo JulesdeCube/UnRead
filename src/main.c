@@ -77,7 +77,7 @@ void on_menuitm_save_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
     // Show the "Open Image" dialog box
     gtk_widget_show(app_wdgts->w_dlg_save_file);
 
-    FILE *fp = fopen(app_wdgts->w_save_path, "w");
+    FILE *fp = fopen(app_wdgts->w_save_path, "a");
     //write
     fputs(app_wdgts->w_text_to_save, fp);
     // add new line at the end of the file  
