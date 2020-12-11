@@ -1,6 +1,8 @@
 #include <gtk/gtk.h>
-#include <load_Image/change_color.h>
+#include "load_Image/change_color.h"
 #include "load_Image/segmentation.h"
+#include "load_Image/rotate.h"
+
 #include <stdio.h>
 
 #include "load_Image/load.h"

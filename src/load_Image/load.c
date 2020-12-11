@@ -34,6 +34,7 @@ void activate_window (GtkApplication *app, gpointer user_data)
     //mainSegmentation(imagec);
 
 
+
     //To show our Image
     gtk_widget_show_all (window);
 }
