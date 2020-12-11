@@ -77,6 +77,47 @@ struct s_neural_network
 */
 struct s_neural_network *nn_consructor(unsigned int nb_layer, unsigned int *layers_size, struct s_function_1p activation_func, struct s_function_2p error_func, enum e_nn_error *error);
 
+/**
+** \brief `s_neural_network` file constuctor.
+**
+** create a neural network from a file
+**
+** \param fp file where the neural netowork as store
+** \param activation_func the activation and is derivate
+**        function for each neurone
+** \param error_func the error function and is derivate
+** \param error the error callback code
+**
+** \return a new instance of `s_neural_network`
+**
+** \throw NN_PERMISSION_DENIED no file provided
+** \throw NN_NO_FUNCTION no error or/and activation function provided
+** \throw NN_ERROR_SPACE there is not enought free space to store the neural
+**        netowrk and his layer/neurone
+**
+** \see layer.h:la_file_consructor for sub error code
+*/
+struct s_neural_network *nn_file_consructor(FILE *fp, struct s_function_1p activation_func, struct s_function_2p error_func, enum e_nn_error *error);
+
+/**
+** \brief `s_neural_network` constuctor by file path.
+**
+** create a neural network from the path of a file
+**
+** \param filename path to file where the neural netowrk is store
+** \param activation_func the activation and is derivate
+**        function for each neurone
+** \param error_func the error function and is derivate
+** \param error the error callback code
+**
+** \return a new instance of `s_neural_network`
+**
+** \throw NN_PERMISSION_DENIED file can't be found
+**
+** \see s_neural_network for sub error code
+*/
+struct s_neural_network *nn_from_file(char *filename, struct s_function_1p activation_func, struct s_function_2p error_func, enum e_nn_error *error);
+
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 //                                 DESTRUCTOR                                 //

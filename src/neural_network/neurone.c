@@ -34,7 +34,7 @@ struct s_neurone ne_consructor(struct s_layer *parrent, enum e_nn_error *error)
 
   // get the number of neurone in the previous layer
   unsigned int nb_neurone_previous_layer = 0;
-  if (self.layer->previous_layer != NULL)
+  if (self.layer->previous_layer)
     nb_neurone_previous_layer = self.layer->previous_layer->size;
 
   // alocate space for every weight
@@ -52,6 +52,66 @@ struct s_neurone ne_consructor(struct s_layer *parrent, enum e_nn_error *error)
   double *last_weight = weight + nb_neurone_previous_layer;
   for (; weight < last_weight; ++weight)
     *weight = random_uniforme(-1.0, 1.0);
+
+  return self;
+}
+
+struct s_neurone ne_file_consructor(FILE *fp, struct s_layer *parrent, enum e_nn_error *error)
+{
+
+  // set the error to success
+  *error = NN_SUCCESS;
+
+  // init the sum and output to null a bias between -1 and 1 and the layer but no weight
+  struct s_neurone self = {0., 0., 0, NULL, parrent};
+
+  // check if there is a file
+  if (!fp)
+  {
+    *error = NN_PERMISSION_DENIED;
+    return self;
+  }
+
+  // check parrent is provided
+  if (!parrent)
+  {
+    *error = NN_NO_PARRENT_LAYER;
+    return self;
+  }
+
+  // if there is a previous layer get the bias
+  if (self.layer->previous_layer)
+    // FIXME - check for end of file
+    fread(&self.bias, sizeof(self.bias), 1, fp);
+
+  // if no layer given return an error
+  if (!parrent)
+  {
+    *error = NN_NO_PARRENT_LAYER;
+    return self;
+  }
+
+  // get the number of neurone in the previous layer
+  unsigned int nb_neurone_previous_layer = 0;
+  if (self.layer->previous_layer != NULL)
+    nb_neurone_previous_layer = self.layer->previous_layer->size;
+
+  // alocate space for every weight
+  self.weights = calloc(nb_neurone_previous_layer, sizeof(double));
+
+  // if we can't alocate the memory return an error
+  if (self.weights == NULL)
+  {
+    *error = NN_ERROR_SPACE;
+    return self;
+  }
+
+  // init each weight one by one with a value between -1 and 1
+  double *weight = self.weights;
+  double *last_weight = weight + nb_neurone_previous_layer;
+  // FIXME - check for end of file
+  for (; weight < last_weight; ++weight)
+    fread(weight, sizeof(*weight), 1, fp);
 
   return self;
 }

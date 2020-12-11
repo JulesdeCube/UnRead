@@ -40,9 +40,10 @@ struct s_neurone
 /**
 ** \brief `s_neurone` constuctor.
 **
-** create a neurone for neural network
+** create a neurone for neural network. if there is an error durring creation,
+** function will return NULL
 **
-** \param layer the parrent layer
+** \param parrent the parrent layer
 ** \param error the return error channel
 **
 ** \return a new instance of `s_neurone`
@@ -51,7 +52,25 @@ struct s_neurone
 ** \throw NN_ERROR_SPACE there is not enought free space to store the neurone
 **        it's self or his weight
 */
-struct s_neurone ne_consructor(struct s_layer *layer, enum e_nn_error *error);
+struct s_neurone ne_consructor(struct s_layer *parrent, enum e_nn_error *error);
+
+/**
+** \brief `s_neurone` constuctor.
+**
+** create a neurone for neural network from a file.if there is an error durring
+** creation, function will return NULL
+**
+** \param parrent the parrent layer
+** \param error the return error channel
+**
+** \return a new instance of `s_neurone`
+**
+** \throw NN_PERMISSION_DENIED no file was provided
+** \throw NN_NO_PARRENT_LAYER no parrent layer provided to the neurone
+** \throw NN_ERROR_SPACE there is not enought free space to store the neurone
+**        it's self or his weight
+*/
+struct s_neurone ne_file_consructor(FILE *fp, struct s_layer *parrent, enum e_nn_error *error);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //

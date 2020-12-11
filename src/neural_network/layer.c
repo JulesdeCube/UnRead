@@ -22,6 +22,13 @@ struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer,
   // set the error to success
   *error = NN_SUCCESS;
 
+  // if no neural network given return an error
+  if (!neural_network)
+  {
+    *error = NN_NO_NEURAL_NETWORK;
+    return NULL;
+  }
+
   // create the layer
   struct s_layer *self = calloc(1, sizeof(struct s_layer));
 
@@ -32,19 +39,12 @@ struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer,
     return self;
   }
 
-  // if no neural network given return an error
-  if (!neural_network)
-  {
-    *error = NN_NO_NEURAL_NETWORK;
-    return NULL;
-  }
-
   // init each value
   self->size = size;
   self->neurones = NULL;
+  self->neural_network = neural_network;
   self->previous_layer = previous_layer;
   self->next_layer = NULL;
-  self->neural_network = neural_network;
 
   // alocate the memory for each neurone struct
   self->neurones = calloc(size, sizeof(struct s_neurone));
@@ -63,18 +63,80 @@ struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer,
   for (; neurone < last_neurone && !*error; ++neurone)
     *neurone = ne_consructor(self, error);
 
-  // if there is a error during neurone initialisation remove previouslý created
-  // neurone and desotry the layer
+  // if there is a error during neurone initialisation return the error and
+  // destroy the layer
   if (*error)
   {
-    // destroy layer
-    for (; neurone >= self->neurones; --neurone)
-      ne_destructor(neurone);
-    free(self->neurones);
-    // prevent destuctor to destruct neurones
-    self->neurones = NULL;
     la_destructor(self);
-    // get error
+    return NULL;
+  }
+
+  // update previous layer
+  if (self->previous_layer)
+    self->previous_layer->next_layer = self;
+
+  return self;
+}
+
+struct s_layer *la_file_consructor(FILE *fp, struct s_layer *previous_layer, struct s_neural_network *neural_network, enum e_nn_error *error)
+{
+  // set the error to success
+  *error = NN_SUCCESS;
+
+  // check if there is a file
+  if (!fp)
+  {
+    *error = NN_PERMISSION_DENIED;
+    return NULL;
+  }
+
+  // if no neural network given return an error
+  if (!neural_network)
+  {
+    *error = NN_NO_NEURAL_NETWORK;
+    return NULL;
+  }
+
+  // create the layer
+  struct s_layer *self = calloc(1, sizeof(struct s_layer));
+
+  // if we didn't have enought free space trow error
+  if (!self)
+  {
+    *error = NN_ERROR_SPACE;
+    return self;
+  }
+
+  // FIXME - check for end of file
+  // init each value
+  fread(&self->size, sizeof(self->size), 1, fp);
+  self->neurones = NULL;
+  self->previous_layer = previous_layer;
+  self->next_layer = NULL;
+  self->neural_network = neural_network;
+
+  // alocate the memory for each neurone struct
+  self->neurones = calloc(self->size, sizeof(struct s_neurone));
+
+  // if we can't alocate memory throw error and desotry it
+  if (!self->neurones)
+  {
+    *error = NN_ERROR_SPACE;
+    la_destructor(self);
+    return NULL;
+  }
+
+  // for each nerone init it
+  struct s_neurone *neurone = self->neurones;
+  struct s_neurone *last_neurone = neurone + self->size;
+  for (; neurone < last_neurone && !*error; ++neurone)
+    *neurone = ne_file_consructor(fp, self, error);
+
+  // if there is a error during neurone initialisation return the error and
+  // destroy the layer
+  if (*error)
+  {
+    la_destructor(self);
     return NULL;
   }
 
@@ -107,9 +169,11 @@ void la_destructor(struct s_layer *self)
     free(self->neurones);
   }
 
-  // reclusive remove next layer (if not we can't have previous size)
-  la_destructor(self->next_layer);
-  self->previous_layer->next_layer = NULL;
+  // remove pointer to this instance of layer to avoid segmentation fault
+  if (self->next_layer)
+    self->next_layer->previous_layer = NULL;
+  if (self->previous_layer)
+    self->previous_layer->next_layer = NULL;
 
   free(self);
 }

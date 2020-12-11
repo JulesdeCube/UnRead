@@ -55,13 +55,38 @@ struct s_layer
 **         du to some error.
 **
 ** \throw NN_NO_NEURAL_NETWORK no parrent neural_network provided
-** \throw NN_NO_PARRENT_LAYER no parrent layer provided to the neurone
 ** \throw NN_ERROR_SPACE there is not enought free space to store the neurones
 **        or/and it's self
 **
 ** \see neurone.h:ne_consructor for sub error code
 */
 struct s_layer *la_consructor(unsigned int size, struct s_layer *previous_layer, struct s_neural_network *neural_network, enum e_nn_error *error);
+
+/**
+** \brief `s_layer` constuctor.
+**
+** create a layer for neural network form a file. if there is an error durring
+** creation, function will return NULL
+**
+** ⚠️** you need to use the `la_destructor` function after use (to free space )
+** ** ⚠️
+**
+** \param fp the file where the layer is store
+** \param previous_layer a pointer to the previous layer (can be null)
+** \param neural_network the neural network that get the neurone
+** \param error the return error channel
+**
+** \return a pointer to a new instance of `s_layer` or `NULL` if we can't create
+**         du to some error.
+**
+** \throw NN_PERMISSION_DENIED no file was provided
+** \throw NN_NO_NEURAL_NETWORK no parrent neural_network provided
+** \throw NN_ERROR_SPACE there is not enought free space to store the neurones
+**        or/and it's self
+**
+** \see neurone.h:ne_file_consructor for sub error code
+*/
+struct s_layer *la_file_consructor(FILE *fp, struct s_layer *previous_layer, struct s_neural_network *neural_network, enum e_nn_error *error);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //

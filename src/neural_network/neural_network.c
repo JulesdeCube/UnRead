@@ -21,6 +21,13 @@ struct s_neural_network *nn_consructor(unsigned int nb_layer, unsigned int *laye
 {
   *error = NN_SUCCESS;
 
+  if (!activation_func.derivate || !activation_func.self ||
+      !error_func.self || !error_func.derivate)
+  {
+    *error = NN_NO_FUNCTION;
+    return NULL;
+  }
+
   struct s_neural_network *self = calloc(1, sizeof(struct s_neural_network));
 
   if (!self)
@@ -29,22 +36,8 @@ struct s_neural_network *nn_consructor(unsigned int nb_layer, unsigned int *laye
     return NULL;
   }
 
-  if (!activation_func.derivate || !activation_func.self)
-  {
-    *error = NN_NO_FUNCTION;
-    nn_destructor(self);
-    return NULL;
-  }
   self->activation_func = activation_func;
-
-  if (!error_func.self || !error_func.derivate)
-  {
-    *error = NN_NO_FUNCTION;
-    nn_destructor(self);
-    return NULL;
-  }
   self->error_func = error_func;
-
   self->nb_layer = nb_layer;
   self->layers = calloc(self->nb_layer, sizeof(struct s_layer *));
 
@@ -63,15 +56,86 @@ struct s_neural_network *nn_consructor(unsigned int nb_layer, unsigned int *laye
 
   if (*error)
   {
-    for (; *layer >= *self->layers; --layer)
-      la_destructor(*layer);
-    self->layers = NULL;
-
+    *error = NN_ERROR_SPACE;
     nn_destructor(self);
+    return NULL;
+  }
 
+  return self;
+}
+
+struct s_neural_network *nn_file_consructor(FILE *fp, struct s_function_1p activation_func, struct s_function_2p error_func, enum e_nn_error *error)
+{
+  *error = NN_SUCCESS;
+
+  // check if there is a file
+  if (!fp)
+  {
+    *error = NN_PERMISSION_DENIED;
+    return NULL;
+  }
+
+  if (!activation_func.derivate || !activation_func.self ||
+      !error_func.self || !error_func.derivate)
+  {
+    *error = NN_NO_FUNCTION;
+    return NULL;
+  }
+
+  struct s_neural_network *self = calloc(1, sizeof(struct s_neural_network));
+
+  if (!self)
+  {
     *error = NN_ERROR_SPACE;
     return NULL;
   }
+
+  self->activation_func = activation_func;
+  self->error_func = error_func;
+  // FIXME - check for end of file
+  fread(&self->nb_layer, sizeof(self->nb_layer), 1, fp);
+  self->layers = calloc(self->nb_layer, sizeof(struct s_layer *));
+
+  if (!self->layers)
+  {
+    *error = NN_ERROR_SPACE;
+    nn_destructor(self);
+    return NULL;
+  }
+
+  struct s_layer **previous_layer = NULL;
+  struct s_layer **layer = self->layers;
+  struct s_layer **last_layer = layer + self->nb_layer;
+  for (; layer < last_layer && !*error; previous_layer = layer, ++layer)
+    *layer = la_file_consructor(fp, previous_layer ? *previous_layer : NULL, self, error);
+
+  if (*error)
+  {
+    nn_destructor(self);
+    return NULL;
+  }
+
+  return self;
+}
+
+struct s_neural_network *nn_from_file(char *filename, struct s_function_1p activation_func, struct s_function_2p error_func, enum e_nn_error *error)
+{
+  *error = NN_SUCCESS;
+
+  FILE *fp = fopen(filename, "rb");
+
+  // check if file exist
+  if (!fp)
+  {
+    *error = NN_PERMISSION_DENIED;
+    return NULL;
+  }
+
+  // create the neural network from the file
+  struct s_neural_network *self = nn_file_consructor(fp, activation_func, error_func, error);
+
+  // free the file
+  fclose(fp);
 
   return self;
 }
@@ -89,7 +153,7 @@ void nn_destructor(struct s_neural_network *self)
 
   struct s_layer **layer = self->layers;
   struct s_layer **last_layer = layer + self->nb_layer;
-  for (; *layer < *last_layer; ++layer)
+  for (; layer < last_layer; ++layer)
     la_destructor(*layer);
 
   free(self->layers);
