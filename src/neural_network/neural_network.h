@@ -177,6 +177,7 @@ void nn_compute(struct s_neural_network *self, enum e_nn_error *error);
 ** \param self the neural network to save
 ** \param filename the path to a file (that can not exist) where the neural
 **        network will be save.
+** \param error the return error channel
 **
 ** \throw NN_NO_NEURAL_NETWORK no neural network provided to the function
 ** \throw NN_PERMISSION_DENIED the file can't be open
@@ -192,6 +193,7 @@ void nn_save(struct s_neural_network *self, char *filename, enum e_nn_error *err
 **
 ** \param self the neural network to save
 ** \param fp file
+** \param error the return error channel
 **
 ** \throw NN_NO_NEURAL_NETWORK no neural network provided to the function
 ** \throw NN_PERMISSION_DENIED no file provided
@@ -199,6 +201,54 @@ void nn_save(struct s_neural_network *self, char *filename, enum e_nn_error *err
 ** \see layer.h:la_write for sub error code
 */
 void nn_write(struct s_neural_network *self, FILE *fp, enum e_nn_error *error);
+
+/**
+** \brief update the neural netowrk
+**
+** update weight and bias of each neurone to match with the targeted value
+**
+** \param self the neural network
+** \param targets the targeted output values
+** \param error the return error channel
+**
+** FIXME - Not Implemented
+*/
+void nn_back_propagage(struct s_neural_network *self, double *targets, enum e_nn_error *error);
+
+/**
+** \brief update the neural netowrk
+**
+** update weight and bias of each neurone to match with the targeted value
+**
+** \param self the neural network
+** \param targets the targeted output values
+** \param error the return error channel
+**
+** \return the totale error value
+**
+** \throw NN_NO_NEURAL_NETWORK no neural network was provided
+** \throw NN_NO_VALUES if the targets array is empty
+** \throw NN_NO_LAYER if there is not layer inside the neural network
+**
+** \see layer.h:la_get_sum_error for sub error code
+*/
+double nn_total_error(struct s_neural_network *self, double *targets, enum e_nn_error *error);
+
+/**
+** \brief transfer the output into the outputs pointer
+**
+** get the ouput of the neural network
+**
+** \param self the neural network
+** \param outputs an array to store the outputs
+** \param error the return error channel
+**
+** \throw NN_NO_LAYER no layer provided
+** \throw NN_NO_LAYER if there is not layer inside the neural network
+**
+** \see layer.h:la_get_outputs for sub error code
+*/
+void nn_get_outputs(struct s_neural_network *self, double *outputs, enum e_nn_error *error);
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //

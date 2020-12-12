@@ -45,7 +45,11 @@ enum e_nn_error
   /**
   ** file permission eception
   */
-  NN_PERMISSION_DENIED
+  NN_PERMISSION_DENIED,
+  /**
+  ** no targets or value provided
+  */
+  NN_NO_VALUES
 };
 
 #endif // UNREAD__SRC_NEURAL_NETWORK__NEURAL_NETWORK_ERROR_H_

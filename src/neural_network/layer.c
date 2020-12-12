@@ -184,11 +184,16 @@ void la_destructor(struct s_layer *self)
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-// FIXME - add error if values is null
-void la_set(struct s_layer *self, double *values, enum e_nn_error *error)
+void la_set_values(struct s_layer *self, double *values, enum e_nn_error *error)
 {
   // set the error to success
   *error = NN_SUCCESS;
+
+  if (!values)
+  {
+    *error = NN_NO_VALUES;
+    return;
+  }
 
   if (!self)
   {
@@ -255,6 +260,58 @@ void la_write(struct s_layer *self, FILE *fp, enum e_nn_error *error)
   // write neurones's informations
   for (; neurone < last_neurone && !*error; ++neurone)
     ne_write(neurone, fp, error);
+}
+
+double la_get_sum_error(struct s_layer *self, double *targets, enum e_nn_error *error)
+{
+  *error = NN_SUCCESS;
+
+  if (!self)
+  {
+    *error = NN_NO_LAYER;
+    return 0.;
+  }
+
+  if (!targets)
+  {
+    *error = NN_NO_VALUES;
+    return 0.;
+  }
+
+  double total = 0;
+
+  // init start and stop element
+  struct s_neurone *neurone = self->neurones;
+  struct s_neurone *last_neurone = neurone + self->size;
+
+  for (; neurone < last_neurone && !*error; ++neurone, ++targets)
+    total += ne_get_error(neurone, *targets, error);
+
+  return total;
+}
+
+void la_get_outputs(struct s_layer *self, double *outputs, enum e_nn_error *error)
+{
+  *error = NN_SUCCESS;
+
+  if (!self)
+  {
+    *error = NN_NO_LAYER;
+    return;
+  }
+
+  if (!outputs)
+  {
+    *error = NN_NO_VALUES;
+    return;
+  }
+
+  // init start and stop element
+  struct s_neurone *neurone = self->neurones;
+  struct s_neurone *last_neurone = neurone + self->size;
+
+  for (; neurone < last_neurone && !*error; ++neurone, ++outputs)
+    *outputs = ne_get_output(neurone, error);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

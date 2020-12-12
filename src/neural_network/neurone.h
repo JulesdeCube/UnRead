@@ -123,6 +123,40 @@ void ne_compute(struct s_neurone *self, enum e_nn_error *error);
 */
 void ne_write(struct s_neurone *self, FILE *fp, enum e_nn_error *error);
 
+/**
+** \brief get the error error from the neurone
+**
+** use the neurone network error function to get the error of the neurone
+**
+** \param self the neuone
+** \param target the wanted value
+** \param error the return error channel
+**
+** \return the error of the neurone or 0 if there is an error
+**
+** \throw NN_NO_NEURONE no neurone provided
+** \throw NN_NO_PARRENT_LAYER no parrent layer in the neurone
+** \throw NN_NO_PARRENT_NEURAL_NETWORK no parrented neural network from le
+**        parrent layer
+** \throw NN_NO_FUNCTION no error function from the parrent neural network from
+**        the parrent layer
+*/
+double ne_get_error(struct s_neurone *self, double target, enum e_nn_error *error);
+
+/**
+** \brief get the output of a neurone
+**
+** get the caculated neurone output
+**
+** \param self the neuone
+** \param error the return error channel
+**
+** \return the output value of the neurone
+**
+** \throw NN_NO_NEURONE no neurone provided
+*/
+double ne_get_output(struct s_neurone *self, enum e_nn_error *error);
+
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
 //                                   VIEWER                                  //

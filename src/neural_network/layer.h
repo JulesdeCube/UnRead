@@ -119,8 +119,9 @@ void la_destructor(struct s_layer *self);
 ** \param error the return error channel
 **
 ** \throw NN_NO_LAYER no layer provided
+** \throw NN_NO_VALUES value array not provided
 */
-void la_set(struct s_layer *self, double *values, enum e_nn_error *error);
+void la_set_values(struct s_layer *self, double *values, enum e_nn_error *error);
 
 /**
 ** \brief apply forward propagation to each neurone
@@ -143,6 +144,7 @@ void la_compute(struct s_layer *self, enum e_nn_error *error);
 **
 ** \param self the layer to save
 ** \param fp file
+** \param error the return error channel
 **
 ** \throw NN_NO_LAYER no layer provided
 ** \throw NN_PERMISSION_DENIED if no file is procided
@@ -150,6 +152,40 @@ void la_compute(struct s_layer *self, enum e_nn_error *error);
 ** \see neurone.h:ne_write for sub error code
 */
 void la_write(struct s_layer *self, FILE *fp, enum e_nn_error *error);
+
+/**
+** \brief get the somme of the error of the neurone of the layer
+**
+** get the value of the error of each neurone of it and sum it
+**
+** \param self the layer to get total error
+** \param targets an array of targeted value with a size of the layer
+** \param error the return error channel
+**
+** \return the sum or 0 if there is an error
+**
+** \throw NN_NO_LAYER no layer provided
+** \throw NN_NO_VALUES no targets array provided
+**
+** \see neurone.h:ne_get_output for sub error code
+*/
+double la_get_sum_error(struct s_layer *self, double *targets, enum e_nn_error *error);
+
+/**
+** \brief transfer the output into the outputs pointer
+**
+** set each case of the outputs array to the output of the neurone
+**
+** \param self the layer
+** \param outputs an array to store the outputs
+** \param error the return error channel
+**
+** \throw NN_NO_LAYER no layer provided
+** \throw NN_NO_VALUES no outputs arrat provided
+**
+** \see neurone.h:ne_get_output for sub error code
+*/
+void la_get_outputs(struct s_layer *self, double *outputs, enum e_nn_error *error);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //

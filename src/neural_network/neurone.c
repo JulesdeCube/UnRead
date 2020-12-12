@@ -239,6 +239,41 @@ void ne_write(struct s_neurone *self, FILE *fp, enum e_nn_error *error)
     fwrite(weight, sizeof(*weight), 1u, fp);
 }
 
+double ne_get_error(struct s_neurone *self, double target, enum e_nn_error *error)
+{
+  *error = NN_SUCCESS;
+
+  if (!self)
+    *error = NN_NO_NEURONE;
+
+  if (!self->layer)
+    *error = NN_NO_PARRENT_LAYER;
+
+  if (!self->layer->neural_network)
+    *error = NN_NO_PARRENT_NEURAL_NETWORK;
+
+  if (!self->layer->neural_network->error_func.self)
+    *error = NN_NO_FUNCTION;
+
+  if (*error)
+    return 0.;
+
+  return self->layer->neural_network->error_func.self(target, self->output);
+}
+
+double ne_get_output(struct s_neurone *self, enum e_nn_error *error)
+{
+  *error = NN_SUCCESS;
+
+  if (!self)
+  {
+    *error = NN_NO_NEURONE;
+    return 0.;
+  }
+
+  return self->output;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 //                                   VIEWER                                   //

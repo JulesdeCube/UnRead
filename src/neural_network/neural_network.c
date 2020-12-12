@@ -179,7 +179,7 @@ void nn_apply(struct s_neural_network *self, double *input, enum e_nn_error *err
   if (!self->nb_layer)
     return;
   // set the value in the fist layer
-  la_set(*self->layers, input, error);
+  la_set_values(*self->layers, input, error);
   // use forward propagation
   nn_compute(self, error);
 }
@@ -257,6 +257,54 @@ void nn_write(struct s_neural_network *self, FILE *fp, enum e_nn_error *error)
   // write each layer informations
   for (; layer < last_layer && !*error; ++layer)
     la_write(*layer, fp, error);
+}
+
+double nn_total_error(struct s_neural_network *self, double *targets, enum e_nn_error *error)
+{
+  *error = NN_SUCCESS;
+
+  if (!self)
+  {
+    *error = NN_NO_NEURAL_NETWORK;
+    return 0.;
+  }
+
+  if (!targets)
+  {
+    *error = NN_NO_VALUES;
+    return 0.;
+  }
+
+  if (!self->nb_layer)
+  {
+    *error = NN_NO_LAYER;
+    return 0.;
+  }
+
+  return la_get_sum_error(*(self->layers + self->nb_layer - 1), targets, error);
+}
+
+void nn_back_propagage(struct s_neural_network *self, double *targets, enum e_nn_error *error)
+{
+  (void)self;
+  (void)targets;
+  (void)error;
+}
+
+void nn_get_outputs(struct s_neural_network *self, double *outputs, enum e_nn_error *error)
+{
+  *error = NN_SUCCESS;
+
+  if (!self)
+    *error = NN_NO_NEURAL_NETWORK;
+
+  if (!self->nb_layer)
+    *error = NN_NO_LAYER;
+
+  if (*error)
+    return;
+
+  la_get_outputs(*(self->layers + self->nb_layer - 1), outputs, error);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
