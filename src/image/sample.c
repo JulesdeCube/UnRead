@@ -107,7 +107,7 @@ void sp_print(struct s_sample *sample)
   if (sample->label == '\00')
     printf("label: not labalize\n");
   else
-    printf("label: %c\n", sample->label);
+    printf("label: %i\n", sample->label);
   // print the image of the sample
   mk_print(&sample->image);
 }

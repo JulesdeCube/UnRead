@@ -60,7 +60,7 @@ struct s_set st_fconsructor(unsigned int count, unsigned int height, unsigned in
     return set;
 
   // init each sample and break if can't create it
-  for (; sample <= last_sample && *error == SP_SUCCESS; ++sample)
+  for (; sample < last_sample && *error == SP_SUCCESS; ++sample)
     *sample = sp_fconsructor(height, width, fp_images, fp_label, error);
 
   // destory created sample if there is an error
@@ -104,7 +104,7 @@ void st_foreach(struct s_set *set, void (*f)(struct s_sample *))
   // the last sample
   struct s_sample *last_sample = sample + set->count;
   // apply the function to all the pixels
-  for (; sample <= last_sample; ++sample)
+  for (; sample < last_sample; ++sample)
     f(sample);
 }
 

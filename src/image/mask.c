@@ -109,7 +109,7 @@ struct s_mask mk_fconstructor(unsigned int height, unsigned int width, FILE *fp,
   mk_fimport(&mask, fp, error);
 
   // if there is an error during the creation return
-  if (error != MK_SUCCESS)
+  if (*error != MK_SUCCESS)
     mk_destructor(&mask);
 
   return mask;
@@ -186,7 +186,7 @@ void mk_foreach_pixel(struct s_mask *mask, void (*f)(unsigned char *))
   // the last pixel
   unsigned char *last_pixel = pixel + mk_count(mask);
   // apply the function to all the pixels
-  for (; pixel <= last_pixel; ++pixel)
+  for (; pixel < last_pixel; ++pixel)
     f(pixel);
 }
 
@@ -199,7 +199,7 @@ void mk_foreach_pixel(struct s_mask *mask, void (*f)(unsigned char *))
 void px_print(unsigned char value)
 {
   // print a pixel in th rgb format but with all the channel equal
-  printf("\x1B[38;2;%d;%d;%dm██", value, value, value);
+  printf("\x1B[48;2;%d;%d;%dm  ", value, value, value);
 }
 
 void mk_print(struct s_mask *mask)
@@ -217,7 +217,7 @@ void mk_print(struct s_mask *mask)
       px_print(*pixel);
 
     // return to an new line at end of each row of pixel
-    printf("\n");
+    printf("\x1B[0m\n");
   }
 }
 
