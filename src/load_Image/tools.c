@@ -38,6 +38,18 @@ void set_3values(guchar *p, int v1, int v2, int v3)
     p[2] = v3;
 }
 
+void normalized_pixel(guchar *pixel, struct s_int_tuple min_max)
+{
+    int value;
+    if(pixel[0] >= min_max.max)
+        value = 255;
+    else if(pixel[0] <= min_max.min)
+        value = 0;
+    else
+        value = (pixel[0] - min_max.min) * (255./ (min_max.max - min_max.min));
+    set_3values(pixel, value, value, value);
+}
+
 int pythagore(int a, int b)
 {
     return sqrt((a*a) + (b*b));

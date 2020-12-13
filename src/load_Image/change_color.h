@@ -16,6 +16,7 @@
  ** - ClassicGLVL_to_NormalizedGLVL
  ** - Greylvl_to_BW
  ** - Colored_to_BW
+ ** - Inverse_color
  */
 enum function
 {
@@ -23,7 +24,8 @@ enum function
     ClassicGLVL_to_NormalizedGLVL,
     Greylvl_to_BW,
     Colored_to_BW,
-    Colored_to_OnlyBlack
+    Colored_to_OnlyBlack,
+    Inverse_color
 };
 
 
