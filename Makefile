@@ -2,8 +2,8 @@ BUILD_DIR=build
 OBJECT_DIR=obj
 SRC_DIR=src
 
-SRC=main.c load_Image/load.c load_Image/change_color.c load_Image/tools.c load_Image/segmentation.c load_Image/rotate.c load_Image/resize.c load_Image/noise.c load_Image/histo_grey_lvl.c
-DEPS=load_Image/load.h load_Image/change_color.c load_Image/tools.h load_Image/segmentation.h load_Image/rotate.h load_Image/resize.h load_Image/noise.h load_Image/histo_grey_lvl.h
+SRC=main.c load_Image/load.c load_Image/change_color.c load_Image/tools.c load_Image/segmentation.c load_Image/rotate.c load_Image/resize.c load_Image/noise.c load_Image/histo_grey_lvl.c load_Image/auto_rotation.c
+DEPS=load_Image/load.h load_Image/change_color.c load_Image/tools.h load_Image/segmentation.h load_Image/rotate.h load_Image/resize.h load_Image/noise.h load_Image/histo_grey_lvl.h  load_Image/auto_rotation.h
 BUILD=UnRead-0.1.0
 
 CC=gcc
