@@ -11,7 +11,11 @@
 #include "segmentation.h"
 #include "rotate.h"
 
+
+//find variance of horizontal projection of an image after rotation
 int get_variance(GtkWidget* image,double degree);
+
+//auto_rotation take an image and find the rotation from -30° to 30° with the best variance. image is change by the function.
 void auto_rotation(GtkWidget* image);
 
 

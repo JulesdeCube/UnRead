@@ -34,6 +34,7 @@ int * horizontalProjection(GdkPixbuf *pixbuf)
         }
     }
     return hp;
+
 }
 /* return a list of int. That represent the ammout of black pixel of each collum*/
 int * verticalProjection(GdkPixbuf *pixbuf)
@@ -129,10 +130,6 @@ void lineSegmentation(GdkPixbuf *pixbuf)
         }
 
     }
-    free(sg);
-    free(number);
-    free(t);
-    free(type);
 }
 
 
@@ -169,6 +166,7 @@ int charSpacePixel(GdkPixbuf *pixbuf){
             b++;
         }
     }
+    return min;
 }
 
 
@@ -242,12 +240,6 @@ void charSegmentation(GdkPixbuf *pixbuf,int lineNumber)
             b++;
         }
     }
-
-    free(sg);
-    free(number);
-    free(number2);
-    free(t);
-    free(type);
 }
 //same sub function in load.c to create a gtk object from an image.
 GtkWidget* create_image2 (char path[255])
