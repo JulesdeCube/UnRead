@@ -107,7 +107,7 @@ void lineSegmentation(GdkPixbuf *pixbuf)
 
 
                 //moving file from UnRead to specific folder.
-                char newpath[20] = "./cuted_line/";
+                char newpath[255] = "./cuted_line/";
                 strcat(newpath,sg);
                 rename(sg,newpath);
 
@@ -181,7 +181,7 @@ void charSegmentation(GdkPixbuf *pixbuf,int lineNumber)
 
 
                 //moving file from UnRead to specific folder.
-                char newpath[20] = "./cuted_char/";
+                char newpath[255] = "./cuted_char/";
                 strcat(newpath,sg);
                 rename(sg,newpath);
 
