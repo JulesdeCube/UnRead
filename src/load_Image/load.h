@@ -10,8 +10,8 @@
 #include "segmentation.h"
 #include "resize.h"
 #include "rotate.h"
-
-#define UNUSED(x) (void)(x)
+#include "noise.h"
+#include "histo_grey_lvl.h"
 
 /**
  ** \brief Create an Image from a file

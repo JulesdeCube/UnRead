@@ -94,7 +94,6 @@ void apply_rotation(GtkWidget* image, enum e_rotate_type r_type, double degree,
 
     // Change old image with the new pixbuf
     gtk_image_set_from_pixbuf (GTK_IMAGE(image), newpixbuf);
-    //gdk_pixbuf_save(newpixbuf, "src/load_Image/Images/img.bmp", "bmp", NULL, NULL);
 }
 
 /**

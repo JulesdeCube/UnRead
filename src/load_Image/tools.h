@@ -30,13 +30,20 @@ struct s_int_tuple search_BW_pixel(GtkWidget* image);
  ** \brief set 3 values on a pointer p
  ** 
  ** \param p pointer to change values
- ** \param v1 
- ** \param v2
- ** \param v3
- **
- ** \return result of pyth for a third side
+ ** \param v1 first value
+ ** \param v2 second value
+ ** \param v3 third value
 */
 void set_3values(guchar *p, int v1, int v2, int v3);
+
+/**
+ ** \brief  Change pixel code in CLASSIC grey level to a pixel code in NORMALIZED grey level
+ ** /!\ Only works with an image which is already in grey level /!\
+ **
+ ** \param pixel which apply new color
+ ** \param min_max tuple with the maximum and minimum color of the image
+*/
+void normalized_pixel(guchar *pixel, struct s_int_tuple min_max);
 
 /**
  ** \brief pythagore function
