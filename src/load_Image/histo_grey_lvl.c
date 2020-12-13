@@ -66,5 +66,4 @@ void histo_greylvl(GtkWidget* image, double black_percent, double white_percent)
             normalized_pixel(p, tuple);
         }
     }
-    gdk_pixbuf_save(pixbuf, "src/load_Image/images/img.bmp", "bmp", NULL, NULL);
 }
