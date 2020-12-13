@@ -30,27 +30,24 @@ void apply_color(GtkWidget* image, void filter(guchar *, struct s_int_tuple))
  ** \brief  Change pixel code in RGB to a pixel code in CLASSIC grey level
  **
  ** \param pixel which apply new color
- ** \param min_max Unused it 
+ ** \param min_max Unused it
 */
 void Colored_to_classicGreyLvl1( guchar *pixel, struct s_int_tuple min_max)
 {
     UNUSED(min_max);
     char value = 0.3 * pixel[0] + 0.59 * pixel[1] + 0.11 * pixel[2];
-    for(unsigned char i = 0; i < 3; ++i)
-        pixel[i] = value;
+    set_3values(pixel, value, value, value);
 }
 
 /**
  ** \brief  Change pixel code in CLASSIC grey level to a pixel code in NORMALIZED grey level
  **
  ** \param pixel which apply new color
- ** \param min_max tuple with the maximum and minimum color of the image  
+ ** \param min_max tuple with the maximum and minimum color of the image
 */
-void ClassicGLVL_to_NormalizedGLVL1( guchar *pixel, struct s_int_tuple min_max)
+void ClassicGLVL_to_NormalizedGLVL1(guchar *pixel, struct s_int_tuple min_max)
 {
-    char value = (pixel[0] - min_max.min) * (255./ (min_max.max - min_max.min));
-    for(unsigned char i = 0; i < 3; ++i)
-        pixel[i] = value;
+    normalized_pixel(pixel, min_max);
 }
 
 /**
@@ -63,8 +60,7 @@ void Greylvl_to_BW1(guchar *pixel, struct s_int_tuple min_max)
 {       
     UNUSED(min_max);
     char value = 255 * (pixel[0] >= 128);
-    for(unsigned char i = 0; i < 3; ++i)
-        pixel[i] = value;
+    set_3values(pixel, value, value, value);
 }
 
 /**
@@ -78,8 +74,7 @@ void Colored_to_BW1(guchar *pixel, struct s_int_tuple min_max)
     int medium = (min_max.max - min_max.min) /2;
     int greycolor = (pixel[0] + pixel[1] + pixel[2]) / 3; 
     char value = 255 * (greycolor > min_max.min + medium);
-    for(unsigned char i = 0; i < 3; ++i)
-        pixel[i] = value;
+    set_3values(pixel, value, value, value);
 }
 
 /**
@@ -92,12 +87,23 @@ void Colored_to_BW1(guchar *pixel, struct s_int_tuple min_max)
 void Colored_to_OnlyBlack1(guchar *pixel, struct s_int_tuple min_max)
 {
     int value;
-    if((pixel[0] + pixel[1] + pixel[2]) / 3 - min_max.min < 2)
+    if((pixel[0] + pixel[1] + pixel[2]) / 3 - min_max.min < 20)
         value = 0;
     else
         value = 255;
-    for(unsigned char i = 0; i < 3; ++i)
-        pixel[i] = value;
+    set_3values(pixel, value, value, value);
+}
+
+/**
+ ** \brief inverse the color of the pixel
+ **
+ ** \param pixel will be modify
+ ** \param min_max useless
+*/
+void inverse_color1(guchar *pixel, struct s_int_tuple min_max)
+{
+    UNUSED(min_max);
+    set_3values(pixel, 255 - pixel[0], 255 - pixel[1], 255 - pixel[2]);
 }
 
 void Change_Color(GtkWidget* image, enum function f)
@@ -122,6 +128,10 @@ void Change_Color(GtkWidget* image, enum function f)
         
     case Colored_to_OnlyBlack:
         apply_color(image, Colored_to_OnlyBlack1);
+        break;
+
+    case Inverse_color:
+        apply_color(image, inverse_color1);
         break;
 
     default:
