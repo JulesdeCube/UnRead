@@ -57,7 +57,6 @@ int * verticalProjection(GdkPixbuf *pixbuf)
             p = which_pixels + y * rowstride + x * n_channels;
             // image coming from transform_graylvl.c are either totally black or totally white,
             if (p[0] < 128) {
-
                 vp[x] += 1;
             }
         }
@@ -130,7 +129,50 @@ void lineSegmentation(GdkPixbuf *pixbuf)
         }
 
     }
+    free(sg);
+    free(number);
+    free(t);
+    free(type);
 }
+
+
+
+
+/*find number of pixel between char */
+
+int charSpacePixel(GdkPixbuf *pixbuf){
+    int * vp = verticalProjection(pixbuf);
+    int min = 1000;
+    int a = 0;
+    int b = 0;
+    int width = gdk_pixbuf_get_width (pixbuf);
+    for (int j = 0; j < width; ++j)
+    {
+        if (vp[j])//row not full white pixel
+        {
+            if (a != b)
+            {
+                if (min > b-a){
+                    min = b-a;
+                }
+                a = 0;
+                b = 0;
+            }
+            else
+            {
+                a ++;
+                b ++;
+            }
+        }
+        else
+        {
+            b++;
+        }
+    }
+}
+
+
+
 /*take an image (format pixbuf) and save each detected Char in a specified directory.
  A Char is detected when every pixel collum has at least one black pixel.
  To avoid name overlap, we add the line number to the char name.
@@ -200,7 +242,12 @@ void charSegmentation(GdkPixbuf *pixbuf,int lineNumber)
             b++;
         }
     }
-    //printf("line END \n");
+
+    free(sg);
+    free(number);
+    free(number2);
+    free(t);
+    free(type);
 }
 //same sub function in load.c to create a gtk object from an image.
 GtkWidget* create_image2 (char path[255])
@@ -241,6 +288,9 @@ void mainSegmentation(GtkWidget* image_to_change)
             pixbuf2 = gtk_image_get_pixbuf((GtkImage *) lineImage);
             if (GDK_IS_PIXBUF(pixbuf2)) {
                 //printf("char seg\n");
+
+
+
                 charSegmentation(pixbuf2, c);
                 //printf("char seg end\n");
                 c += 1;

@@ -18,6 +18,9 @@ int * verticalProjection(GdkPixbuf *pixbuf);
 //take a pixbuf image and create crop each line in a specific directory
 void lineSegmentation(GdkPixbuf *pixbuf);
 
+//find white space minimum scale.
+int charSpacePixel(GdkPixbuf *pixbuf)
+
 //take a pixbuf image and create crop each character in a specific directory
 void charSegmentation(GdkPixbuf *pixbuf,int lineNumber);
 
