@@ -37,7 +37,27 @@ enum sp_error
   /**
   ** error we arrive to end of file containing label
   */
-  SP_ERROR_EOF_LABEL
+  SP_ERROR_EOF_LABEL,
+  /**
+  ** error throw when the start code of the images file is not correct
+  */
+  SP_ERROR_WONG_FILECODE_IMAGE,
+  /**
+  ** error throw when the start code of the labels file is not correct
+  */
+  SP_ERROR_WONG_FILECODE_LABEL,
+  /**
+  ** error the image and labels count is not the same
+  */
+  SP_ERROR_SIZE_NOT_MATCH,
+  /**
+  ** error throw when the sample given path didn't exist
+  */
+  SP_ERROR_NO_SAMPLES_FILE,
+  /**
+  ** error throw when the image given path didn't exist
+  */
+  SP_ERROR_NO_IMAGES_FILE
 };
 
 /**
@@ -90,6 +110,7 @@ struct s_sample sp_consructor(unsigned int height, unsigned int width, char labe
 ** \return a new instance of `s_sample`
 */
 struct s_sample sp_fconsructor(unsigned int height, unsigned int width, FILE *fp_images, FILE *fp_label, enum sp_error *error);
+
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
 //                                 DESTRUCTOR                                //

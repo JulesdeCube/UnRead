@@ -71,6 +71,65 @@ struct s_set st_fconsructor(unsigned int count, unsigned int height, unsigned in
   return set;
 }
 
+struct s_set st_import(char *image_dataset_path, char *labels_dataset_path, enum sp_error *error)
+{
+  struct s_set self = (struct s_set){0, NULL};
+
+  FILE *fp_images = fopen(image_dataset_path, "rb");
+  if (!fp_images)
+  {
+    *error = SP_ERROR_NO_IMAGES_FILE;
+    return self;
+  }
+
+  FILE *fp_labels = fopen(labels_dataset_path, "rb");
+  if (!fp_images)
+  {
+    *error = SP_ERROR_NO_SAMPLES_FILE;
+    return self;
+  }
+
+  self = st_from_file(fp_images, fp_labels, error);
+
+  fclose(fp_images);
+  fclose(fp_labels);
+
+  return self;
+}
+
+struct s_set st_from_file(FILE *fp_images, FILE *fp_labels, enum sp_error *error)
+{
+
+  *error = SP_SUCCESS;
+
+  if (!fp_images)
+    *error = SP_ERROR_NO_SAMPLES_FILE;
+
+  if (!fp_images)
+    *error = SP_ERROR_NO_SAMPLES_FILE;
+
+  unsigned int code_images = fgetu(fp_images, error, SP_ERROR_EOF_IMAGE);
+  unsigned int code_labels = fgetu(fp_labels, error, SP_ERROR_EOF_LABEL);
+  unsigned int nb_images = fgetu(fp_images, error, SP_ERROR_EOF_IMAGE);
+  unsigned int nb_labels = fgetu(fp_labels, error, SP_ERROR_EOF_LABEL);
+  unsigned int height = fgetu(fp_images, error, SP_ERROR_EOF_IMAGE);
+  unsigned int width = fgetu(fp_images, error, SP_ERROR_EOF_IMAGE);
+
+  if (code_images != 0x00000803)
+    *error = SP_ERROR_WONG_FILECODE_IMAGE;
+
+  if (code_labels != 0x00000801)
+    *error = SP_ERROR_WONG_FILECODE_LABEL;
+
+  if (nb_images != nb_labels)
+    *error = SP_ERROR_SIZE_NOT_MATCH;
+
+  if (*error)
+    return (struct s_set){0, NULL};
+
+  return st_fconsructor(nb_images, height, width, fp_images, fp_labels, error);
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
 //                                 DESTRUCTOR                                //

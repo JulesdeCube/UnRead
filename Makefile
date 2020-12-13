@@ -2,8 +2,8 @@ BUILD_DIR=build
 OBJECT_DIR=obj
 SRC_DIR=src
 
-SRC=main.c image/mask.c image/sample.c image/set.c
-DEPS=image/mask.h image/sample.h image/set.h
+SRC=main.c image/mask.c image/sample.c image/set.c image/utils.c
+DEPS=image/mask.h image/sample.h image/set.h image/utils.h
 BUILD=UnRead-0.1.0
 
 CC=gcc
@@ -51,4 +51,3 @@ $(BUILD_DIR)/$(BUILD): $(BUILD_DIR)/ $(addprefix $(OBJECT_DIR)/, $(SRC:.c=.o))
 
 %/:
 	@mkdir -p $@
-

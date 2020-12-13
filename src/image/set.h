@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include "sample.h"
+#include "utils.h"
 
 /**
 ** \struct s_set
@@ -49,9 +50,8 @@ struct s_set
 */
 struct s_set st_consructor(unsigned int count, unsigned int height, unsigned int width, enum sp_error *error);
 
-
 /**
-** \brief `s_set` constuctor from file
+** \brief `s_set` file constuctor from file
 **
 ** create an `s_set` base on a image file and a label file.
 **
@@ -63,11 +63,43 @@ struct s_set st_consructor(unsigned int count, unsigned int height, unsigned int
 ** \param width the width of each images of the datadset
 ** \param fp_images a file contaiging the images data, see `mk_fconstructor`
 ** \param fp_label a file contaiging the label, each one code in a 1 pont
-** \param error error return. in case of error all the will be destroy
+** \param error error return. in case of error all will be destroy
 **
-** \return a new instance of `s_sample`
+** \return a new instance of `s_set`
 */
 struct s_set st_fconsructor(unsigned int count, unsigned int height, unsigned int width, FILE *fp_images, FILE *fp_label, enum sp_error *error);
+
+/**
+** \brief `s_set` MNIST constuctor
+**
+** create an `s_set` base on file in MNIST format
+**
+** ⚠️** you need to use the `st_destructor` function after set use (to free
+** space )** ⚠️
+**
+** \param fp_images a file contaiging the images data, see `mk_fconstructor`
+** \param fp_label a file contaiging the label, each one code in a 1 pont
+** \param error error return. in case of error all will be destroy
+**
+** \return a new instance of `s_set`
+*/
+struct s_set st_from_file(FILE *fp_images, FILE *fp_label, enum sp_error *error);
+
+/**
+** \brief `s_set` MNIST constuctor from path
+**
+** create an `s_set` by giving 2 file in MNIST format
+**
+** ⚠️** you need to use the `st_destructor` function after set use (to free
+** space )** ⚠️
+**
+** \param image_dataset_path path to the images part of the dataset
+** \param labels_dataset_path path to the labels part of the dataset
+** \param error error return. in case of error all will be destroy
+**
+** \return a new instance of `s_set`
+*/
+struct s_set st_import(char *image_dataset_path, char *labels_dataset_path, enum sp_error *error);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
