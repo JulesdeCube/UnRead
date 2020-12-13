@@ -373,7 +373,7 @@
               <object class="GtkImage" id="img_main">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="pixbuf">../../../../../../../../home/bapti/PourGit/UnRead/src/load_Image/Images/logo_unread.png</property>
+                <property name="pixbuf">../load_Image/Images/logo_unread.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
