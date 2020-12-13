@@ -16,12 +16,12 @@
 
 ## ⭐ Feature
 
-TODO
+Reconize characters 🤓
 
 ## ✔️ Require
 - nothing yet :slightly_smiling_face:
 
-  
+
 
 ## 📘 Usage
 
@@ -57,4 +57,3 @@ Licensed under the [GNU general public license V3](./LICENSE.md).
 [![see Contributor](https://contributors-img.web.app/image?repo=JulesdeCube/UnRead)](https://github.com/JulesdeCube/UnRead/graphs/contributors)
 
 To write code or reported issues please first read the [Contribution guide lines](./CONTRIBUTING.md).
-
