@@ -22,7 +22,7 @@ typedef struct
     char      *w_path;                  // path of the image open
     char      *w_save_path;             // path of the file where the text is save
     char      *w_text_to_save;          // string of the text to save
-    int        w_step;
+    int        w_step;                  //value of the current step
 } app_widgets;
 
 int main(int argc, char *argv[])
@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-// Open the text
+// Open the helper text
 void on_menuitm_about_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
 {
     UNUSED(menuitem);
@@ -68,7 +68,7 @@ void on_menuitm_about_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
     "-File: \n\
     1)open     : ouvrir une image à l'aide de l'explorateur de fichier \n\
     2)save     : sauvegarde le texte retourner par le réseau de neurones \n\
-    3)save as  : \n\
+    3)save as  : enregistre le texte dans le document séléctionner (peut écrire dans un document non vide) \n\
     4)quit     : ferme le sous menu \n\
     -Help: \n\
             -about: ouvre une fenêtre avec des instructions d'utilisations \n\
@@ -117,15 +117,38 @@ void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
     gtk_widget_hide(app_wdgts->w_dlg_file_choose);
 }
 
+void on_menuitm_save_as_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
+{
+    UNUSED(menuitem);
+    gchar *file_name = NULL;        // Name of file to open from dialog box
+    // Show the "Open Image" dialog box
+    gtk_widget_show(app_wdgts->w_dlg_save_file);
+
+    // Check return value from Open Image dialog box to see if user clicked the Open button
+    if (gtk_dialog_run(GTK_DIALOG (app_wdgts->w_dlg_save_file)) == GTK_RESPONSE_OK)
+    {
+        // Get the file name from the dialog box
+        file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(app_wdgts->w_dlg_save_file));
+        if (file_name != NULL)
+        {
+            FILE *fp = fopen(file_name, "a");
+            //write
+            fputs(app_wdgts->w_text_to_save, fp);
+            // add new line at the end of the file
+            fputc('\n', fp);
+            // free the file
+            fclose(fp);
+        }
+    }
+    g_free(file_name);
+    // Finished with the "Open Image" dialog box, so hide it
+    gtk_widget_hide(app_wdgts->w_dlg_save_file);
+}
+
 //file ->save in the w_save_path
 void on_menuitm_save_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
 {
     UNUSED(menuitem);
-    //GtkWidget *image;
-
-    // Show the "Open Image" dialog box
-    gtk_widget_show(app_wdgts->w_dlg_save_file);
-
     FILE *fp = fopen(app_wdgts->w_save_path, "a");
     //write
     fputs(app_wdgts->w_text_to_save, fp);
@@ -133,15 +156,13 @@ void on_menuitm_save_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
     fputc('\n', fp);
     // free the file
     fclose(fp);
-    // Finished with the "Open Image" dialog box, so hide it
-    gtk_widget_hide(app_wdgts->w_dlg_save_file);
 }
 
 //step zero of the process od the ocr
 void step_zero(app_widgets *app_wdgts)
 {
     //UNUSED(button);
-    //image grey lvl normalised
+    //image->only black
     gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), app_wdgts->w_path);
     Change_Color(app_wdgts->w_img_main,Colored_to_classicGreyLvl);
     Change_Color(app_wdgts->w_img_main,ClassicGLVL_to_NormalizedGLVL);
@@ -153,14 +174,13 @@ void step_zero(app_widgets *app_wdgts)
 //step one of the process od the ocr
 void step_one(app_widgets *app_wdgts)
 {
-    //image grey only black
+    //image-> only black
     gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), app_wdgts->w_path);
     Change_Color(app_wdgts->w_img_main,Colored_to_classicGreyLvl);
     Change_Color(app_wdgts->w_img_main,ClassicGLVL_to_NormalizedGLVL);
     Change_Color(app_wdgts->w_img_main,Colored_to_OnlyBlack);
     GdkPixbuf *newpixbuf = New_Size_Image(app_wdgts->w_img_main, 500, 500);
     gtk_image_set_from_pixbuf (GTK_IMAGE(app_wdgts->w_img_main), newpixbuf);
-    //segmentation
 }
 
 //step two of the process od the ocr
@@ -173,7 +193,6 @@ void step_two(app_widgets *app_wdgts)
     Change_Color(app_wdgts->w_img_main,Colored_to_OnlyBlack);
     GdkPixbuf *newpixbuf = New_Size_Image(app_wdgts->w_img_main, 500, 500);
     gtk_image_set_from_pixbuf (GTK_IMAGE(app_wdgts->w_img_main), newpixbuf);
-    //segmentation
 
     //passage réseau de neuronne
 
