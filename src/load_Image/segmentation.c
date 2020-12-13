@@ -91,7 +91,7 @@ void lineSegmentation(GdkPixbuf *pixbuf)
 
                 /* line name is segmentedLine_/line number/ and the format is bmp*/
                 char * sg = (char *) malloc( 255 * sizeof(char) );
-                char * number = (char *) malloc( 255 * sizeof(char) );
+                char * number = (char *) malloc( 255 * sizeof(char));
                 char * t = (char *) malloc( 255 * sizeof(char) );
                 char * type = (char *) malloc( 255 * sizeof(char) );
                 sprintf(sg,"segmentedLine_");
@@ -115,6 +115,11 @@ void lineSegmentation(GdkPixbuf *pixbuf)
 
                 a = j;
                 b = j;
+
+                free(sg);
+                free(number);
+                free(t);
+                free(type);
             }
             // case when there is not any black pixel but the two line marker are the same. Skip to next line
             else
@@ -130,6 +135,7 @@ void lineSegmentation(GdkPixbuf *pixbuf)
         }
 
     }
+    free(hp);
 }
 
 
@@ -167,6 +173,7 @@ int charSpacePixel(GdkPixbuf *pixbuf){
         }
     }
     return min;
+    free(vp);
 }
 
 
@@ -228,6 +235,12 @@ void charSegmentation(GdkPixbuf *pixbuf,int lineNumber)
                 a = j;
                 b = j;
 
+                free(sg);
+                free(number);
+                free(number2);
+                free(t);
+                free(type);
+
             }
             else
             {
@@ -240,6 +253,7 @@ void charSegmentation(GdkPixbuf *pixbuf,int lineNumber)
             b++;
         }
     }
+    free(vp);
 }
 //same sub function in load.c to create a gtk object from an image.
 GtkWidget* create_image2 (char path[255])

@@ -34,7 +34,9 @@ void auto_rotation(GtkWidget *image) {
     for (int i = -30; i <= 30; i = i + 2) {
         //getting a temporary image for test
         pixbuf = gtk_image_get_pixbuf ((GtkImage*) image);
-        GdkPixbuf *newpixbuf = gdk_pixbuf_new_subpixbuf (pixbuf, 0, 0,gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf));
+        GdkPixbuf *newpixbuf = gdk_pixbuf_new_subpixbuf (pixbuf, 0, 0,
+                                                         gdk_pixbuf_get_width (pixbuf),
+                                                         gdk_pixbuf_get_height (pixbuf));
         temp_image = gtk_image_new_from_pixbuf (newpixbuf);
 
         int var = get_variance(temp_image, i);
@@ -42,8 +44,6 @@ void auto_rotation(GtkWidget *image) {
             var_max = var;
             degree_max = i;
         }
-        printf("degree: %d\n",i);
-        printf("variance: %d\n",var);
     }
 
     rotate(image, degree_max);
