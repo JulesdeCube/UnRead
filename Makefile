@@ -2,12 +2,12 @@ BUILD_DIR=build
 OBJECT_DIR=obj
 SRC_DIR=src
 
-SRC=main.c image/mask.c image/sample.c image/set.c image/utils.c
-DEPS=image/mask.h image/sample.h image/set.h image/utils.h
+SRC=main.c $(addprefix neural_network/, layer.c neural_network.c neurone.c utils.c ) $(addprefix image/, mask.c sample.c set.c utils.c )
+DEPS=$(addprefix neural_network/, layer.h neural_network.h neurone.h utils.h ) $(addprefix image/, mask.h sample.h set.h utils.h )
 BUILD=UnRead-0.1.0
 
 CC=gcc
-CFLAGS=-I$(SRC_DIR) -Wall -Wextra -Werror -std=c99 -pedantic -g
+CFLAGS=-I$(SRC_DIR) -Wall -Wextra -Werror -std=c99 -pedantic -g -lm
 
 .PHONY: all help version run build clean
 ##
@@ -40,7 +40,7 @@ clean: $(OBJECT_DIR)
 
 
 $(OBJECT_DIR)/%.o: $(SRC_DIR)/%.c $(addprefix $(SRC_DIR)/, $(DEPS))
-	@	@mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	@echo "compiling" $<
 	@$(CC) -c -o $@ $< $(CFLAGS)
 
