@@ -2,8 +2,8 @@ BUILD_DIR=build
 OBJECT_DIR=obj
 SRC_DIR=src
 
-SRC=main.c load_Image/load.c load_Image/change_color.c load_Image/tools.c load_Image/segmentation.c load_Image/rotate.c load_Image/resize.c load_Image/noise.c load_Image/histo_grey_lvl.c load_Image/auto_rotation.c
-DEPS=load_Image/load.h load_Image/change_color.c load_Image/tools.h load_Image/segmentation.h load_Image/rotate.h load_Image/resize.h load_Image/noise.h load_Image/histo_grey_lvl.h  load_Image/auto_rotation.h
+SRC=main.c $(addprefix neural_network/, layer.c neural_network.c neurone.c utils.c ) $(addprefix image/, mask.c sample.c set.c utils.c ) $(addprefix load_Image/, load.c change_color.c tools.c segmentation.c rotate.c resize.c noise.c histo_grey_lvl.c auto_rotation.c)
+DEPS=$(addprefix neural_network/, layer.h neural_network.h neurone.h utils.h ) $(addprefix image/, mask.h sample.h set.h utils.h ) $(addprefix load_Image/, load.h change_color.h tools.h segmentation.h rotate.h resize.h noise.h histo_grey_lvl.h auto_rotation.h)
 BUILD=UnRead-0.1.0
 
 CC=gcc
@@ -25,10 +25,10 @@ all: help
 help: ## print this help
 help: version
 	@fgrep -h "## " $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/^## //' |sed -e 's/\(.*\)## /- \1/'
-	@echo "\nJules Lefebvre <juleslefebvre.pro@outlook.fr>"
+	@echo -e "\nJules Lefebvre <juleslefebvre.pro@outlook.fr>"
 
 version: ## print the makefile version
-	@echo "C build v1.2.0"
+	@echo "C build v1.2.1"
 
 install: ## install all dependence to compile project
 	@echo "install packages : $(PACKAGES)"
@@ -70,10 +70,9 @@ $(OBJECT_DIR)/%.o: $(SRC_DIR)/%.c $(addprefix $(SRC_DIR)/, $(DEPS))
 	@$(CC) -c -o $@ $< $(CFLAGS)
 
 $(BUILD_DIR)/$(BUILD): $(BUILD_DIR)/ $(addprefix $(OBJECT_DIR)/, $(SRC:.c=.o))
-	@echo "\nbuilding $(BUILD)"
+	@echo -e "\nbuilding $(BUILD)"
 	@$(CC) -o $(BUILD_DIR)/$(BUILD) $(addprefix $(OBJECT_DIR)/, $(SRC:.c=.o)) $(CFLAGS)
 	@echo "Finish"
 
 %/:
 	@mkdir -p $@
-

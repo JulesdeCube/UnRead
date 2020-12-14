@@ -6,5 +6,8 @@ build/
 
 # editor
 .vscode/
-.*.swp
 *~
+.*.swp
+
+# test
+test/neural_network

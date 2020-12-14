@@ -8,6 +8,12 @@
 #include "load_Image/auto_rotation.h"
 
 #include <stdio.h>
+#include "neural_network/neural_network.h"
+#include "neural_network/utils.h"
+#include "image/set.h"
+
+#define nb_layers 4
+#define nb_test 10000
 
 #define UNUSED(x) (void)(x)
 
