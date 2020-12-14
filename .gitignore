@@ -2,9 +2,11 @@
 obj/
 build/
 *.o
+*.jpg
 
 # editor
 .vscode/
+*~
 .*.swp
 
 # test
