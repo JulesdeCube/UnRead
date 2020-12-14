@@ -68,9 +68,9 @@ int * verticalProjection(GdkPixbuf *pixbuf)
 /*take an image (format pixbuf) and save each detected line in a specified directory. A line is detected when every pixel line has a black pixel.  */
 void lineSegmentation(GdkPixbuf *pixbuf)
 {
-    printf("horizontal proj\n");
+    //printf("horizontal proj\n");
     int * hp = horizontalProjection(pixbuf);
-    printf("horizontal projection end\n");
+    //printf("horizontal projection end\n");
     int a = 0;
     int b = 0;
     int height = gdk_pixbuf_get_height (pixbuf);
@@ -100,7 +100,7 @@ void lineSegmentation(GdkPixbuf *pixbuf)
                 sprintf(type, ".bmp");
                 strcat(sg, number);
                 strcat(sg,type);
-                number +=1;
+                //number +=1;
                 //printf("saving line\n");
                 gdk_pixbuf_save(pixLine,sg,t,NULL,NULL);
 

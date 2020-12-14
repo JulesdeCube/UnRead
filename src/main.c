@@ -3,10 +3,17 @@
 #include "load_Image/segmentation.h"
 #include "load_Image/rotate.h"
 #include "load_Image/resize.h"
+#include "load_Image/histo_grey_lvl.h"
+#include "load_Image/noise.h"
+#include "load_Image/auto_rotation.h"
 
 #include <stdio.h>
+#include "neural_network/neural_network.h"
+#include "neural_network/utils.h"
+#include "image/set.h"
 
-#include "load_Image/load.h"
+#define nb_layers 4
+#define nb_test 10000
 
 #define UNUSED(x) (void)(x)
 
@@ -64,29 +71,7 @@ int main(int argc, char *argv[])
 void on_menuitm_about_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
 {
     UNUSED(menuitem);
-    const gchar *text =
-    "-File: \n\
-    1)open     : ouvrir une image à l'aide de l'explorateur de fichier \n\
-    2)save     : sauvegarde le texte retourner par le réseau de neurones \n\
-    3)save as  : enregistre le texte dans le document séléctionner (peut écrire dans un document non vide) \n\
-    4)quit     : ferme le sous menu \n\
-    -Help: \n\
-            -about: ouvre une fenêtre avec des instructions d'utilisations \n\
-    \n\
-    Les autres boutons: \n\
-                    -Next step : permet après l'ouverture d'une image par l'explorateur de fichier de voir la procédure de traitement de l'image et le texte retourner\
-    par le réseau de neurones etape par etape.\n\
-                    -Apply : permet après ouverture d'une image par l'explorateur de fichier de voir le résultat final après analyse du réseau de neurones\n\
-    \n\
-    La fenetre Help->about : fenêtre d'aide avec les instructions d'utilisations du projet\n\
-    La fenetre de texte : montre le texte renvoyer par le réseau de neuronne après traitement.\n\
-    \n\
-    Elle contient 2 boutons:\n\
-                        -Train : permet d'envoyer le texte au réseau de neuronne après modification par l'utilisateur s'il y avait une erreur.\n\
-                        -Close : masque la fenetre au lieu de la détruire ce qui lui permet de se réouvrir plus tard avec d'autres images.\n\
-                        En effet la croix en haut à gauche détruit la fenêtrece qui l'empêche de se réouvrir plus tard après le traitement d'une autre image.\n";
     gtk_widget_show(app_wdgts->w_window_help);
-    gtk_label_set_text (GTK_LABEL(app_wdgts->w_label_text_help),text);
 }
 
 // File --> Open
@@ -113,10 +98,12 @@ void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
             gtk_image_set_from_pixbuf (GTK_IMAGE(app_wdgts->w_img_main), newpixbuf);
         }
     }
+    app_wdgts->w_step = 0;
     // Finished with the "Open Image" dialog box, so hide it
     gtk_widget_hide(app_wdgts->w_dlg_file_choose);
 }
 
+//save the text in the chosen file
 void on_menuitm_save_as_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
 {
     UNUSED(menuitem);
@@ -165,7 +152,9 @@ void step_zero(app_widgets *app_wdgts)
     //image->only black
     gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), app_wdgts->w_path);
     Change_Color(app_wdgts->w_img_main,Colored_to_classicGreyLvl);
-    Change_Color(app_wdgts->w_img_main,ClassicGLVL_to_NormalizedGLVL);
+    histo_greylvl(app_wdgts->w_img_main, 5, 40);
+    remove_noise_image(app_wdgts->w_img_main, 1);
+    remove_noise_image(app_wdgts->w_img_main, 2);
     Change_Color(app_wdgts->w_img_main,Colored_to_OnlyBlack);
     GdkPixbuf *newpixbuf = New_Size_Image(app_wdgts->w_img_main, 500, 500);
     gtk_image_set_from_pixbuf (GTK_IMAGE(app_wdgts->w_img_main), newpixbuf);
@@ -177,8 +166,15 @@ void step_one(app_widgets *app_wdgts)
     //image-> only black
     gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), app_wdgts->w_path);
     Change_Color(app_wdgts->w_img_main,Colored_to_classicGreyLvl);
-    Change_Color(app_wdgts->w_img_main,ClassicGLVL_to_NormalizedGLVL);
+    histo_greylvl(app_wdgts->w_img_main, 5, 40);
+    remove_noise_image(app_wdgts->w_img_main, 1);
+    remove_noise_image(app_wdgts->w_img_main, 2);
     Change_Color(app_wdgts->w_img_main,Colored_to_OnlyBlack);
+    //rotation
+    auto_rotation(app_wdgts->w_img_main);
+    //segmentation
+    mainSegmentation(app_wdgts->w_img_main);
+    //affichage
     GdkPixbuf *newpixbuf = New_Size_Image(app_wdgts->w_img_main, 500, 500);
     gtk_image_set_from_pixbuf (GTK_IMAGE(app_wdgts->w_img_main), newpixbuf);
 }
@@ -186,11 +182,18 @@ void step_one(app_widgets *app_wdgts)
 //step two of the process od the ocr
 void step_two(app_widgets *app_wdgts)
 {
-    //image grey lvl normalised
+    //image-> only black
     gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), app_wdgts->w_path);
     Change_Color(app_wdgts->w_img_main,Colored_to_classicGreyLvl);
-    Change_Color(app_wdgts->w_img_main,ClassicGLVL_to_NormalizedGLVL);
+    histo_greylvl(app_wdgts->w_img_main, 5, 40);
+    remove_noise_image(app_wdgts->w_img_main, 1);
+    remove_noise_image(app_wdgts->w_img_main, 2);
     Change_Color(app_wdgts->w_img_main,Colored_to_OnlyBlack);
+    //rotation
+    auto_rotation(app_wdgts->w_img_main);
+    //segmentation
+    mainSegmentation(app_wdgts->w_img_main);
+    //affichage
     GdkPixbuf *newpixbuf = New_Size_Image(app_wdgts->w_img_main, 500, 500);
     gtk_image_set_from_pixbuf (GTK_IMAGE(app_wdgts->w_img_main), newpixbuf);
 
@@ -229,19 +232,33 @@ void on_button_clicked(GtkButton *button, app_widgets *app_wdgts)
     app_wdgts->w_step %= 3;
 }
 
+//DO all process
 void on_button_apply_clicked(GtkButton *button, app_widgets *app_wdgts)
 {
     UNUSED(button);
-    //g_print("ca marche");
-    //UNUSED(app_wdgts);
     step_two(app_wdgts);
 }
 
-//Close the pop up window
+//Train the neurones
+void on_button_train_clicked(GtkButton *button, app_widgets *app_wdgts)
+{
+    UNUSED(button);
+    UNUSED(app_wdgts);
+    //g_print("ca marche");
+}
+
+//Close the pop up window label
 void on_button_close_clicked(GtkButton *button, app_widgets *app_wdgts)
 {
     UNUSED(button);
     gtk_widget_hide(app_wdgts->w_window_label);
+}
+
+//Close the pop up window help
+void on_button_close_help_clicked(GtkButton *button, app_widgets *app_wdgts)
+{
+    UNUSED(button);
+    gtk_widget_hide(app_wdgts->w_window_help);
 }
 
 // File --> Quit

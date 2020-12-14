@@ -135,7 +135,14 @@
     <property name="default_width">500</property>
     <property name="default_height">500</property>
     <child type="titlebar">
-      <placeholder/>
+      <object class="GtkHeaderBar">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="title" translatable="yes">How to use our project</property>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
     </child>
     <child>
       <object class="GtkBox">
@@ -149,6 +156,26 @@
           <object class="GtkLabel" id="text_help">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="label" translatable="yes">-File:
+    1)Open an image    : ouvrir une image à l'aide de l'explorateur de fichier
+    2)Save the text     : sauvegarde le texte retourner par le réseau de neurones
+    3)Save the text in  : enregistre le texte dans le document séléctionner (peut écrire dans un document non vide)
+    4)quit     : ferme le sous menu
+    -Help:
+            -about: ouvre une fenêtre avec des instructions d'utilisations
+
+    Les autres boutons:
+                    -Play : permet après l'ouverture d'une image par l'explorateur de fichier de voir la procédure de traitement de l'image et le texte retourner\
+    par le réseau de neurones etape par etape.
+                    -Apply : permet après ouverture d'une image par l'explorateur de fichier de voir le résultat final après analyse du réseau de neurones
+
+    La fenetre Help-&gt;about : fenêtre d'aide avec les instructions d'utilisations du projet
+    La fenetre de texte : montre le texte renvoyer par le réseau de neuronne après traitement.
+
+    Elle contient 2 boutons:
+                        -Train : permet d'envoyer le texte au réseau de neuronne après modification par l'utilisateur s'il y avait une erreur.
+                        -Close : masque la fenetre au lieu de la détruire ce qui lui permet de se réouvrir plus tard avec d'autres images.
+                        En effet la croix en haut à gauche détruit la fenêtrece qui l'empêche de se réouvrir plus tard après le traitement d'une autre image.</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -157,7 +184,33 @@
           </packing>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkButton" id="button_close_help">
+                <property name="label">gtk-cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="halign">center</property>
+                <property name="use_stock">True</property>
+                <property name="always_show_image">True</property>
+                <signal name="clicked" handler="on_button_close_help_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
         </child>
       </object>
     </child>
@@ -204,12 +257,13 @@
             <property name="margin_top">8</property>
             <property name="homogeneous">True</property>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="button_train">
                 <property name="label" translatable="yes">Train</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="halign">start</property>
+                <signal name="clicked" handler="on_button_train_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -282,31 +336,28 @@
                         <property name="can_focus">False</property>
                         <child>
                           <object class="GtkImageMenuItem" id="menuitm_open">
-                            <property name="label">gtk-open</property>
+                            <property name="label">Open an image</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
+                            <property name="use_stock">False</property>
                             <signal name="activate" handler="on_menuitm_open_activate" swapped="no"/>
                           </object>
                         </child>
                         <child>
                           <object class="GtkImageMenuItem" id="menuitm_save">
-                            <property name="label">gtk-save</property>
+                            <property name="label">Save the text</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
+                            <property name="use_stock">False</property>
                             <signal name="activate" handler="on_menuitm_save_activate" swapped="no"/>
                           </object>
                         </child>
                         <child>
                           <object class="GtkImageMenuItem" id="menuitm_save_as">
-                            <property name="label">gtk-save-as</property>
+                            <property name="label">Save the text in</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
+                            <property name="use_stock">False</property>
                             <signal name="activate" handler="on_menuitm_save_as_activate" swapped="no"/>
                           </object>
                         </child>
@@ -373,7 +424,7 @@
               <object class="GtkImage" id="img_main">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="pixbuf">Images/logo_unread.png</property>
+                <property name="pixbuf">Images/Union.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
