@@ -205,15 +205,16 @@ void nn_write(struct s_neural_network *self, FILE *fp, enum e_nn_error *error);
 /**
 ** \brief update the neural netowrk
 **
-** update weight and bias of each neurone to match with the targeted value
+** back propagate derivate error on each weight and baias
 **
 ** \param self the neural network
-** \param targets the targeted output values
 ** \param error the return error channel
 **
-** FIXME - Not Implemented
+** \throw NN_NO_NEURAL_NETWORK no neural network provided to the function
+**
+** \see layer.h:la_back_propagage for sub error code
 */
-void nn_back_propagage(struct s_neural_network *self, double *targets, enum e_nn_error *error);
+void nn_back_propagage(struct s_neural_network *self, enum e_nn_error *error);
 
 /**
 ** \brief update the neural netowrk

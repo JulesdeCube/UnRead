@@ -23,7 +23,7 @@ struct s_neurone ne_consructor(struct s_layer *parrent, enum e_nn_error *error)
   *error = NN_SUCCESS;
 
   // init the sum and output to null a bias between -1 and 1 and the layer but no weight
-  struct s_neurone self = {0., 0., random_uniforme(-1.0, 1.0), NULL, parrent};
+  struct s_neurone self = {0., 0., random_uniforme(-1.0, 1.0), NULL, 0., parrent};
 
   // if no layer given return an error
   if (!parrent)
@@ -41,7 +41,7 @@ struct s_neurone ne_consructor(struct s_layer *parrent, enum e_nn_error *error)
   self.weights = calloc(nb_neurone_previous_layer, sizeof(double));
 
   // if we can't alocate the memory return an error
-  if (self.weights == NULL)
+  if (!self.weights)
   {
     *error = NN_ERROR_SPACE;
     return self;
@@ -63,7 +63,7 @@ struct s_neurone ne_file_consructor(FILE *fp, struct s_layer *parrent, enum e_nn
   *error = NN_SUCCESS;
 
   // init the sum and output to null a bias between -1 and 1 and the layer but no weight
-  struct s_neurone self = {0., 0., 0, NULL, parrent};
+  struct s_neurone self = {0., 0., 0, NULL, 0., parrent};
 
   // check if there is a file
   if (!fp)
@@ -93,14 +93,14 @@ struct s_neurone ne_file_consructor(FILE *fp, struct s_layer *parrent, enum e_nn
 
   // get the number of neurone in the previous layer
   unsigned int nb_neurone_previous_layer = 0;
-  if (self.layer->previous_layer != NULL)
+  if (self.layer->previous_layer)
     nb_neurone_previous_layer = self.layer->previous_layer->size;
 
   // alocate space for every weight
   self.weights = calloc(nb_neurone_previous_layer, sizeof(double));
 
   // if we can't alocate the memory return an error
-  if (self.weights == NULL)
+  if (!self.weights)
   {
     *error = NN_ERROR_SPACE;
     return self;
@@ -125,19 +125,19 @@ struct s_neurone ne_file_consructor(FILE *fp, struct s_layer *parrent, enum e_nn
 void ne_destructor(struct s_neurone *self)
 {
   // if no layer remove it
-  if (self == NULL)
+  if (!self)
     return;
 
   // remove layer
   self->layer = NULL;
 
-  // if there is no biases return
-  if (self->weights == NULL)
-    return;
-
-  // remove biases
-  free(self->weights);
-  self->weights = NULL;
+  // if there is weight remove it
+  if (self->weights)
+  {
+    // remove weight
+    free(self->weights);
+    self->weights = NULL;
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -245,18 +245,19 @@ double ne_get_error(struct s_neurone *self, double target, enum e_nn_error *erro
 
   if (!self)
     *error = NN_NO_NEURONE;
-
-  if (!self->layer)
+  else if (!self->layer)
     *error = NN_NO_PARRENT_LAYER;
-
-  if (!self->layer->neural_network)
+  else if (!self->layer->neural_network)
     *error = NN_NO_PARRENT_NEURAL_NETWORK;
-
-  if (!self->layer->neural_network->error_func.self)
+  else if (!self->layer->neural_network->error_func.self)
+    *error = NN_NO_FUNCTION;
+  else if (!self->layer->neural_network->error_func.derivate)
     *error = NN_NO_FUNCTION;
 
   if (*error)
     return 0.;
+
+  self->derivate_error = self->layer->neural_network->error_func.derivate(target, self->output);
 
   return self->layer->neural_network->error_func.self(target, self->output);
 }
@@ -272,6 +273,55 @@ double ne_get_output(struct s_neurone *self, enum e_nn_error *error)
   }
 
   return self->output;
+}
+
+void ne_back_propagage(struct s_neurone *self, enum e_nn_error *error)
+{
+  *error = NN_SUCCESS;
+
+  if (!self)
+    *error = NN_NO_NEURONE;
+  else if (!self->layer)
+    *error = NN_NO_PARRENT_LAYER;
+  else if (!self->layer->previous_layer)
+    *error = NN_NO_PARRENT_LAYER;
+
+  if (*error)
+    return;
+
+  struct s_layer *previous_layer = self->layer->previous_layer;
+  struct s_neural_network *neural_network = self->layer->neural_network;
+  double (*activation_derivate)(double) = neural_network->activation_func.derivate;
+
+  // init start and stop element
+  struct s_neurone *previous_neurone = previous_layer->neurones;
+  struct s_neurone *last_previous_neurone = previous_layer->neurones + previous_layer->size;
+
+  double *weight = self->weights;
+
+  // FIXME - introduce learning rate
+  double partial_deriavate = self->derivate_error * activation_derivate(self->output) * 0.5;
+
+  // loop in each neurone and set his value
+  for (; previous_neurone < last_previous_neurone; ++previous_neurone, ++weight)
+  {
+
+    double delta_weight = partial_deriavate * previous_neurone->output;
+    previous_neurone->derivate_error += delta_weight;
+    *weight -= delta_weight;
+  }
+  self->bias -= partial_deriavate;
+}
+
+void ne_reset_error(struct s_neurone *self, enum e_nn_error *error)
+{
+  if (!self)
+  {
+    *error = NN_NO_NEURONE;
+    return;
+  }
+
+  self->derivate_error = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -291,26 +341,28 @@ void ne_print(struct s_neurone *self)
   }
 
   // print the output of the neurone
-  printf("output : %lf, sum : %lf\n", self->output, self->sum);
+  printf("out: %lf, b: %lf, err : %lf, w:", self->output, self->bias, self->derivate_error);
 
   // if there is no previous layer just print the value
   struct s_layer *previous_layer = self->layer->previous_layer;
-  if (!previous_layer)
-    return;
+  if (previous_layer)
+  {
 
-  // print the bias
-  printf("bias : %lf\n", self->bias);
+    // print the bias
+    //printf("bias : %lf\n", self->bias);
 
-  // print the weight
-  printf("weight : ");
-  // if there is more than 1 neurone in the previous layer print the fist
-  // element
-  if (previous_layer->size)
-    printf("[0]%lf", *self->weights);
+    // print the weight
+    //printf("weight : ");
+    // if there is more than 1 neurone in the previous layer print the fist
+    // element
+    if (previous_layer->size)
+      printf("[ %lf", *self->weights);
 
-  // for all weight exept the fist one print the separator and the value
-  for (unsigned int i = 1; i < previous_layer->size; ++i)
-    printf(", [%u]%lf", i, self->weights[i]);
-  // return a line at the end of the list of weight
+    // for all weight exept the fist one print the separator and the value
+    for (unsigned int i = 1; i < previous_layer->size; ++i)
+      printf(", %lf", self->weights[i]);
+    // return a line at the end of the list of weight
+    printf(" ]");
+  }
   printf("\n");
 }

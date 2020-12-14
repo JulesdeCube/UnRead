@@ -23,6 +23,7 @@ struct s_neurone
   double output;
   double bias;
   double *weights;
+  double derivate_error;
   struct s_layer *layer;
 };
 
@@ -148,7 +149,7 @@ double ne_get_error(struct s_neurone *self, double target, enum e_nn_error *erro
 **
 ** get the caculated neurone output
 **
-** \param self the neuone
+** \param self the neurone
 ** \param error the return error channel
 **
 ** \return the output value of the neurone
@@ -156,6 +157,30 @@ double ne_get_error(struct s_neurone *self, double target, enum e_nn_error *erro
 ** \throw NN_NO_NEURONE no neurone provided
 */
 double ne_get_output(struct s_neurone *self, enum e_nn_error *error);
+
+/**
+** \brief update neurone
+**
+** update neurone weight and bias base on the `derivate_error` and propagate
+** error on previous neurones
+**
+** \param self the neurone
+** \param error the return error channel
+**
+** \throw NN_NO_NEURONE no neurone provided
+** \throw NN_NO_PARRENT_LAYER no parrent layer or previous layer
+*/
+void ne_back_propagage(struct s_neurone *self, enum e_nn_error *error);
+
+/**
+** \brief reset the `derivate_error` attribute
+**
+** \param self the neurone
+** \param error the return error channel
+**
+** \throw NN_NO_NEURONE no neurone provided
+*/
+void ne_reset_error(struct s_neurone *self, enum e_nn_error *error);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //

@@ -1,12 +1,38 @@
 #include <stdio.h>
 #include "neural_network/neural_network.h"
 #include "neural_network/utils.h"
+#include "image/set.h"
 
-void print_array(size_t size, double *values, char *preffix)
+#define nb_layers 4
+#define nb_test 10000
+
+double *cahrs_to_doubles(size_t count, unsigned char *values)
 {
-  printf("%s : [", preffix);
-  for (size_t i = 0; i < size; i++)
-    printf("%f, ", values[i]);
+  double *array = malloc(count * sizeof(double));
+  for (size_t i = 0; i < count; i++)
+    array[i] = (double)values[i] / 255.;
+
+  return array;
+}
+
+void set_at_place(double *values, unsigned int to_set)
+{
+  printf("[ ");
+  for (size_t i = 0; i < 10; i++)
+  {
+    values[i] = i == to_set;
+    printf("%f ", values[i]);
+  }
+  printf("]\n");
+}
+
+void print_array(double *values)
+{
+  printf("[ ");
+  for (size_t i = 0; i < 10; i++)
+  {
+    printf("%f ", values[i]);
+  }
   printf("]\n");
 }
 
@@ -14,91 +40,87 @@ int main(void)
 {
   srand(time(NULL));
 
-  printf("UnRead 0.1.0\n");
-
   char *path = "test/neural_network/net1.hex";
+  double targets[10] = {0.};
+  double outputs[10] = {0.};
 
-  enum e_nn_error error;
-  struct s_function_1p activation_func = {&sigmoid, &sigmoid_derivate};
-  struct s_function_2p error_func = {&sq_difference, &sq_difference_derivate};
+  enum e_nn_error nn_error;
+  enum sp_error sp_error;
 
-  // struct s_neural_network *nn = nn_from_file(path, activation_func, error_func, &error);
+  struct s_set set = st_import(
+      "test/dataset/train-images-idx3-ubyte",
+      "test/dataset/train-labels-idx1-ubyte",
+      &sp_error);
 
-  unsigned int layers_size[3u] = {2, 4, 1};
-  struct s_neural_network *nn = nn_consructor(3, layers_size, activation_func, error_func, &error);
+  // st_print(&set);
 
-  if (error)
+  unsigned int width = set.samples->image.width;
+  unsigned int height = set.samples->image.height;
+  unsigned int layers_size[nb_layers] = {width * height, 20, 20, 10};
+
+  struct s_neural_network *nn = nn_consructor(
+      nb_layers,
+      layers_size,
+      (struct s_function_1p){&sigmoid, &sigmoid_derivate},
+      (struct s_function_2p){&sq_difference, &sq_difference_derivate},
+      &nn_error);
+
+  if (nn_error)
   {
-    printf("error durring initialisation of neural network : %u\n", error);
-    return error;
+    printf("error durring initialisation of neural network : %u\n", nn_error);
+    return nn_error;
   }
 
-  nn_print(nn);
-
-  printf("\n\n\n\n\n\n\n\nTRAINNING\n\n\n\n\n\n\n\n");
-  double inputs[8] = {0., 0., 0., 1., 1., 0., 1., 1.};
-  double targets[4] = {0., 1., 1., 0.};
-  double output[2];
-
+  int j = 0;
   double total_error;
-  //do
-  //{
-  total_error = 0.;
-  for (size_t i = 0; i < 8 && !error; i++)
+
+  do
   {
-    size_t sample = rand() % 4;
-    double *input = inputs + sample * 2;
-    double *target = targets + sample;
+    printf("\033[s");
+    size_t id = j % 100;
+    struct s_sample *sample = (set.samples + id);
+    double *input = cahrs_to_doubles(mk_count(&sample->image), sample->image.pixels);
+    set_at_place(targets, sample->label);
 
-    printf("sample %li:\n", sample);
+    // printf("sample %li:\n", sample);
+    if (!nn_error)
+      nn_apply(nn, input, &nn_error);
 
-    nn_apply(nn, input, &error);
-    if (error)
-    {
-      printf("can't apply value for %lu sample\n", sample);
-      break;
-    }
+    if (!nn_error)
+      total_error = nn_total_error(nn, targets, &nn_error);
 
-    double layer_error = nn_total_error(nn, targets + sample, &error);
-    if (error)
-    {
-      printf("can't calcule error for %lu sample\n", sample);
-      break;
-    }
-    nn_back_propagage(nn, targets, &error);
-    if (error)
-      printf("can't back propagate %lu sample\n", sample);
+    if (!nn_error)
+      nn_back_propagage(nn, &nn_error);
 
-    nn_get_outputs(nn, output, &error);
+    nn_get_outputs(nn, outputs, &nn_error);
+    print_array(outputs);
+    //nn_print(nn);
+    printf("STEPS: %i\n", j);
+    printf("\nERROR: %f", total_error);
+    printf("\033[u");
 
-    print_array(2, input, "inputs");
-    print_array(1, target, "targets");
-    print_array(1, output, "output");
+    free(input);
+    j++;
+  } while (!nn_error && j < nb_test);
 
-    printf("error: %f\n\n", layer_error);
-
-    total_error += layer_error;
+  if (nn_error)
+  {
+    printf("error durring training : %u\n", nn_error);
+    return nn_error;
   }
 
-  printf("ERROR : %f\n================\n\n", total_error);
+  nn_save(nn, path, &nn_error);
 
-  //} while (!error && total_error > 0.1);
-
-  if (error)
+  if (nn_error)
   {
-    printf("error durring training : %u\n", error);
-    return error;
+    printf("error durring export of the network : %u\n", nn_error);
+    return nn_error;
   }
 
-  nn_save(nn, path, &error);
-
-  if (error)
-  {
-    printf("error durring export of the network : %u\n", error);
-    return error;
-  }
+  getchar();
 
   nn_destructor(nn);
+  st_destructor(&set);
 
   return 0;
 }

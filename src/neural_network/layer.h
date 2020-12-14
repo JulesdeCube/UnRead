@@ -187,6 +187,47 @@ double la_get_sum_error(struct s_layer *self, double *targets, enum e_nn_error *
 */
 void la_get_outputs(struct s_layer *self, double *outputs, enum e_nn_error *error);
 
+/**
+** \brief applay a function to each neurone
+**
+** \param self the layer to browse
+** \param f the function to apply
+** \param error the return error channel
+**
+** \throw NN_NO_LAYER no layer provided
+**
+** \see error code of the parametred function
+*/
+void la_foreach_neurone(struct s_layer *self, void (*f)(struct s_neurone *, enum e_nn_error *error), enum e_nn_error *error);
+
+/**
+** \brief update all the neurone of the layer.
+**
+** update weight and bais base on the derivate error value an propagete it to
+** previous layer if exist
+**
+** \param self the layer
+** \param error the return error channel
+**
+** \throw NN_NO_LAYER no layer provided
+**
+** \see neurone.h:ne_back_propagage for sub error code
+*/
+void la_back_propagage(struct s_layer *self, enum e_nn_error *error);
+
+/**
+** \brief reset all the neurone derivate value
+**
+** \param self the layer
+** \param error the return error channel
+**
+** \throw NN_NO_LAYER no layer provided
+**
+** \see neurone.h:ne_reset_error for sub error code
+** \see la_foreach_neurone for sub error code
+*/
+void la_reset_error(struct s_layer *self, enum e_nn_error *error);
+
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
 //                                   VIEWER                                  //

@@ -29,13 +29,13 @@ double random_uniforme(double min, double max)
 
 double sq_difference(double target, double output)
 {
-  target -= output;
-  return target * target / 2.;
+  output -= target;
+  return output * output;
 }
 
 double sq_difference_derivate(double target, double output)
 {
-  return target -= output;
+  return 2. * (output - target);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

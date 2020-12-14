@@ -314,6 +314,57 @@ void la_get_outputs(struct s_layer *self, double *outputs, enum e_nn_error *erro
     *outputs = ne_get_output(neurone, error);
 }
 
+void la_foreach_neurone(struct s_layer *self, void (*f)(struct s_neurone *, enum e_nn_error *error), enum e_nn_error *error)
+{
+  *error = NN_SUCCESS;
+
+  if (!self)
+  {
+    *error = NN_NO_LAYER;
+    return;
+  }
+
+  // init start and stop element
+  struct s_neurone *neurone = self->neurones;
+  struct s_neurone *last_neurone = neurone + self->size;
+
+  // loop to each neurone to backpropagate
+  for (; neurone < last_neurone && !*error; ++neurone)
+    f(neurone, error);
+}
+
+void la_back_propagage(struct s_layer *self, enum e_nn_error *error)
+{
+  *error = NN_SUCCESS;
+
+  if (!self)
+  {
+    *error = NN_NO_LAYER;
+    return;
+  }
+
+  // resert the gradiant layer
+  if (self->previous_layer)
+    la_reset_error(self->previous_layer, error);
+  // make propagate
+  if (!*error)
+    la_foreach_neurone(self, ne_back_propagage, error);
+}
+
+void la_reset_error(struct s_layer *self, enum e_nn_error *error)
+{
+
+  *error = NN_SUCCESS;
+
+  if (!self)
+  {
+    *error = NN_NO_LAYER;
+    return;
+  }
+
+  la_foreach_neurone(self, ne_reset_error, error);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 //                                   VIEWER                                   //
@@ -333,7 +384,7 @@ void la_print(struct s_layer *self)
   for (unsigned int i = 0; i < self->size; ++i)
   {
     // print neurone separator
-    printf("\n                       ---------- neurone %d ----------                       \n", i);
+    printf("Neurone %d :: ", i);
     // print the neurone
     ne_print(self->neurones + i);
   }

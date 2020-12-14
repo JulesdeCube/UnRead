@@ -148,7 +148,7 @@ struct s_neural_network *nn_from_file(char *filename, struct s_function_1p activ
 
 void nn_destructor(struct s_neural_network *self)
 {
-  if (self == NULL)
+  if (!self)
     return;
 
   struct s_layer **layer = self->layers;
@@ -284,11 +284,22 @@ double nn_total_error(struct s_neural_network *self, double *targets, enum e_nn_
   return la_get_sum_error(*(self->layers + self->nb_layer - 1), targets, error);
 }
 
-void nn_back_propagage(struct s_neural_network *self, double *targets, enum e_nn_error *error)
+void nn_back_propagage(struct s_neural_network *self, enum e_nn_error *error)
 {
-  (void)self;
-  (void)targets;
-  (void)error;
+  *error = NN_SUCCESS;
+
+  if (!self)
+  {
+    *error = NN_NO_NEURAL_NETWORK;
+    return;
+  }
+
+  // get the last layer pointer
+  struct s_layer **layer = self->layers + self->nb_layer - 1;
+
+  // loop between the last and the second layer
+  for (; layer > self->layers && !*error; --layer)
+    la_back_propagage(*layer, error);
 }
 
 void nn_get_outputs(struct s_neural_network *self, double *outputs, enum e_nn_error *error)
@@ -298,7 +309,7 @@ void nn_get_outputs(struct s_neural_network *self, double *outputs, enum e_nn_er
   if (!self)
     *error = NN_NO_NEURAL_NETWORK;
 
-  if (!self->nb_layer)
+  else if (!self->nb_layer)
     *error = NN_NO_LAYER;
 
   if (*error)
@@ -323,35 +334,40 @@ void nn_print(struct s_neural_network *self)
     return;
   }
 
-  printf("////////////////////////////////////////////////////////////////////////////////\n");
+  /*   printf("////////////////////////////////////////////////////////////////////////////////\n");
   printf("//                                                                            //\n");
   printf("//                                    INPUT                                   //\n");
   printf("//                                                                            //\n");
-  printf("////////////////////////////////////////////////////////////////////////////////\n");
+  printf("////////////////////////////////////////////////////////////////////////////////\n"); */
+  printf("\n=================================== INPUT ====================================\n");
+
   // check if it exist at less 1 layer
   if (self->nb_layer)
     la_print(*self->layers);
 
-  printf("\n\n\n");
+  /*   printf("\n\n\n");
   printf("////////////////////////////////////////////////////////////////////////////////\n");
   printf("//                                                                            //\n");
   printf("//                                   HIDDEN                                   //\n");
   printf("//                                                                            //\n");
-  printf("////////////////////////////////////////////////////////////////////////////////\n");
+  printf("////////////////////////////////////////////////////////////////////////////////\n"); */
 
   // loop beween the second layer and the penultimate
   for (unsigned int i = 2; i < self->nb_layer; ++i)
   {
-    printf("\n=================================== LAYER %u ===================================\n", i - 1);
+    printf("\n=================================== HIDDEN %i ====================================\n", i - 1);
     la_print(*(self->layers + i - 1));
   }
 
-  printf("\n\n\n");
+  /*   printf("\n\n\n");
   printf("////////////////////////////////////////////////////////////////////////////////\n");
   printf("//                                                                            //\n");
   printf("//                                   OUTPUT                                   //\n");
   printf("//                                                                            //\n");
-  printf("////////////////////////////////////////////////////////////////////////////////\n");
+  printf("////////////////////////////////////////////////////////////////////////////////\n"); */
+
+  printf("\n=================================== OUTPUT ====================================\n");
+
   // print the last layer if there is at less 1 layer
   if (self->nb_layer)
     la_print(*(self->layers + self->nb_layer - 1));
