@@ -33,6 +33,8 @@ typedef struct
     char *w_save_path;            // path of the file where the text is save
     char *w_text_to_save;         // string of the text to save
     int w_step;                   //value of the current step
+
+
 } app_widgets;
 
 int main(int argc, char *argv[])
@@ -55,9 +57,11 @@ int main(int argc, char *argv[])
     widgets->w_label_text = GTK_WIDGET(gtk_builder_get_object(builder, "text"));
     widgets->w_label_text_help = GTK_WIDGET(gtk_builder_get_object(builder, "text_help"));
     widgets->w_path = malloc(sizeof(char));
+    widgets->w_path[0] = '\0';
     widgets->w_save_path = "test/save_file/save.txt";
     widgets->w_text_to_save = "oui";
     widgets->w_step = 0;
+
 
     gtk_builder_connect_signals(builder, widgets);
 
@@ -217,31 +221,34 @@ void step_two(app_widgets *app_wdgts)
 void on_button_clicked(GtkButton *button, app_widgets *app_wdgts)
 {
     UNUSED(button);
-    if(app_wdgts->w_path[0] != '\0')
+    if(app_wdgts->w_path[0] == '\0')
         return;
-    switch (app_wdgts->w_step)
+    else
     {
-    case 0:
-        step_zero(app_wdgts);
-        break;
-    case 1:
-        step_one(app_wdgts);
-        break;
-    case 2:
-        step_two(app_wdgts);
-        break;
-    default:
-        return;
+        switch (app_wdgts->w_step)
+        {
+        case 0:
+            step_zero(app_wdgts);
+            break;
+        case 1:
+            step_one(app_wdgts);
+            break;
+        case 2:
+            step_two(app_wdgts);
+            break;
+        default:
+            return;
+        }
+        app_wdgts->w_step++;
+        app_wdgts->w_step %= 3;
     }
-    app_wdgts->w_step++;
-    app_wdgts->w_step %= 3;
 }
 
 //DO all process
 void on_button_apply_clicked(GtkButton *button, app_widgets *app_wdgts)
 {
     UNUSED(button);
-    if(app_wdgts->w_path[0] != '\0')
+    if(app_wdgts->w_path[0] == '\0')
         return;
     step_two(app_wdgts);
 }
