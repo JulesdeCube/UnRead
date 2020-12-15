@@ -1,5 +1,5 @@
 /**
-** \file src/image/mask.h
+** \file src/data_set/mask.h
 ** \author Jules Lefebvre <jules.lefebvre@epita.fr
 ** \version 1.0.0
 ** \date 2020/09/30
@@ -8,8 +8,8 @@
 ** definition of constuctor, destructor and method of the `s_mask` object
 */
 
-#ifndef UNREAD__SRC_IMAGE__MASK_H_
-#define UNREAD__SRC_IMAGE__MASK_H_
+#ifndef UNREAD__SRC_DATA_SET__MASK_H_
+#define UNREAD__SRC_DATA_SET__MASK_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -181,4 +181,4 @@ void mk_print(struct s_mask *mask);
 */
 void mk_debug(struct s_mask *image);
 
-#endif // UNREAD__SRC_IMAGE__MASK_H_
+#endif // UNREAD__SRC_DATA_SET__MASK_H_
