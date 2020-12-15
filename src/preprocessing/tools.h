@@ -18,7 +18,7 @@ struct s_int_tuple
 };
 
 /**
-** \brief Search the withest (maximum) and the blackest (minimum) pixel of a pixbuf
+** \brief Search the whitest (maximum) and the blackest (minimum) pixel of a pixbuf
 ** corresponding to an image
 **
 ** \param image search on this image

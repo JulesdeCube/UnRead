@@ -2,7 +2,7 @@
 
 #define SIZE_OF_IMAGE_CHAR 28
 
-double *get_great_char(GtkWidget *image)
+double *image_to_array(GtkWidget *image)
 {
     // Informations about the old pixbuf
     GdkPixbuf *pixbuf = gtk_image_get_pixbuf((GtkImage *)image);

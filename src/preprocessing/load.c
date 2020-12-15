@@ -32,7 +32,7 @@ void activate_window(GtkApplication *app, gpointer user_data)
     //remove_noise_image(imagec, 1);
     //remove_noise_image(imagec, 2);
 
-    double *array = get_great_char(imagec);
+    double *array = image_to_array(imagec);
     free(array);
     //rotate(imagec, 217);
 
