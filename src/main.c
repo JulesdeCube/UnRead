@@ -32,8 +32,8 @@ typedef struct
     char *w_path;                 // path of the image open
     char *w_save_path;            // path of the file where the text is save
     char *w_text_to_save;         // string of the text to save
-    int w_step;                   //value of the current step
-
+    int  w_step;                  //value of the current step
+    struct s_neural_network *nn;  //neural network
 
 } app_widgets;
 
@@ -61,7 +61,18 @@ int main(int argc, char *argv[])
     widgets->w_save_path = "test/save_file/save.txt";
     widgets->w_text_to_save = "oui";
     widgets->w_step = 0;
+    unsigned int layers_size[nb_layers] = {784, 20, 20, 10};
+    enum e_nn_error error = NN_SUCCESS;
+    widgets->nn = nn_from_file("test/neurone_network",
+    (struct s_function_1p){&sigmoid, &sigmoid_derivate},
+      (struct s_function_2p){&sq_difference, &sq_difference_derivate},
+       &error);
 
+    if(error)
+    {
+        widgets->nn = nn_consructor(nb_layers, layers_size, (struct s_function_1p){&sigmoid, &sigmoid_derivate},
+      (struct s_function_2p){&sq_difference, &sq_difference_derivate}, &error);
+    }
 
     gtk_builder_connect_signals(builder, widgets);
 
@@ -179,8 +190,6 @@ void step_one(app_widgets *app_wdgts)
     Change_Color(app_wdgts->w_img_main, Colored_to_OnlyBlack);
     //rotation
     auto_rotation(app_wdgts->w_img_main);
-    //segmentation
-    mainSegmentation(app_wdgts->w_img_main);
     //affichage
     GdkPixbuf *newpixbuf = New_Size_Image(app_wdgts->w_img_main, 500, 500);
     gtk_image_set_from_pixbuf(GTK_IMAGE(app_wdgts->w_img_main), newpixbuf);
@@ -189,21 +198,8 @@ void step_one(app_widgets *app_wdgts)
 //step two of the process od the ocr
 void step_two(app_widgets *app_wdgts)
 {
-    //image-> only black
-    gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), app_wdgts->w_path);
-    Change_Color(app_wdgts->w_img_main, Colored_to_classicGreyLvl);
-    histo_greylvl(app_wdgts->w_img_main, 5, 40);
-    remove_noise_image(app_wdgts->w_img_main, 1);
-    remove_noise_image(app_wdgts->w_img_main, 2);
-    Change_Color(app_wdgts->w_img_main, Colored_to_OnlyBlack);
-    //rotation
-    auto_rotation(app_wdgts->w_img_main);
     //segmentation
     mainSegmentation(app_wdgts->w_img_main);
-    //affichage
-    GdkPixbuf *newpixbuf = New_Size_Image(app_wdgts->w_img_main, 500, 500);
-    gtk_image_set_from_pixbuf(GTK_IMAGE(app_wdgts->w_img_main), newpixbuf);
-
     //passage réseau de neuronne
 
     //montrer le texte
