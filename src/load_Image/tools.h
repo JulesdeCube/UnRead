@@ -11,24 +11,25 @@
 /**
  * \brief tuple of int with min and max
  */
-struct s_int_tuple{
+struct s_int_tuple
+{
     int min;
     int max;
 };
 
 /**
- ** \brief Search the withest (maximum) and the blackest (minimum) pixel of a pixbuf 
+ ** \brief Search the withest (maximum) and the blackest (minimum) pixel of a pixbuf
  ** corresponding to an image
- ** 
+ **
  ** \param image search on this image
  **
  ** \return tuple with minimum and maximum values
 */
-struct s_int_tuple search_BW_pixel(GtkWidget* image);
+struct s_int_tuple search_BW_pixel(GtkWidget *image);
 
 /**
  ** \brief set 3 values on a pointer p
- ** 
+ **
  ** \param p pointer to change values
  ** \param v1 first value
  ** \param v2 second value
@@ -47,7 +48,7 @@ void normalized_pixel(guchar *pixel, struct s_int_tuple min_max);
 
 /**
  ** \brief pythagore function
- ** 
+ **
  ** \param a a side
  ** \param b an other side
  **
@@ -57,7 +58,7 @@ int pythagore(int a, int b);
 
 /**
  ** \brief maximum function
- ** 
+ **
  ** \param a a value
  ** \param b an other value
  **
@@ -67,7 +68,7 @@ int max(int a, int b);
 
 /**
  ** \brief modulo function
- ** 
+ **
  ** \param x a value
  ** \param y an other value to divide the first
  **

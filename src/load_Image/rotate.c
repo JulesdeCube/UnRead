@@ -28,23 +28,23 @@ int get_new_y(int x, int y, double degree)
     return x * sin(degree) + y * cos(degree);
 }
 
-void apply_rotation(GtkWidget* image, enum e_rotate_type r_type, double degree,
-                    guchar* filter(struct s_rotate_tools))
+void apply_rotation(GtkWidget *image, enum e_rotate_type r_type, double degree,
+                    guchar *filter(struct s_rotate_tools))
 {
     // Initialize our tools
     struct s_rotate_tools tools;
-    
+
     // Transform degrees in radient
-    tools.degree = 3.14159265358979323846264338*degree/180;
+    tools.degree = 3.14159265358979323846264338 * degree / 180;
 
     // All informations to take of the pixbuffer
-    GdkPixbuf *pixbuf = gtk_image_get_pixbuf ((GtkImage*) image);
-    tools.n_channels = gdk_pixbuf_get_n_channels (pixbuf);
-    tools.rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-    tools.height = gdk_pixbuf_get_height (pixbuf);
-    tools.width = gdk_pixbuf_get_width (pixbuf);
-    tools.which_pixels = gdk_pixbuf_get_pixels (pixbuf);
-    
+    GdkPixbuf *pixbuf = gtk_image_get_pixbuf((GtkImage *)image);
+    tools.n_channels = gdk_pixbuf_get_n_channels(pixbuf);
+    tools.rowstride = gdk_pixbuf_get_rowstride(pixbuf);
+    tools.height = gdk_pixbuf_get_height(pixbuf);
+    tools.width = gdk_pixbuf_get_width(pixbuf);
+    tools.which_pixels = gdk_pixbuf_get_pixels(pixbuf);
+
     // To inverse width and height for future rotation
     int w, h;
     switch (r_type)
@@ -55,7 +55,7 @@ void apply_rotation(GtkWidget* image, enum e_rotate_type r_type, double degree,
         break;
     case NONE:
         tools.newHeight = tools.height;
-        tools.newWidth = tools.width; 
+        tools.newWidth = tools.width;
         break;
     case MORE_SPACE:
         w = tools.width / 2;
@@ -70,20 +70,20 @@ void apply_rotation(GtkWidget* image, enum e_rotate_type r_type, double degree,
     }
 
     // New pixbuf for an image
-    GdkPixbuf *newpixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, 0, 8, tools.newWidth, tools.newHeight);
-    int newRowstride = gdk_pixbuf_get_rowstride (newpixbuf);
-    guchar *new_which_pixels = gdk_pixbuf_get_pixels (newpixbuf);
+    GdkPixbuf *newpixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, 0, 8, tools.newWidth, tools.newHeight);
+    int newRowstride = gdk_pixbuf_get_rowstride(newpixbuf);
+    guchar *new_which_pixels = gdk_pixbuf_get_pixels(newpixbuf);
 
-    for(int y = 0; y < tools.newHeight; ++y)
+    for (int y = 0; y < tools.newHeight; ++y)
     {
-        for(int x = 0; x < tools.newWidth; ++x)
+        for (int x = 0; x < tools.newWidth; ++x)
         {
             tools.x = x;
             tools.y = y;
             guchar *newp = new_which_pixels + y * newRowstride + x * tools.n_channels;
             guchar *oldp = filter(tools);
             // Change colors of RGB
-            if(oldp != NULL)
+            if (oldp != NULL)
                 // Put with colors of the older pixbuf
                 set_3values(newp, oldp[0], oldp[1], oldp[2]);
             else
@@ -93,7 +93,7 @@ void apply_rotation(GtkWidget* image, enum e_rotate_type r_type, double degree,
     }
 
     // Change old image with the new pixbuf
-    gtk_image_set_from_pixbuf (GTK_IMAGE(image), newpixbuf);
+    gtk_image_set_from_pixbuf(GTK_IMAGE(image), newpixbuf);
 }
 
 /**
@@ -103,13 +103,13 @@ void apply_rotation(GtkWidget* image, enum e_rotate_type r_type, double degree,
  **
  ** \return old pixel or NULL if does not exist
 */
-guchar* classicRotate(struct s_rotate_tools tools)
+guchar *classicRotate(struct s_rotate_tools tools)
 {
-    tools.x -= tools.newWidth/2;
-    tools.y -= tools.newHeight/2;
-    int oldX = get_new_x(tools.x, tools.y, tools.degree) + tools.width/2;
-    int oldY = get_new_y(tools.x, tools.y, tools.degree) + tools.height/2;
-    if(oldX < 0 || oldX >= tools.width || oldY < 0 || oldY >= tools.height)
+    tools.x -= tools.newWidth / 2;
+    tools.y -= tools.newHeight / 2;
+    int oldX = get_new_x(tools.x, tools.y, tools.degree) + tools.width / 2;
+    int oldY = get_new_y(tools.x, tools.y, tools.degree) + tools.height / 2;
+    if (oldX < 0 || oldX >= tools.width || oldY < 0 || oldY >= tools.height)
         return NULL;
     return tools.which_pixels + oldY * tools.rowstride + oldX * tools.n_channels;
 }
@@ -121,10 +121,9 @@ guchar* classicRotate(struct s_rotate_tools tools)
  **
  ** \return old pixel
 */
-guchar* rotate180(struct s_rotate_tools tools)
+guchar *rotate180(struct s_rotate_tools tools)
 {
-    return tools.which_pixels + (tools.height - tools.y - 1) *
-     tools.rowstride + (tools.width - tools.x - 1) * tools.n_channels;
+    return tools.which_pixels + (tools.height - tools.y - 1) * tools.rowstride + (tools.width - tools.x - 1) * tools.n_channels;
 }
 
 /**
@@ -135,10 +134,9 @@ guchar* rotate180(struct s_rotate_tools tools)
  **
  ** \return old pixel
 */
-guchar* rotate90(struct s_rotate_tools tools)
+guchar *rotate90(struct s_rotate_tools tools)
 {
-    return tools.which_pixels + tools.x *
-     tools.rowstride + (tools.width - tools.y - 1) * tools.n_channels;
+    return tools.which_pixels + tools.x * tools.rowstride + (tools.width - tools.y - 1) * tools.n_channels;
 }
 
 /**
@@ -149,16 +147,15 @@ guchar* rotate90(struct s_rotate_tools tools)
  **
  ** \return old pixel
 */
-guchar* rotate270(struct s_rotate_tools tools)
+guchar *rotate270(struct s_rotate_tools tools)
 {
-    return tools.which_pixels + (tools.height - tools.x - 1) *
-     tools.rowstride + tools.y * tools.n_channels;
+    return tools.which_pixels + (tools.height - tools.x - 1) * tools.rowstride + tools.y * tools.n_channels;
 }
 
-void rotate(GtkWidget* image, double degree)
+void rotate(GtkWidget *image, double degree)
 {
     degree = modulo(degree, 360);
-    switch ((long) degree)
+    switch ((long)degree)
     {
     case 0:
         break;
@@ -166,7 +163,7 @@ void rotate(GtkWidget* image, double degree)
     case 90:
         apply_rotation(image, INVERSE_HW, degree, rotate90);
         break;
-    
+
     case 270:
         apply_rotation(image, INVERSE_HW, degree, rotate270);
         break;

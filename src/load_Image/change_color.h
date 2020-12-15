@@ -28,22 +28,21 @@ enum function
     Inverse_color
 };
 
-
 /**
  ** \brief Run on each pixel from image and apply the function in parameters
- ** 
+ **
  ** \param image which image to apply color
  ** \param filter function to apply on each pixel
 */
-void apply_color(GtkWidget* image, void filter(guchar *, struct s_int_tuple));
+void apply_color(GtkWidget *image, void filter(guchar *, struct s_int_tuple));
 
 /**
- ** \brief Switch from "enum function" and call `apply_color` 
+ ** \brief Switch from "enum function" and call `apply_color`
  ** with the coresponding function
  **
  ** \param image which image to change color
  ** \param f enum corresponding with functions to apply on image
  */
-void Change_Color(GtkWidget* image, enum function f);
+void Change_Color(GtkWidget *image, enum function f);
 
 #endif

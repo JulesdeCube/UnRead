@@ -45,30 +45,29 @@ enum e_rotate_type
  */
 struct s_rotate_tools
 {
-    int x;
-    int y;
-    guchar *which_pixels;
-    int rowstride;
-    int n_channels;
-    int width;
-    int height;
-    double degree;
-    int newHeight;
-    int newWidth;
+  int x;
+  int y;
+  guchar *which_pixels;
+  int rowstride;
+  int n_channels;
+  int width;
+  int height;
+  double degree;
+  int newHeight;
+  int newWidth;
 };
 
 /**
  ** \brief Run on each pixel from image and apply the function in parameters
- ** 
+ **
  ** \param image which image to apply rotation*
  ** \param degree of rotation in trigonometry rotation
  ** \param r_type for witch values of height and width it will be apply in
  **               function of type of rotation
  ** \param fun function to apply on each pixel
  */
-void apply_rotation(GtkWidget* image, enum e_rotate_type r_type, double degree,
-                guchar* filter(struct s_rotate_tools));
-
+void apply_rotation(GtkWidget *image, enum e_rotate_type r_type, double degree,
+                    guchar *filter(struct s_rotate_tools));
 
 /**
  ** \brief Rotate the image with degrees
@@ -76,6 +75,6 @@ void apply_rotation(GtkWidget* image, enum e_rotate_type r_type, double degree,
  ** \param image which image to change color
  ** \param degree how many degrees to rotate the image
  */
-void rotate(GtkWidget* image, double degree);
+void rotate(GtkWidget *image, double degree);
 
 #endif

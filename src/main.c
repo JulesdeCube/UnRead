@@ -19,24 +19,24 @@
 
 typedef struct
 {
-    GtkWidget *w_dlg_save_file;         // Pointer to file chooser dialog box
-    GtkWidget *w_dlg_file_choose;       // Pointer to file chooser dialog box
-    GtkWidget *w_img_main;              // Pointer to image widget
-    GtkWidget *w_window_label;          // Pointer to a window to display the text
-    GtkWidget *w_window_help;           // Pointer to a window to display the text
-    GtkWidget *w_label_text_help;       // Pointer to an label to display the text to help
-    GtkWidget *w_label_text;            // Pointer to an label to display the text
-    char      *w_path;                  // path of the image open
-    char      *w_save_path;             // path of the file where the text is save
-    char      *w_text_to_save;          // string of the text to save
-    int        w_step;                  //value of the current step
+    GtkWidget *w_dlg_save_file;   // Pointer to file chooser dialog box
+    GtkWidget *w_dlg_file_choose; // Pointer to file chooser dialog box
+    GtkWidget *w_img_main;        // Pointer to image widget
+    GtkWidget *w_window_label;    // Pointer to a window to display the text
+    GtkWidget *w_window_help;     // Pointer to a window to display the text
+    GtkWidget *w_label_text_help; // Pointer to an label to display the text to help
+    GtkWidget *w_label_text;      // Pointer to an label to display the text
+    char *w_path;                 // path of the image open
+    char *w_save_path;            // path of the file where the text is save
+    char *w_text_to_save;         // string of the text to save
+    int w_step;                   //value of the current step
 } app_widgets;
 
 int main(int argc, char *argv[])
 {
-    GtkBuilder      *builder;
-    GtkWidget       *window;
-    app_widgets     *widgets = g_slice_new(app_widgets);
+    GtkBuilder *builder;
+    GtkWidget *window;
+    app_widgets *widgets = g_slice_new(app_widgets);
 
     gtk_init(&argc, &argv);
 
@@ -78,16 +78,16 @@ void on_menuitm_about_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
 void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
 {
     UNUSED(menuitem);
-    gchar *file_name = NULL;        // Name of file to open from dialog box
+    gchar *file_name = NULL; // Name of file to open from dialog box
     // Show the "Open Image" dialog box
     gtk_widget_show(app_wdgts->w_dlg_file_choose);
 
     // Check return value from Open Image dialog box to see if user clicked the Open button
-    if (gtk_dialog_run(GTK_DIALOG (app_wdgts->w_dlg_file_choose)) == GTK_RESPONSE_OK)
+    if (gtk_dialog_run(GTK_DIALOG(app_wdgts->w_dlg_file_choose)) == GTK_RESPONSE_OK)
     {
         // Get the file name from the dialog box
         file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(app_wdgts->w_dlg_file_choose));
-        if(app_wdgts->w_path != NULL)
+        if (app_wdgts->w_path != NULL)
             g_free(app_wdgts->w_path);
         app_wdgts->w_path = file_name;
 
@@ -95,7 +95,7 @@ void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
         {
             gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), file_name);
             GdkPixbuf *newpixbuf = New_Size_Image(app_wdgts->w_img_main, 500, 500);
-            gtk_image_set_from_pixbuf (GTK_IMAGE(app_wdgts->w_img_main), newpixbuf);
+            gtk_image_set_from_pixbuf(GTK_IMAGE(app_wdgts->w_img_main), newpixbuf);
         }
     }
     app_wdgts->w_step = 0;
@@ -107,12 +107,12 @@ void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
 void on_menuitm_save_as_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
 {
     UNUSED(menuitem);
-    gchar *file_name = NULL;        // Name of file to open from dialog box
+    gchar *file_name = NULL; // Name of file to open from dialog box
     // Show the "Open Image" dialog box
     gtk_widget_show(app_wdgts->w_dlg_save_file);
 
     // Check return value from Open Image dialog box to see if user clicked the Open button
-    if (gtk_dialog_run(GTK_DIALOG (app_wdgts->w_dlg_save_file)) == GTK_RESPONSE_OK)
+    if (gtk_dialog_run(GTK_DIALOG(app_wdgts->w_dlg_save_file)) == GTK_RESPONSE_OK)
     {
         // Get the file name from the dialog box
         file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(app_wdgts->w_dlg_save_file));
@@ -151,13 +151,13 @@ void step_zero(app_widgets *app_wdgts)
     //UNUSED(button);
     //image->only black
     gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), app_wdgts->w_path);
-    Change_Color(app_wdgts->w_img_main,Colored_to_classicGreyLvl);
+    Change_Color(app_wdgts->w_img_main, Colored_to_classicGreyLvl);
     histo_greylvl(app_wdgts->w_img_main, 5, 40);
     remove_noise_image(app_wdgts->w_img_main, 1);
     remove_noise_image(app_wdgts->w_img_main, 2);
-    Change_Color(app_wdgts->w_img_main,Colored_to_OnlyBlack);
+    Change_Color(app_wdgts->w_img_main, Colored_to_OnlyBlack);
     GdkPixbuf *newpixbuf = New_Size_Image(app_wdgts->w_img_main, 500, 500);
-    gtk_image_set_from_pixbuf (GTK_IMAGE(app_wdgts->w_img_main), newpixbuf);
+    gtk_image_set_from_pixbuf(GTK_IMAGE(app_wdgts->w_img_main), newpixbuf);
 }
 
 //step one of the process od the ocr
@@ -165,18 +165,18 @@ void step_one(app_widgets *app_wdgts)
 {
     //image-> only black
     gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), app_wdgts->w_path);
-    Change_Color(app_wdgts->w_img_main,Colored_to_classicGreyLvl);
+    Change_Color(app_wdgts->w_img_main, Colored_to_classicGreyLvl);
     histo_greylvl(app_wdgts->w_img_main, 5, 40);
     remove_noise_image(app_wdgts->w_img_main, 1);
     remove_noise_image(app_wdgts->w_img_main, 2);
-    Change_Color(app_wdgts->w_img_main,Colored_to_OnlyBlack);
+    Change_Color(app_wdgts->w_img_main, Colored_to_OnlyBlack);
     //rotation
     auto_rotation(app_wdgts->w_img_main);
     //segmentation
     mainSegmentation(app_wdgts->w_img_main);
     //affichage
     GdkPixbuf *newpixbuf = New_Size_Image(app_wdgts->w_img_main, 500, 500);
-    gtk_image_set_from_pixbuf (GTK_IMAGE(app_wdgts->w_img_main), newpixbuf);
+    gtk_image_set_from_pixbuf(GTK_IMAGE(app_wdgts->w_img_main), newpixbuf);
 }
 
 //step two of the process od the ocr
@@ -184,18 +184,18 @@ void step_two(app_widgets *app_wdgts)
 {
     //image-> only black
     gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), app_wdgts->w_path);
-    Change_Color(app_wdgts->w_img_main,Colored_to_classicGreyLvl);
+    Change_Color(app_wdgts->w_img_main, Colored_to_classicGreyLvl);
     histo_greylvl(app_wdgts->w_img_main, 5, 40);
     remove_noise_image(app_wdgts->w_img_main, 1);
     remove_noise_image(app_wdgts->w_img_main, 2);
-    Change_Color(app_wdgts->w_img_main,Colored_to_OnlyBlack);
+    Change_Color(app_wdgts->w_img_main, Colored_to_OnlyBlack);
     //rotation
     auto_rotation(app_wdgts->w_img_main);
     //segmentation
     mainSegmentation(app_wdgts->w_img_main);
     //affichage
     GdkPixbuf *newpixbuf = New_Size_Image(app_wdgts->w_img_main, 500, 500);
-    gtk_image_set_from_pixbuf (GTK_IMAGE(app_wdgts->w_img_main), newpixbuf);
+    gtk_image_set_from_pixbuf(GTK_IMAGE(app_wdgts->w_img_main), newpixbuf);
 
     //passage réseau de neuronne
 
