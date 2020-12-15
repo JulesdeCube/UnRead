@@ -8,6 +8,9 @@
 #include <string.h>
 #include <dirent.h>
 
+#include "../preprocessing/resize_char.h"
+#include "../neural_network/neural_network.h"
+
 //create an array of the horizontal projection of a pixbuf image. Each array[i] link to the sum of black pixel of the 'i' line.
 int *horizontalProjection(GdkPixbuf *pixbuf);
 
@@ -28,5 +31,9 @@ GtkWidget *create_image2(char path[255]);
 
 //main segmentation, use line Segmentation on the pixbuf image. Then use charSegmentation on each line.
 void mainSegmentation(GtkWidget *image_to_change);
+
+size_t get_output(size_t count, double *output);
+
+char *neural_segmentation(struct s_neural_network *nn);
 
 #endif //UNREAD__SRC_SEGMENTATION__SEGMENTATION_H_

@@ -1,4 +1,3 @@
-
 #include "segmentation.h"
 
 /* return a list of int. That represent the ammout of black pixel of each line*/
@@ -270,10 +269,8 @@ void mainSegmentation(GtkWidget *image_to_change)
         //use dirent.h to find every line
         while ((dir = readdir(d)) != NULL)
         {
-            //printf("line number:%d\n", c);
 
             sprintf(fileName, "./cuted_line/%s", dir->d_name);
-            //printf("%s\n",fileName);
             if (d)
                 lineImage = create_image2(fileName);
             pixbuf2 = gtk_image_get_pixbuf((GtkImage *)lineImage);
@@ -287,5 +284,44 @@ void mainSegmentation(GtkWidget *image_to_change)
             }
         }
         closedir(d);
+    }
+}
+
+size_t get_output(size_t count, double *output)
+{
+    size_t max_id = 0;
+
+    for (; count; --count)
+        if (output[count] >= output[max_id])
+            max_id = count;
+
+    return max_id;
+}
+
+char *neural_segmentation(struct s_neural_network *nn){
+    GtkWidget *charImage;
+    GdkPixbuf *pixbuf;
+    size_t size;
+    double *array;
+    double *output;
+    char fileName[269];
+    enum e_nn_error *error;
+
+    DIR *d;
+    struct dirent *dir;
+    d = opendir("./cuted_char/");
+    if (d)
+    {
+        //use dirent.h to find every char
+        while ((dir = readdir(d)) != NULL)
+        {
+            sprintf(fileName, "./cuted_char/%s", dir->d_name);
+            if (d)
+                charImage = create_image2(fileName);
+            array = image_to_array(charImage);
+            nn_apply(*nn,array,error);
+            nn_get_outputs(nn,output,error);
+            get_output(size,output);
+        }
     }
 }
