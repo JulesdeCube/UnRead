@@ -2,8 +2,8 @@ BUILD_DIR=build
 OBJECT_DIR=obj
 SRC_DIR=src
 
-SRC=main.c $(addprefix neural_network/, layer.c neural_network.c neurone.c utils.c ) $(addprefix image/, mask.c sample.c set.c utils.c ) $(addprefix load_Image/, load.c change_color.c tools.c segmentation.c rotate.c resize.c noise.c histo_grey_lvl.c auto_rotation.c)
-DEPS=$(addprefix neural_network/, layer.h neural_network.h neurone.h utils.h ) $(addprefix image/, mask.h sample.h set.h utils.h ) $(addprefix load_Image/, load.h change_color.h tools.h segmentation.h rotate.h resize.h noise.h histo_grey_lvl.h auto_rotation.h)
+SRC=main.c $(addprefix neural_network/, layer.c neural_network.c neurone.c utils.c ) $(addprefix image/, mask.c sample.c set.c utils.c ) $(addprefix load_Image/, load.c change_color.c tools.c segmentation.c rotate.c resize.c noise.c histo_grey_lvl.c auto_rotation.c resize_char.c)
+DEPS=$(addprefix neural_network/, layer.h neural_network.h neurone.h utils.h ) $(addprefix image/, mask.h sample.h set.h utils.h ) $(addprefix load_Image/, load.h change_color.h tools.h segmentation.h rotate.h resize.h noise.h histo_grey_lvl.h auto_rotation.h resize_char.h)
 BUILD=UnRead-0.1.0
 
 CC=gcc
