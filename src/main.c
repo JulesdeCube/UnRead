@@ -22,17 +22,17 @@
 
 typedef struct
 {
-    GtkWidget *w_dlg_save_file;   // Pointer to file chooser dialog box
-    GtkWidget *w_dlg_file_choose; // Pointer to file chooser dialog box
-    GtkWidget *w_img_main;        // Pointer to image widget
-    GtkWidget *w_window_label;    // Pointer to a window to display the text
-    GtkWidget *w_window_help;     // Pointer to a window to display the text
-    GtkWidget *w_label_text_help; // Pointer to an label to display the text to help
-    GtkWidget *w_label_text;      // Pointer to an label to display the text
-    char *w_path;                 // path of the image open
-    char *w_save_path;            // path of the file where the text is save
+    GtkWidget *w_dlg_save_file;   // Pointer to the file chooser dialog box save
+    GtkWidget *w_dlg_file_choose; // Pointer to the file chooser dialog box open
+    GtkWidget *w_img_main;        // Pointer to the widget image
+    GtkWidget *w_window_label;    // Pointer to the window that displays the text
+    GtkWidget *w_window_help;     // Pointer to the window that displays the text "help"
+    GtkWidget *w_label_text_help; // Pointer to an label that contains the text to "help"
+    GtkWidget *w_label_text;      // Pointer to an label that contains the text
+    char *w_path;                 // path of the open image
+    char *w_save_path;            // path of the file where the text is save (default)
     char *w_text_to_save;         // string of the text to save
-    int  w_step;                  //value of the current step
+    int   w_step;                 //value of the current step
     struct s_neural_network *nn;  //neural network
 
 } app_widgets;
@@ -202,9 +202,8 @@ void step_one(app_widgets *app_wdgts)
 void step_two(app_widgets *app_wdgts)
 {
     //passage réseau de neuronne
-    
     //montrer le texte
-    const gchar *text = "un zolie texte";
+    const gchar *text = app_wdgts->w_text_to_save;
     // Show the "Open Image" dialog box
     gtk_widget_show(app_wdgts->w_window_label);
     GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(app_wdgts->w_label_text));
@@ -247,6 +246,7 @@ void on_button_apply_clicked(GtkButton *button, app_widgets *app_wdgts)
     UNUSED(button);
     if(app_wdgts->w_path[0] == '\0')
         return;
+    step_one(app_wdgts);
     step_two(app_wdgts);
 }
 
