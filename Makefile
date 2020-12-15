@@ -10,7 +10,7 @@ PATH_DATA_SET=data_set
 SRC_DATA_SET=mask.c sample.c set.c utils.c
 DEPS_DATA_SET=$(SRC_DATA_SET:.c=.h)
 
-PATH_SEGMENTATION=load_Image
+PATH_SEGMENTATION=segmentation
 SRC_SEGMENTATION=segmentation.c auto_rotation.c
 DEPS_SEGMENTATION=$(SRC_SEGMENTATION:.c=.h)
 
@@ -26,8 +26,8 @@ $(addprefix $(PATH_PREPROCESSING)/,  $(SRC_PREPROCESSING))
 
 DEPS=$(addprefix $(PATH_NEURAL_NETWORK)/, $(DEPS_NEURAL_NETWORK))\
 $(addprefix $(PATH_DATA_SET)/, $(DEPS_DATA_SET))\
-$(addprefix $(PATH_SEGMENTATION)/,$(DEPS_PREPROCESSING))\
-$(addprefix $(PATH_PREPROCESSING)/, $(DEPS_SEGMENTATION))
+$(addprefix $(PATH_PREPROCESSING)/,$(DEPS_PREPROCESSING))\
+$(addprefix $(PATH_SEGMENTATION)/, $(DEPS_SEGMENTATION))
 
 BUILD=UnRead-1.0.0
 

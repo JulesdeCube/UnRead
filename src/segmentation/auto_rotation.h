@@ -7,8 +7,10 @@
 #include <gdk/gdk.h>
 #include <string.h>
 #include <dirent.h>
+
 #include "segmentation.h"
-#include "rotate.h"
+
+#include "../load_Image/rotate.h"
 
 //find variance of horizontal projection of an image after rotation
 int get_variance(GtkWidget *image, double degree);

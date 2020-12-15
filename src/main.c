@@ -1,15 +1,18 @@
 #include <gtk/gtk.h>
+#include <stdio.h>
+
 #include "load_Image/change_color.h"
-#include "load_Image/segmentation.h"
 #include "load_Image/rotate.h"
 #include "load_Image/resize.h"
 #include "load_Image/histo_grey_lvl.h"
 #include "load_Image/noise.h"
-#include "load_Image/auto_rotation.h"
 
-#include <stdio.h>
+#include "segmentation/segmentation.h"
+#include "segmentation/auto_rotation.h"
+
 #include "neural_network/neural_network.h"
 #include "neural_network/utils.h"
+
 #include "data_set/set.h"
 
 #define nb_layers 4
