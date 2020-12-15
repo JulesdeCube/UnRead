@@ -5,22 +5,21 @@
     <img src="https://img.shields.io/badge/std-c99-blue?style=flat-square"/>
 </p>
 
-
-
-
-
-
- **Unread** is a **O**ptical **C**haracter **R**ecognition (OCR). Developed as part of the **[EPITA](https://www.epita.fr/)'s 2ⁿᵈ year project**.
-
-
+**Unread** is a **O**ptical **C**haracter **R**ecognition (OCR). Developed as part of the **[EPITA](https://www.epita.fr/)'s 2ⁿᵈ year project**.
 
 ## ⭐ Feature
+- load image
+- auto rotation
+- background remover
+- text spliting
+- neural network training
 
-TODO
 
 ## ✔️ Require
-- nothing yet :slightly_smiling_face:
+- GTK 3
 
+### 🚧 Developement
+- `libgtk-3-dev`
 
 
 ## 📘 Usage
@@ -57,4 +56,3 @@ Licensed under the [GNU general public license V3](./LICENSE.md).
 [![see Contributor](https://contributors-img.web.app/image?repo=JulesdeCube/UnRead)](https://github.com/JulesdeCube/UnRead/graphs/contributors)
 
 To write code or reported issues please first read the [Contribution guide lines](./CONTRIBUTING.md).
-
