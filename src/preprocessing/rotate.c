@@ -1,13 +1,13 @@
 #include "rotate.h"
 
 /**
- ** \brief Get the new position of x with an rotation of degree
- **
- ** \param x position
- ** \param y position
- ** \param degree degree of rotation IN GRADIENT
- **
- ** \return new position of x
+** \brief Get the new position of x with an rotation of degree
+**
+** \param x position
+** \param y position
+** \param degree degree of rotation IN GRADIENT
+**
+** \return new position of x
 */
 int get_new_x(int x, int y, double degree)
 {
@@ -15,13 +15,13 @@ int get_new_x(int x, int y, double degree)
 }
 
 /**
- ** \brief Get the new position of y with an rotation of degree
- **
- ** \param x position
- ** \param y position
- ** \param degree degree of rotation IN GRADIENT
- **
- ** \return new position of y
+** \brief Get the new position of y with an rotation of degree
+**
+** \param x position
+** \param y position
+** \param degree degree of rotation IN GRADIENT
+**
+** \return new position of y
 */
 int get_new_y(int x, int y, double degree)
 {
@@ -97,11 +97,11 @@ void apply_rotation(GtkWidget *image, enum e_rotate_type r_type, double degree,
 }
 
 /**
- ** \brief return the old position of the pixel with an rotation of tools.degree
- **
- ** \param tools all tools to use for rotation
- **
- ** \return old pixel or NULL if does not exist
+** \brief return the old position of the pixel with an rotation of tools.degree
+**
+** \param tools all tools to use for rotation
+**
+** \return old pixel or NULL if does not exist
 */
 guchar *classicRotate(struct s_rotate_tools tools)
 {
@@ -115,11 +115,11 @@ guchar *classicRotate(struct s_rotate_tools tools)
 }
 
 /**
- ** \brief return the old position of the pixel with an rotation of 180 degrees
- **
- ** \param tools all tools to use for rotation
- **
- ** \return old pixel
+** \brief return the old position of the pixel with an rotation of 180 degrees
+**
+** \param tools all tools to use for rotation
+**
+** \return old pixel
 */
 guchar *rotate180(struct s_rotate_tools tools)
 {
@@ -127,12 +127,12 @@ guchar *rotate180(struct s_rotate_tools tools)
 }
 
 /**
- ** \brief return the old position of the pixel with an rotation of 90 degrees
- ** in trigonometry rotation
- **
- ** \param tools all tools to use for rotation
- **
- ** \return old pixel
+** \brief return the old position of the pixel with an rotation of 90 degrees
+** in trigonometry rotation
+**
+** \param tools all tools to use for rotation
+**
+** \return old pixel
 */
 guchar *rotate90(struct s_rotate_tools tools)
 {
@@ -140,12 +140,12 @@ guchar *rotate90(struct s_rotate_tools tools)
 }
 
 /**
- ** \brief return the old position of the pixel with an rotation of -90 degrees
- ** in trigonometry rotation
- **
- ** \param tools all tools to use for rotation
- **
- ** \return old pixel
+** \brief return the old position of the pixel with an rotation of -90 degrees
+** in trigonometry rotation
+**
+** \param tools all tools to use for rotation
+**
+** \return old pixel
 */
 guchar *rotate270(struct s_rotate_tools tools)
 {

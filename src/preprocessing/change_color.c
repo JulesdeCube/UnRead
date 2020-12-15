@@ -27,10 +27,10 @@ void apply_color(GtkWidget *image, void filter(guchar *, struct s_int_tuple))
 }
 
 /**
- ** \brief  Change pixel code in RGB to a pixel code in CLASSIC grey level
- **
- ** \param pixel which apply new color
- ** \param min_max Unused it
+** \brief  Change pixel code in RGB to a pixel code in CLASSIC grey level
+**
+** \param pixel which apply new color
+** \param min_max Unused it
 */
 void Colored_to_classicGreyLvl1(guchar *pixel, struct s_int_tuple min_max)
 {
@@ -40,10 +40,10 @@ void Colored_to_classicGreyLvl1(guchar *pixel, struct s_int_tuple min_max)
 }
 
 /**
- ** \brief  Change pixel code in CLASSIC grey level to a pixel code in NORMALIZED grey level
- **
- ** \param pixel which apply new color
- ** \param min_max tuple with the maximum and minimum color of the image
+** \brief  Change pixel code in CLASSIC grey level to a pixel code in NORMALIZED grey level
+**
+** \param pixel which apply new color
+** \param min_max tuple with the maximum and minimum color of the image
 */
 void ClassicGLVL_to_NormalizedGLVL1(guchar *pixel, struct s_int_tuple min_max)
 {
@@ -51,10 +51,10 @@ void ClassicGLVL_to_NormalizedGLVL1(guchar *pixel, struct s_int_tuple min_max)
 }
 
 /**
- ** \brief  Change pixel code in grey level to a pixel code in black and white binary
- **
- ** \param pixel which apply new color
- ** \param min_max Unused it
+** \brief  Change pixel code in grey level to a pixel code in black and white binary
+**
+** \param pixel which apply new color
+** \param min_max Unused it
 */
 void Greylvl_to_BW1(guchar *pixel, struct s_int_tuple min_max)
 {
@@ -64,10 +64,10 @@ void Greylvl_to_BW1(guchar *pixel, struct s_int_tuple min_max)
 }
 
 /**
- ** \brief Change pixel code in RGB to a pixel code in black and white binary
- **
- ** \param pixel which apply new color
- ** \param min_max tuple with the maximum and minimum color of the image
+** \brief Change pixel code in RGB to a pixel code in black and white binary
+**
+** \param pixel which apply new color
+** \param min_max tuple with the maximum and minimum color of the image
 */
 void Colored_to_BW1(guchar *pixel, struct s_int_tuple min_max)
 {
@@ -78,11 +78,11 @@ void Colored_to_BW1(guchar *pixel, struct s_int_tuple min_max)
 }
 
 /**
- ** \brief transform pixel if his color value is under 15+minimal
- ** of the image into a black one. Else into a white one
- **
- ** \param pixel will be modify
- ** \param min_max the withest(maximal value) and blackest (minimal value) of the image
+** \brief transform pixel if his color value is under 15+minimal
+** of the image into a black one. Else into a white one
+**
+** \param pixel will be modify
+** \param min_max the withest(maximal value) and blackest (minimal value) of the image
 */
 void Colored_to_OnlyBlack1(guchar *pixel, struct s_int_tuple min_max)
 {
@@ -95,10 +95,10 @@ void Colored_to_OnlyBlack1(guchar *pixel, struct s_int_tuple min_max)
 }
 
 /**
- ** \brief inverse the color of the pixel
- **
- ** \param pixel will be modify
- ** \param min_max useless
+** \brief inverse the color of the pixel
+**
+** \param pixel will be modify
+** \param min_max useless
 */
 void inverse_color1(guchar *pixel, struct s_int_tuple min_max)
 {
