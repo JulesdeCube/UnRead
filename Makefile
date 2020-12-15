@@ -6,7 +6,7 @@ PATH_NEURAL_NETWORK=neural_network
 SRC_NEURAL_NETWORK=layer.c neural_network.c neurone.c utils.c
 DEPS_NEURAL_NETWORK=$(SRC_NEURAL_NETWORK:.c=.h)
 
-PATH_DATA_SET=image
+PATH_DATA_SET=data_set
 SRC_DATA_SET=mask.c sample.c set.c utils.c
 DEPS_DATA_SET=$(SRC_DATA_SET:.c=.h)
 
