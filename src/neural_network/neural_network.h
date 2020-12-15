@@ -244,12 +244,27 @@ double nn_total_error(struct s_neural_network *self, double *targets, enum e_nn_
 ** \param outputs an array to store the outputs
 ** \param error the return error channel
 **
-** \throw NN_NO_LAYER no layer provided
+** \throw NN_NO_NEURAL_NETWORK no neural network was provided
 ** \throw NN_NO_LAYER if there is not layer inside the neural network
 **
 ** \see layer.h:la_get_outputs for sub error code
 */
 void nn_get_outputs(struct s_neural_network *self, double *outputs, enum e_nn_error *error);
+
+/**
+** \brief return the size of the last layer
+**
+** return the number of neurone in the last layer
+**
+** \param self the neural network
+** \param error the return error channel
+**
+** \return the size of the last neurone
+**
+** \throw NN_NO_NEURAL_NETWORK no neural network was provided
+** \throw NN_NO_LAYER if there is not layer inside the neural network
+*/
+unsigned int nn_get_last_layer_size(struct s_neural_network *self, enum e_nn_error *error);
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //

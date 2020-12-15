@@ -318,6 +318,23 @@ void nn_get_outputs(struct s_neural_network *self, double *outputs, enum e_nn_er
   la_get_outputs(*(self->layers + self->nb_layer - 1), outputs, error);
 }
 
+unsigned int nn_get_last_layer_size(struct s_neural_network *self, enum e_nn_error *error)
+{
+
+  *error = NN_SUCCESS;
+
+  if (!self)
+    *error = NN_NO_NEURAL_NETWORK;
+
+  else if (!self->nb_layer)
+    *error = NN_NO_LAYER;
+
+  if (*error)
+    return;
+
+  return self->layers[self->nb_layer - 1]->size;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 //                                   VIEWER                                   //
