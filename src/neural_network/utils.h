@@ -68,7 +68,6 @@ double sq_difference(double target, double output);
 */
 double sq_difference_derivate(double target, double output);
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
 //                             ACTIVATION FUNCTION                           //
