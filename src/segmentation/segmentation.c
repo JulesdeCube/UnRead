@@ -299,13 +299,38 @@ size_t get_output(size_t count, double *output)
 }
 
 char *neural_segmentation(struct s_neural_network *nn){
+
+    size_t char_count = 0;
+    DIR * dirp;
+    struct dirent * entry;
+
+    dirp = opendir("./cuted_char/");
+    while ((entry = readdir(dirp)) != NULL) {
+        char_count++;
+    }
+    closedir(dirp);
+    printf("%ld",char_count);
+
+    size_t line_count = 0;
+    dirp = opendir("./cuted_line/");
+    while ((entry = readdir(dirp)) != NULL) {
+            line_count++;
+    }
+    closedir(dirp);
+
+    printf("%ld",line_count);
     GtkWidget *charImage;
-    GdkPixbuf *pixbuf;
-    size_t size;
+    enum e_nn_error *error = NN_SUCCESS;
+    size_t size = nn_get_last_layer_size(nn,error);
+
+    char *text = malloc((char_count+(line_count*2)) * sizeof(char));
+
     double *array;
-    double *output;
+    double *output = malloc(size * sizeof(double)) ;
+    size_t value;
+    char c;
     char fileName[269];
-    enum e_nn_error *error;
+
 
     DIR *d;
     struct dirent *dir;
@@ -319,9 +344,12 @@ char *neural_segmentation(struct s_neural_network *nn){
             if (d)
                 charImage = create_image2(fileName);
             array = image_to_array(charImage);
-            nn_apply(*nn,array,error);
+            nn_apply(nn,array,error);
             nn_get_outputs(nn,output,error);
-            get_output(size,output);
+            value = get_output(size,output);
+            c = (char) value + 0;
+            strncat(text,&c,1);
         }
     }
+    return text;
 }

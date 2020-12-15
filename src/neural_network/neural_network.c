@@ -330,7 +330,7 @@ unsigned int nn_get_last_layer_size(struct s_neural_network *self, enum e_nn_err
     *error = NN_NO_LAYER;
 
   if (*error)
-    return;
+    return 0;
 
   return self->layers[self->nb_layer - 1]->size;
 }
