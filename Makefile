@@ -14,7 +14,7 @@ PATH_SEGMENTATION=segmentation
 SRC_SEGMENTATION=segmentation.c auto_rotation.c
 DEPS_SEGMENTATION=$(SRC_SEGMENTATION:.c=.h)
 
-PATH_PREPROCESSING=load_Image
+PATH_PREPROCESSING=preprocessing
 SRC_PREPROCESSING=change_color.c tools.c rotate.c resize.c noise.c histo_grey_lvl.c
 DEPS_PREPROCESSING=$(SRC_PREPROCESSING:.c=.h)
 

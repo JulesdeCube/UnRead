@@ -1,11 +1,11 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
 
-#include "load_Image/change_color.h"
-#include "load_Image/rotate.h"
-#include "load_Image/resize.h"
-#include "load_Image/histo_grey_lvl.h"
-#include "load_Image/noise.h"
+#include "preprocessing/change_color.h"
+#include "preprocessing/rotate.h"
+#include "preprocessing/resize.h"
+#include "preprocessing/histo_grey_lvl.h"
+#include "preprocessing/noise.h"
 
 #include "segmentation/segmentation.h"
 #include "segmentation/auto_rotation.h"
