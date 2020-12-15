@@ -217,6 +217,8 @@ void step_two(app_widgets *app_wdgts)
 void on_button_clicked(GtkButton *button, app_widgets *app_wdgts)
 {
     UNUSED(button);
+    if(app_wdgts->w_path[0] != '\0')
+        return;
     switch (app_wdgts->w_step)
     {
     case 0:
@@ -239,6 +241,8 @@ void on_button_clicked(GtkButton *button, app_widgets *app_wdgts)
 void on_button_apply_clicked(GtkButton *button, app_widgets *app_wdgts)
 {
     UNUSED(button);
+    if(app_wdgts->w_path[0] != '\0')
+        return;
     step_two(app_wdgts);
 }
 
