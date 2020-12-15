@@ -191,6 +191,8 @@ void step_one(app_widgets *app_wdgts)
     Change_Color(app_wdgts->w_img_main, Colored_to_OnlyBlack);
     //rotation
     auto_rotation(app_wdgts->w_img_main);
+    //segmentation
+    mainSegmentation(app_wdgts->w_img_main);
     //affichage
     GdkPixbuf *newpixbuf = New_Size_Image(app_wdgts->w_img_main, 500, 500);
     gtk_image_set_from_pixbuf(GTK_IMAGE(app_wdgts->w_img_main), newpixbuf);
@@ -199,10 +201,8 @@ void step_one(app_widgets *app_wdgts)
 //step two of the process od the ocr
 void step_two(app_widgets *app_wdgts)
 {
-    //segmentation
-    mainSegmentation(app_wdgts->w_img_main);
     //passage réseau de neuronne
-
+    
     //montrer le texte
     const gchar *text = "un zolie texte";
     // Show the "Open Image" dialog box
