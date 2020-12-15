@@ -12,6 +12,7 @@
 #include "rotate.h"
 #include "noise.h"
 #include "histo_grey_lvl.h"
+#include "resize_char.h"
 
 /**
  ** \brief Create an Image from a file

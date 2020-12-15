@@ -15,7 +15,7 @@ SRC_SEGMENTATION=segmentation.c auto_rotation.c
 DEPS_SEGMENTATION=$(SRC_SEGMENTATION:.c=.h)
 
 PATH_PREPROCESSING=preprocessing
-SRC_PREPROCESSING=change_color.c tools.c rotate.c resize.c noise.c histo_grey_lvl.c
+SRC_PREPROCESSING=change_color.c tools.c rotate.c resize.c noise.c histo_grey_lvl.c resize_char.c
 DEPS_PREPROCESSING=$(SRC_PREPROCESSING:.c=.h)
 
 SRC=main.c\

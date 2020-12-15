@@ -2,7 +2,7 @@
 
 GtkWidget *create_image()
 {
-    return gtk_image_new_from_file("./test/traitement/jules1.bmp");
+    return gtk_image_new_from_file("./test/traitement/c.bmp");
 }
 
 void activate_window(GtkApplication *app, gpointer user_data)
@@ -24,23 +24,23 @@ void activate_window(GtkApplication *app, gpointer user_data)
       ################################################
     */
     //Change_Color(imagec, Inverse_color);
-    Change_Color(imagec, Colored_to_classicGreyLvl);
+    //Change_Color(imagec, Colored_to_classicGreyLvl);
     //Change_Color(imagec, ClassicGLVL_to_NormalizedGLVL);
-    histo_greylvl(imagec, 5, 40);
+    //histo_greylvl(imagec, 5, 40);
     //Change_Color(imagec, Colored_to_BW);
     //Change_Color(imagec, Colored_to_OnlyBlack);
-    remove_noise_image(imagec, 1);
-    remove_noise_image(imagec, 2);
+    //remove_noise_image(imagec, 1);
+    //remove_noise_image(imagec, 2);
 
-    /*GdkPixbuf *pixbuf = New_Size_Image(imagec, 100, 100);
-    gdk_pixbuf_save(pixbuf, "src/load_Image/images/img.bmp", "bmp", NULL, NULL);*/
+    double *array = get_great_char(imagec);
+    free(array);
     //rotate(imagec, 217);
 
     //Segmentation for hugo
     //mainSegmentation(imagec);
 
     //To show our Image
-    //gtk_widget_show_all (window);
+    gtk_widget_show_all(window);
 }
 
 int create_window(int argc, char **argv)
