@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     widgets->w_path = malloc(sizeof(char));
     widgets->w_path[0] = '\0';
     widgets->w_save_path = "test/save_file/save.txt";
-    widgets->w_text_to_save = "oui";
+    widgets->w_text_to_save = "";
     widgets->w_step = 0;
     unsigned int layers_size[nb_layers] = {784, 20, 20, 10};
     enum e_nn_error error = NN_SUCCESS;
@@ -156,6 +156,7 @@ void on_menuitm_save_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
     UNUSED(menuitem);
     FILE *fp = fopen(app_wdgts->w_save_path, "a");
     //write
+
     fputs(app_wdgts->w_text_to_save, fp);
     // add new line at the end of the file
     fputc('\n', fp);
@@ -190,6 +191,8 @@ void step_one(app_widgets *app_wdgts)
     Change_Color(app_wdgts->w_img_main, Colored_to_OnlyBlack);
     //rotation
     auto_rotation(app_wdgts->w_img_main);
+    //segmentation
+    mainSegmentation(app_wdgts->w_img_main);
     //affichage
     GdkPixbuf *newpixbuf = New_Size_Image(app_wdgts->w_img_main, 500, 500);
     gtk_image_set_from_pixbuf(GTK_IMAGE(app_wdgts->w_img_main), newpixbuf);
@@ -198,10 +201,8 @@ void step_one(app_widgets *app_wdgts)
 //step two of the process od the ocr
 void step_two(app_widgets *app_wdgts)
 {
-    //segmentation
-    mainSegmentation(app_wdgts->w_img_main);
     //passage réseau de neuronne
-
+    
     //montrer le texte
     const gchar *text = "un zolie texte";
     // Show the "Open Image" dialog box
