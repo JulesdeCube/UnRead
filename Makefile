@@ -2,9 +2,34 @@ BUILD_DIR=build
 OBJECT_DIR=obj
 SRC_DIR=src
 
-SRC=main.c $(addprefix neural_network/, layer.c neural_network.c neurone.c utils.c ) $(addprefix image/, mask.c sample.c set.c utils.c ) $(addprefix load_Image/, load.c change_color.c tools.c segmentation.c rotate.c resize.c noise.c histo_grey_lvl.c auto_rotation.c)
-DEPS=$(addprefix neural_network/, layer.h neural_network.h neurone.h utils.h ) $(addprefix image/, mask.h sample.h set.h utils.h ) $(addprefix load_Image/, load.h change_color.h tools.h segmentation.h rotate.h resize.h noise.h histo_grey_lvl.h auto_rotation.h)
-BUILD=UnRead-0.1.0
+PATH_NEURAL_NETWORK=neural_network
+SRC_NEURAL_NETWORK=layer.c neural_network.c neurone.c utils.c
+DEPS_NEURAL_NETWORK=$(SRC_NEURAL_NETWORK:.c=.h)
+
+PATH_DATA_SET=image
+SRC_DATA_SET=mask.c sample.c set.c utils.c
+DEPS_DATA_SET=$(SRC_DATA_SET:.c=.h)
+
+PATH_SEGMENTATION=load_Image
+SRC_SEGMENTATION=segmentation.c auto_rotation.c
+DEPS_SEGMENTATION=$(SRC_SEGMENTATION:.c=.h)
+
+PATH_PREPROCESSING=load_Image
+SRC_PREPROCESSING=change_color.c tools.c rotate.c resize.c noise.c histo_grey_lvl.c
+DEPS_PREPROCESSING=$(SRC_PREPROCESSING:.c=.h)
+
+SRC=main.c\
+$(addprefix $(PATH_NEURAL_NETWORK)/, $(SRC_NEURAL_NETWORK))\
+$(addprefix $(PATH_DATA_SET)/, $(SRC_DATA_SET))\
+$(addprefix $(PATH_SEGMENTATION)/, $(SRC_SEGMENTATION))\
+$(addprefix $(PATH_PREPROCESSING)/,  $(SRC_PREPROCESSING))
+
+DEPS=$(addprefix $(PATH_NEURAL_NETWORK)/, $(DEPS_NEURAL_NETWORK))\
+$(addprefix $(PATH_DATA_SET)/, $(DEPS_DATA_SET))\
+$(addprefix $(PATH_SEGMENTATION)/,$(DEPS_PREPROCESSING))\
+$(addprefix $(PATH_PREPROCESSING)/, $(DEPS_SEGMENTATION))
+
+BUILD=UnRead-1.0.0
 
 CC=gcc
 GTK_CFLAGS=$(shell pkg-config --cflags gtk+-3.0)
@@ -25,12 +50,15 @@ all: help
 help: ## print this help
 help: version
 	@fgrep -h "## " $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/^## //' |sed -e 's/\(.*\)## /- \1/'
-	@echo -e "\nJules Lefebvre <juleslefebvre.pro@outlook.fr>"
+	@echo "\nJules Lefebvre <juleslefebvre.pro@outlook.fr>"
 
 version: ## print the makefile version
-	@echo "C build v1.2.1"
+	@echo "C build v1.2.2"
 
 install: ## install all dependence to compile project
+	@echo "creating needed folder"
+	@mkdir -p cuted_line
+	@mkdir -p cuted_char
 	@echo "install packages : $(PACKAGES)"
 ifneq "$(shell whereis apk)" "apk:"
 	@apk add --no-cache $(PACKAGES)
@@ -47,9 +75,6 @@ else ifneq "$(shell whereis nix-env)" "nix-env:"
 else
 	@echo "ERROR: package manager not found.">&2
 endif
-	@echo "creating needed folder"
-	@mkdir -p cuted_line
-	@mkdir -p cuted_char
 
 run: ## build and run the programme
 run: build
@@ -59,9 +84,11 @@ build: ## build the programme
 build: $(BUILD_DIR)/$(BUILD)
 
 clean: ## clean all precompiled files
-clean: $(OBJECT_DIR)
 	@echo "clean files"
 	@$(RM) -r $(OBJECT_DIR)
+	@$(RM) -r cuted_line
+	@$(RM) -r cuted_char
+
 
 
 $(OBJECT_DIR)/%.o: $(SRC_DIR)/%.c $(addprefix $(SRC_DIR)/, $(DEPS))
@@ -70,7 +97,7 @@ $(OBJECT_DIR)/%.o: $(SRC_DIR)/%.c $(addprefix $(SRC_DIR)/, $(DEPS))
 	@$(CC) -c -o $@ $< $(CFLAGS)
 
 $(BUILD_DIR)/$(BUILD): $(BUILD_DIR)/ $(addprefix $(OBJECT_DIR)/, $(SRC:.c=.o))
-	@echo -e "\nbuilding $(BUILD)"
+	@echo "\nbuilding $(BUILD)"
 	@$(CC) -o $(BUILD_DIR)/$(BUILD) $(addprefix $(OBJECT_DIR)/, $(SRC:.c=.o)) $(CFLAGS)
 	@echo "Finish"
 
