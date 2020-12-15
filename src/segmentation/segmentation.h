@@ -1,5 +1,5 @@
-#ifndef UNREAD_SEGMENTATION_H
-#define UNREAD_SEGMENTATION_H
+#ifndef UNREAD__SRC_SEGMENTATION__SEGMENTATION_H_
+#define UNREAD__SRC_SEGMENTATION__SEGMENTATION_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,4 +29,4 @@ GtkWidget *create_image2(char path[255]);
 //main segmentation, use line Segmentation on the pixbuf image. Then use charSegmentation on each line.
 void mainSegmentation(GtkWidget *image_to_change);
 
-#endif //UNREAD_SEGMENTATION_H
+#endif //UNREAD__SRC_SEGMENTATION__SEGMENTATION_H_

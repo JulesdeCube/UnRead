@@ -1,5 +1,5 @@
-#ifndef UNREAD__SRC__LOAD_IMAGE__NOISE_H__
-#define UNREAD__SRC__LOAD_IMAGE__NOISE_H__
+#ifndef UNREAD__SRC_PREPROCESSING__NOISE_H_
+#define UNREAD__SRC_PREPROCESSING__NOISE_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,4 +16,4 @@
 */
 void remove_noise_image(GtkWidget *image, int radius);
 
-#endif
+#endif // UNREAD__SRC_PREPROCESSING__NOISE_H_

@@ -1,5 +1,5 @@
-#ifndef UNREAD__SRC__LOAD_IMAGE__ROTATE_H__
-#define UNREAD__SRC__LOAD_IMAGE__ROTATE_H__
+#ifndef UNREAD__SRC_PREPROCESSING__ROTATE_H_
+#define UNREAD__SRC_PREPROCESSING__ROTATE_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -77,4 +77,4 @@ void apply_rotation(GtkWidget *image, enum e_rotate_type r_type, double degree,
  */
 void rotate(GtkWidget *image, double degree);
 
-#endif
+#endif // UNREAD__SRC_PREPROCESSING__ROTATE_H_

@@ -1,5 +1,5 @@
-#ifndef UNREAD__SRC__LOAD_IMAGE__LOAD_H__
-#define UNREAD__SRC__LOAD_IMAGE__LOAD_H__
+#ifndef UNREAD__SRC_PREPROCESSING__LOAD_H_
+#define UNREAD__SRC_PREPROCESSING__LOAD_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,4 +37,4 @@ void activate_window(GtkApplication *app, gpointer user_data);
  */
 int create_window(int argc, char **argv);
 
-#endif
+#endif // UNREAD__SRC_PREPROCESSING__LOAD_H_

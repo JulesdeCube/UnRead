@@ -1,5 +1,5 @@
-#ifndef UNREAD__SRC__LOAD_IMAGE__CHANGE_COLOR_H__
-#define UNREAD__SRC__LOAD_IMAGE__CHANGE_COLOR_H__
+#ifndef UNREAD__SRC_PREPROCESSING__CHANGE_COLOR_H_
+#define UNREAD__SRC_PREPROCESSING__CHANGE_COLOR_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,4 +45,4 @@ void apply_color(GtkWidget *image, void filter(guchar *, struct s_int_tuple));
  */
 void Change_Color(GtkWidget *image, enum function f);
 
-#endif
+#endif // UNREAD__SRC_PREPROCESSING__CHANGE_COLOR_H_

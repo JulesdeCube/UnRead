@@ -1,5 +1,5 @@
-#ifndef UNREAD__SRC__LOAD_IMAGE__RESIZE_H__
-#define UNREAD__SRC__LOAD_IMAGE__RESIZE_H__
+#ifndef UNREAD__SRC_PREPROCESSING__RESIZE_H_
+#define UNREAD__SRC_PREPROCESSING__RESIZE_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,4 +21,4 @@
 */
 GdkPixbuf *New_Size_Image(GtkWidget *image, int newHeight, int newWidth);
 
-#endif
+#endif // UNREAD__SRC_PREPROCESSING__RESIZE_H_

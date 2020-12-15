@@ -1,5 +1,5 @@
-#ifndef UNREAD__SRC__LOAD_IMAGE__TOOLS_H_
-#define UNREAD__SRC__LOAD_IMAGE__TOOLS_H_
+#ifndef UNREAD__SRC_PREPROCESSING__TOOLS_H_
+#define UNREAD__SRC_PREPROCESSING__TOOLS_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -75,4 +75,4 @@ int max(int a, int b);
  ** \return result of modulo division
 */
 double modulo(double x, double y);
-#endif
+#endif // UNREAD__SRC_PREPROCESSING__TOOLS_H_

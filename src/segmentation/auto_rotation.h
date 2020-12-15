@@ -1,5 +1,5 @@
-#ifndef UNREAD_AUTO_ROTATION_H
-#define UNREAD_AUTO_ROTATION_H
+#ifndef UNREAD__SRC_SEGMENTATION__AUTO_ROTATION_H_
+#define UNREAD__SRC_SEGMENTATION__AUTO_ROTATION_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,4 +18,4 @@ int get_variance(GtkWidget *image, double degree);
 //auto_rotation take an image and find the rotation from -30° to 30° with the best variance. image is change by the function.
 void auto_rotation(GtkWidget *image);
 
-#endif //UNREAD_AUTO_ROTATION_H
+#endif //UNREAD__SRC_SEGMENTATION__AUTO_ROTATION_H_

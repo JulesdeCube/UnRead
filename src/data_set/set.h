@@ -1,5 +1,5 @@
 /**
-** \file src/image/set.h
+** \file src/data_set/set.h
 ** \author Jules Lefebvre <jules.lefebvre@epita.fr
 ** \version 1.0.0
 ** \date 2020/10/04
@@ -8,8 +8,8 @@
 ** definition of constuctor, destructor and method of the  s_set` object.
 */
 
-#ifndef UNREAD__SRC_IMAGE__SET_H_
-#define UNREAD__SRC_IMAGE__SET_H_
+#ifndef UNREAD__SRC_DATA_SET__SET_H_
+#define UNREAD__SRC_DATA_SET__SET_H_
 
 #include <stdio.h>
 #include "sample.h"
@@ -140,4 +140,4 @@ void st_foreach(struct s_set *set, void (*f)(struct s_sample *));
 */
 void st_print(struct s_set *set);
 
-#endif // UNREAD__SRC_IMAGE__SET_H_
+#endif // UNREAD__SRC_DATA_SET__SET_H_

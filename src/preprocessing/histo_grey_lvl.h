@@ -1,5 +1,5 @@
-#ifndef UNREAD__SRC__LOAD_IMAGE__HISTO_GREY_LVL_H__
-#define UNREAD__SRC__LOAD_IMAGE__HISTO_GREY_LVL_H__
+#ifndef UNREAD__SRC_PREPROCESSING__HISTO_GREY_LVL_H_
+#define UNREAD__SRC_PREPROCESSING__HISTO_GREY_LVL_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,4 +18,4 @@
 */
 void histo_greylvl(GtkWidget *image, double black_percent, double white_percent);
 
-#endif
+#endif // UNREAD__SRC_PREPROCESSING__HISTO_GREY_LVL_H_

@@ -1,3 +1,11 @@
+/**
+** \file src/neural_network/neural_network_error.h
+** \author Jules Lefebvre <jules.lefebvre@epita.fr
+** \version 1.0.0
+** \date 2020/12/12
+** \brief contaigned the enum of all the neural network code
+*/
+
 #ifndef UNREAD__SRC_NEURAL_NETWORK__NEURAL_NETWORK_ERROR_H_
 #define UNREAD__SRC_NEURAL_NETWORK__NEURAL_NETWORK_ERROR_H_
 

@@ -1,5 +1,5 @@
 /**
-** \file src/image/sample.h
+** \file src/data_set/sample.h
 ** \author Jules Lefebvre <jules.lefebvre@epita.fr
 ** \version 1.0.0
 ** \date 2020/10/04
@@ -8,8 +8,8 @@
 ** declartion of all the methode use to manipulate the `s_sample` object
 */
 
-#ifndef UNREAD__SRC_IMAGE__SAMPLE_H_
-#define UNREAD__SRC_IMAGE__SAMPLE_H_
+#ifndef UNREAD__SRC_DATA_SET__SAMPLE_H_
+#define UNREAD__SRC_DATA_SET__SAMPLE_H_
 
 #include <stdio.h>
 #include "mask.h"
@@ -160,4 +160,4 @@ void sp_print(struct s_sample *sample);
 */
 void sp_debug(struct s_sample *sample);
 
-#endif // UNREAD__SRC_IMAGE__SAMPLE_H_
+#endif // UNREAD__SRC_DATA_SET__SAMPLE_H_
