@@ -29,7 +29,7 @@ $(addprefix $(PATH_DATA_SET)/, $(DEPS_DATA_SET))\
 $(addprefix $(PATH_PREPROCESSING)/,$(DEPS_PREPROCESSING))\
 $(addprefix $(PATH_SEGMENTATION)/, $(DEPS_SEGMENTATION))
 
-BUILD=UnRead-1.0.0
+BUILD=UnRead-1.1.0
 
 CC=gcc
 GTK_CFLAGS=$(shell pkg-config --cflags gtk+-3.0)
