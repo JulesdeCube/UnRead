@@ -15,12 +15,13 @@
 - neural network training
 
 
+Reconize characters 🤓
+
 ## ✔️ Require
 - GTK 3
 
 ### 🚧 Developement
 - `libgtk-3-dev`
-
 
 ## 📘 Usage
 
